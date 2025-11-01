@@ -90,26 +90,25 @@ input[type="checkbox"]{width:24px;height:24px;cursor:pointer;accent-color:#ff9aa
 <div class="header-overlay"></div>
 <div class="header-content">
 <div>
-<h1 class="page-title" data-translate="Learn Thyself">✨ Learn Thyself ✨</h1>
-<p class="page-subtitle" data-translate="Organize my time. Understand my mind.">Organize my time. Understand my mind.</p>
+<h1 class="page-title">✨ Learn Thyself ✨</h1>
+<p class="page-subtitle">Organize my time. Understand my mind.</p>
 </div>
-<button id="langToggle" style="position:absolute;top:20px;right:20px;padding:8px 16px;background:rgba(255,255,255,0.9);border:2px solid #ff9aa2;border-radius:20px;cursor:pointer;font-weight:600;color:#ff758f;transition:all 0.3s;">EN</button>
 </div>
 </div>
 <div class="content-wrapper">
 <!-- Tab Navigation -->
 <div class="tab-nav">
-<button class="tab-btn active" onclick="switchTab('today')" data-translate="Today">Today</button>
-<button class="tab-btn" onclick="switchTab('history')" data-translate="History">History</button>
+<button class="tab-btn active" onclick="switchTab('today')">Today</button>
+<button class="tab-btn" onclick="switchTab('history')">History</button>
 </div>
 
 <!-- Today View -->
 <div id="todayView" class="view-section active">
 <div class="card card-mood">
-<h2 class="card-title" data-translate="How's your mood & energy today?">How's your mood & energy today?</h2>
+<h2 class="card-title">How's your mood & energy today?</h2>
 <div class="grid-desktop">
 <div style="padding:20px;background:rgba(236,72,153,0.05);border-radius:12px;border:1px solid rgba(236,72,153,0.15);">
-<label style="display:block;font-weight:600;color:#db2777;margin-bottom:16px;font-size:1.1rem;"><span data-translate="Mood">😊 Mood</span></label>
+<label style="display:block;font-weight:600;color:#db2777;margin-bottom:16px;font-size:1.1rem;">😊 Mood</label>
 <div id="moodButtons" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;">
 <button class="mood-btn" data-mood="1" title="Very Sad"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M8 15c1 -1.5 2.5 -2 4 -2s3 0.5 4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="9" r="1" fill="currentColor"/><circle cx="15" cy="9" r="1" fill="currentColor"/></svg></button>
 <button class="mood-btn" data-mood="2" title="Sad"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M8 16c1 -1 2.5 -1.5 4 -1.5s3 0.5 4 1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="9" r="1" fill="currentColor"/><circle cx="15" cy="9" r="1" fill="currentColor"/></svg></button>
@@ -636,195 +635,6 @@ div.innerHTML=`<span style="font-weight:500;color:#374151;">${labels[idx]}</span
 container.appendChild(div);
 });
 }
-
-// Language Translation System
-const translations={
-en:{
-'Learn Thyself':'Learn Thyself',
-'Organize my time. Understand my mind.':'Organize my time. Understand my mind.',
-'Today':'Today',
-'History':'History',
-'How\'s your mood & energy today?':'How\'s your mood & energy today?',
-'Mood':'Mood',
-'Energy':'Energy',
-'Notes:':'Notes:',
-'How are you feeling and why?':'How are you feeling and why?',
-'What affected your energy today?':'What affected your energy today?',
-'No mood selected':'No mood selected',
-'No energy selected':'No energy selected',
-'Selected: ':'Selected: ',
-'Selected: Level':'Selected: Level',
-'Save Mood & Energy':'Save Mood & Energy',
-'My Daily Activities':'My Daily Activities',
-'Add activity':'Add activity',
-'Add':'Add',
-'day streak':'day streak',
-'My Progress':'My Progress',
-'Completed':'Completed',
-'This Week':'This Week',
-'Calendar':'Calendar',
-'Time Tracker':'Time Tracker',
-'Activity name':'Activity name',
-'Start':'Start',
-'Stop':'Stop',
-'Daily To Do':'Daily To Do',
-'Add task':'Add task',
-'Get It Done':'Get It Done',
-'Quote of the Hour':'Quote of the Hour',
-'Photo Album':'Photo Album',
-'Add Photo':'Add Photo',
-'Daily Ratings':'Daily Ratings',
-'Relationship':'Relationship',
-'Health':'Health',
-'Money':'Money',
-'Learning':'Learning',
-'Fun':'Fun',
-'Your Progress History':'Your Progress History',
-'Weekly':'Weekly',
-'Monthly':'Monthly',
-'This Week\'s Summary':'This Week\'s Summary',
-'Activities Completed':'Activities Completed',
-'Average Mood':'Average Mood',
-'Average Energy':'Average Energy',
-'Time Tracked':'Time Tracked',
-'Daily Breakdown':'Daily Breakdown',
-'This Month\'s Summary':'This Month\'s Summary',
-'Weekly Breakdown':'Weekly Breakdown',
-'Week':'Week',
-'Best Streaks':'Best Streaks',
-'Mood & Energy Insights':'Mood & Energy Insights',
-'Life Ratings Overview':'Life Ratings Overview',
-'Best Mood Day':'Best Mood Day',
-'Best Energy Day':'Best Energy Day',
-'activities':'activities',
-'Very Sad':'Very Sad',
-'Sad':'Sad',
-'Neutral':'Neutral',
-'Happy':'Happy',
-'Very Happy':'Very Happy',
-'Very Low':'Very Low',
-'Low':'Low',
-'Medium':'Medium',
-'High':'High',
-'Very High':'Very High'
-},
-es:{
-'Learn Thyself':'Conócete a Ti Mismo',
-'Organize my time. Understand my mind.':'Organiza mi tiempo. Comprende mi mente.',
-'Today':'Hoy',
-'History':'Historial',
-'How\'s your mood & energy today?':'¿Cómo está tu ánimo y energía hoy?',
-'Mood':'Ánimo',
-'Energy':'Energía',
-'Notes:':'Notas:',
-'How are you feeling and why?':'¿Cómo te sientes y por qué?',
-'What affected your energy today?':'¿Qué afectó tu energía hoy?',
-'No mood selected':'Ningún ánimo seleccionado',
-'No energy selected':'Ninguna energía seleccionada',
-'Selected: ':'Seleccionado: ',
-'Selected: Level':'Seleccionado: Nivel',
-'Save Mood & Energy':'Guardar Ánimo y Energía',
-'My Daily Activities':'Mis Actividades Diarias',
-'Add activity':'Agregar actividad',
-'Add':'Agregar',
-'day streak':'días seguidos',
-'My Progress':'Mi Progreso',
-'Completed':'Completado',
-'This Week':'Esta Semana',
-'Calendar':'Calendario',
-'Time Tracker':'Registro de Tiempo',
-'Activity name':'Nombre de actividad',
-'Start':'Iniciar',
-'Stop':'Detener',
-'Daily To Do':'Tareas Diarias',
-'Add task':'Agregar tarea',
-'Get It Done':'Hazlo Ya',
-'Quote of the Hour':'Cita de la Hora',
-'Photo Album':'Álbum de Fotos',
-'Add Photo':'Agregar Foto',
-'Daily Ratings':'Calificaciones Diarias',
-'Relationship':'Relación',
-'Health':'Salud',
-'Money':'Dinero',
-'Learning':'Aprendizaje',
-'Fun':'Diversión',
-'Your Progress History':'Tu Historial de Progreso',
-'Weekly':'Semanal',
-'Monthly':'Mensual',
-'This Week\'s Summary':'Resumen de Esta Semana',
-'Activities Completed':'Actividades Completadas',
-'Average Mood':'Ánimo Promedio',
-'Average Energy':'Energía Promedio',
-'Time Tracked':'Tiempo Registrado',
-'Daily Breakdown':'Desglose Diario',
-'This Month\'s Summary':'Resumen de Este Mes',
-'Weekly Breakdown':'Desglose Semanal',
-'Week':'Semana',
-'Best Streaks':'Mejores Rachas',
-'Mood & Energy Insights':'Perspectivas de Ánimo y Energía',
-'Life Ratings Overview':'Resumen de Calificaciones de Vida',
-'Best Mood Day':'Mejor Día de Ánimo',
-'Best Energy Day':'Mejor Día de Energía',
-'activities':'actividades',
-'Very Sad':'Muy Triste',
-'Sad':'Triste',
-'Neutral':'Neutral',
-'Happy':'Feliz',
-'Very Happy':'Muy Feliz',
-'Very Low':'Muy Baja',
-'Low':'Baja',
-'Medium':'Media',
-'High':'Alta',
-'Very High':'Muy Alta'
-}
-};
-
-let currentLang=localStorage.getItem('language')||'en';
-const langBtn=document.getElementById('langToggle');
-
-function t(key){
-return translations[currentLang][key]||key;
-}
-
-function translatePage(){
-document.querySelectorAll('[data-translate]').forEach(el=>{
-const key=el.getAttribute('data-translate');
-const translated=t(key);
-if(el.tagName==='H1'||el.tagName==='H2'){
-el.textContent=el.textContent.replace(key,translated);
-}else{
-el.textContent=translated;
-}
-});
-document.querySelectorAll('[data-translate-placeholder]').forEach(el=>{
-const key=el.getAttribute('data-translate-placeholder');
-el.placeholder=t(key);
-});
-document.querySelectorAll('[data-translate-title]').forEach(el=>{
-const key=el.getAttribute('data-translate-title');
-el.title=t(key);
-});
-const moodLabelEl=document.getElementById('moodLabel');
-if(moodLabelEl&&moodLabelEl.textContent.includes('No mood')){
-moodLabelEl.textContent=t('No mood selected');
-}
-const energyLabelEl=document.getElementById('energyLabel');
-if(energyLabelEl&&energyLabelEl.textContent.includes('No energy')){
-energyLabelEl.textContent=t('No energy selected');
-}
-langBtn.textContent=currentLang==='en'?'EN':'ES';
-}
-
-langBtn.addEventListener('click',()=>{
-currentLang=currentLang==='en'?'es':'en';
-localStorage.setItem('language',currentLang);
-translatePage();
-if(typeof loadHistory==='function'&&document.getElementById('historyView').classList.contains('active')){
-loadHistory();
-}
-});
-
-translatePage();
 
 </script>
 </body>
