@@ -336,7 +336,9 @@ function getYesterday(){const d=new Date();d.setDate(d.getDate()-1);return d.toI
 function checkAndResetDaily(){const today=getTodayString();const yesterday=getYesterday();activities.forEach(item=>{if(!item.lastCompletedDate){item.lastCompletedDate=null;item.streak=0;item.checked=false;}else if(item.lastCompletedDate!==today){if(item.lastCompletedDate===yesterday&&item.checked){item.checked=false;}else if(item.lastCompletedDate!==yesterday){item.streak=0;item.checked=false;}else{item.checked=false;}}});save();}
 checkAndResetDaily();function save(){localStorage.setItem('activities',JSON.stringify(activities));updateProgress();}
 function render(){container.innerHTML='';activities.forEach(item=>{const div=document.createElement('div');div.className='activity-item';div.innerHTML='<div style="display:flex;align-items:center;gap:16px;flex:1;"><input type="checkbox" '+(item.checked?'checked':'')+' data-id="'+item.id+'"/><span style="font-weight:600;color:#374151;">'+escapeHtml(item.text)+'</span><span class="status-badge" style="background:var(--pastel-pink);color:#ff758f;"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="display:inline-block;vertical-align:middle;margin-right:4px;"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/></svg>'+(item.streak||0)+' day streak</span></div><button data-id="'+item.id+'" style="background:rgba(239,68,68,0.1);border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;color:#ef4444;font-size:16px;font-weight:bold;display:flex;align-items:center;justify-content:center;transition:all 0.2s;">×</button>';const checkbox=div.querySelector('input[type="checkbox"]');checkbox.addEventListener('change',()=>{const today=getTodayString();const yesterday=getYesterday();item.checked=checkbox.checked;if(checkbox.checked){if(item.lastCompletedDate===yesterday){item.streak=(item.streak||0)+1;}else if(item.lastCompletedDate===today){item.streak=item.streak||1;}else{item.streak=1;}
-item.lastCompletedDate=today;}else{item.lastCompletedDate=null;}
+item.lastCompletedDate=today;let completionHistory=JSON.parse(localStorage.getItem('activityCompletions')||'{}');if(!completionHistory[today])completionHistory[today]=[];if(!completionHistory[today].includes(item.id)){completionHistory[today].push(item.id);}
+localStorage.setItem('activityCompletions',JSON.stringify(completionHistory));}else{item.lastCompletedDate=null;let completionHistory=JSON.parse(localStorage.getItem('activityCompletions')||'{}');if(completionHistory[today]){completionHistory[today]=completionHistory[today].filter(id=>id!==item.id);}
+localStorage.setItem('activityCompletions',JSON.stringify(completionHistory));}
 save();render();});const delBtn=div.querySelector('button');delBtn.addEventListener('click',()=>{activities=activities.filter(a=>a.id!==item.id);save();render();});container.appendChild(div);});updateProgress();}
 addBtn.addEventListener('click',()=>{const text=input.value.trim();if(!text)return;activities.unshift({id:uid(),text,checked:false,streak:0,lastCompletedDate:null});input.value='';save();render();});render();})();(function(){const sliders=['relationship','health','money','learning','fun'];sliders.forEach(name=>{const slider=document.getElementById(name+'Slider');const value=document.getElementById(name+'Value');slider.addEventListener('input',()=>{value.textContent=slider.value;const ratings=JSON.parse(localStorage.getItem('dailyRatings')||'{}');ratings[getTodayString()]=ratings[getTodayString()]||{};ratings[getTodayString()][name]=slider.value;localStorage.setItem('dailyRatings',JSON.stringify(ratings));});const ratings=JSON.parse(localStorage.getItem('dailyRatings')||'{}');const today=getTodayString();if(ratings[today]&&ratings[today][name]){slider.value=ratings[today][name];value.textContent=ratings[today][name];}});})();function updateProgress(){const activities=JSON.parse(localStorage.getItem('activities')||'[]');const total=activities.length;const completed=activities.filter(a=>a.checked).length;const pct=total>0?Math.round((completed/total)*100):0;document.getElementById('progressFill').style.width=pct+'%';document.getElementById('progressStats').textContent=completed+' of '+total+' activities completed';}
 function createListHandler(inputId,btnId,listId,storageKey){const input=document.getElementById(inputId);const btn=document.getElementById(btnId);const list=document.getElementById(listId);let items=JSON.parse(localStorage.getItem(storageKey)||'[]');function save(){localStorage.setItem(storageKey,JSON.stringify(items));}
@@ -419,6 +421,7 @@ const activities=JSON.parse(localStorage.getItem('activities')||'[]');
 const moodData=JSON.parse(localStorage.getItem('dailyMoodEnergy')||'{}');
 const timeData=JSON.parse(localStorage.getItem('timeTracker')||'{}');
 const ratings=JSON.parse(localStorage.getItem('dailyRatings')||'{}');
+const completionHistory=JSON.parse(localStorage.getItem('activityCompletions')||'{}');
 
 let totalCompleted=0;
 let moodSum=0,moodCount=0;
@@ -426,10 +429,10 @@ let energySum=0,energyCount=0;
 let timeSum=0;
 
 dates.forEach(date=>{
-// Count completed activities for this date
-activities.forEach(act=>{
-if(act.lastCompletedDate===date&&act.checked)totalCompleted++;
-});
+// Count completed activities for this date using completion history
+if(completionHistory[date]){
+totalCompleted+=completionHistory[date].length;
+}
 // Mood/energy
 if(moodData[date]){
 if(moodData[date].mood){moodSum+=parseInt(moodData[date].mood);moodCount++;}
@@ -458,7 +461,7 @@ dayDiv.style.background='white';
 dayDiv.style.borderRadius='8px';
 dayDiv.style.marginBottom='8px';
 dayDiv.style.border='1px solid #fde68a';
-const dayCompleted=activities.filter(a=>a.lastCompletedDate===date&&a.checked).length;
+const dayCompleted=completionHistory[date]?completionHistory[date].length:0;
 const dayMood=moodData[date]?moodData[date].mood||'-':'-';
 const dayEnergy=moodData[date]?moodData[date].energy||'-':'-';
 const dayTime=timeData[date]?timeData[date].reduce((sum,e)=>sum+parseFloat(e.hours||0),0).toFixed(1)+'h':'0h';
@@ -475,6 +478,7 @@ const activities=JSON.parse(localStorage.getItem('activities')||'[]');
 const moodData=JSON.parse(localStorage.getItem('dailyMoodEnergy')||'{}');
 const timeData=JSON.parse(localStorage.getItem('timeTracker')||'{}');
 const ratings=JSON.parse(localStorage.getItem('dailyRatings')||'{}');
+const completionHistory=JSON.parse(localStorage.getItem('activityCompletions')||'{}');
 
 let totalCompleted=0;
 let moodSum=0,moodCount=0;
@@ -482,9 +486,9 @@ let energySum=0,energyCount=0;
 let timeSum=0;
 
 dates.forEach(date=>{
-activities.forEach(act=>{
-if(act.lastCompletedDate===date&&act.checked)totalCompleted++;
-});
+if(completionHistory[date]){
+totalCompleted+=completionHistory[date].length;
+}
 if(moodData[date]){
 if(moodData[date].mood){moodSum+=parseInt(moodData[date].mood);moodCount++;}
 if(moodData[date].energy){energySum+=parseInt(moodData[date].energy);energyCount++;}
@@ -517,7 +521,9 @@ let weekMoodSum=0,weekMoodCount=0;
 let weekEnergySum=0,weekEnergyCount=0;
 let weekTime=0;
 weekDates.forEach(date=>{
-weekCompleted+=activities.filter(a=>a.lastCompletedDate===date&&a.checked).length;
+if(completionHistory[date]){
+weekCompleted+=completionHistory[date].length;
+}
 if(moodData[date]){
 if(moodData[date].mood){weekMoodSum+=parseInt(moodData[date].mood);weekMoodCount++;}
 if(moodData[date].energy){weekEnergySum+=parseInt(moodData[date].energy);weekEnergyCount++;}
