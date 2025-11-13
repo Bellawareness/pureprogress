@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="en" translate="no">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="google" content="notranslate"/>
+<title>Feedback - Learn Thyself</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<style>
+:root{
+--pastel-pink:#ffd6e7;
+--pastel-blue:#d6e9ff;
+--pastel-lavender:#e7d6ff;
+--pastel-mint:#d6ffe9;
+--pastel-peach:#ffebd6;
+--pastel-yellow:#fff9d6;
+--bg-gradient-start:#ffeef8;
+--bg-gradient-end:#e7f3ff;
+--card-bg:rgba(255,255,255,0.95);
+--text-primary:#374151;
+--text-secondary:#6b7280;
+--border-color:rgba(255,154,162,0.2);
+--accent-1:#ec4899;
+--accent-2:#8b5cf6;
+--accent-3:#0ea5e9;
+}
+body{
+font-family:Inter,system-ui,-apple-system,Arial,sans-serif;
+margin:0;
+min-height:100vh;
+background:linear-gradient(135deg,var(--bg-gradient-start) 0%,var(--bg-gradient-end) 100%);
+color:var(--text-primary);
+}
+.container{
+max-width:900px;
+margin:0 auto;
+padding:24px;
+}
+.header-hero{
+height:280px;
+border-radius:20px;
+position:relative;
+overflow:hidden;
+background-image:url('pinkcloud.jpg');
+background-size:cover;
+background-position:center;
+margin-bottom:32px;
+}
+.header-overlay{
+position:absolute;
+inset:0;
+background:rgba(0,0,0,0.08);
+backdrop-filter:blur(2px);
+}
+.header-content{
+position:relative;
+z-index:2;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+height:100%;
+text-align:center;
+padding:0 1rem;
+}
+.page-title{
+font-family:'Pacifico',cursive;
+font-size:clamp(2rem,5vw,2.75rem);
+color:#fff;
+text-shadow:0 4px 12px rgba(0,0,0,0.3);
+margin:0 0 8px 0;
+}
+.page-subtitle{
+color:rgba(255,255,255,0.95);
+font-size:1.125rem;
+margin:0;
+}
+.card{
+background:var(--card-bg);
+border-radius:20px;
+box-shadow:0 8px 32px rgba(255,182,193,0.15);
+padding:32px;
+margin-bottom:32px;
+position:relative;
+}
+.card::before{
+content:'';
+position:absolute;
+top:-8px;
+left:20px;
+width:16px;
+height:16px;
+background:radial-gradient(circle at 30% 30%,#ffd700 0%,#daa520 50%,#b8860b 100%);
+border-radius:50%;
+box-shadow:0 3px 8px rgba(0,0,0,0.3),inset -2px -2px 4px rgba(0,0,0,0.2),inset 2px 2px 4px rgba(255,255,255,0.3);
+}
+.card::after{
+content:'';
+position:absolute;
+top:-8px;
+right:20px;
+width:16px;
+height:16px;
+background:radial-gradient(circle at 30% 30%,#ffd700 0%,#daa520 50%,#b8860b 100%);
+border-radius:50%;
+box-shadow:0 3px 8px rgba(0,0,0,0.3),inset -2px -2px 4px rgba(0,0,0,0.2),inset 2px 2px 4px rgba(255,255,255,0.3);
+}
+.section-title{
+font-size:1.5rem;
+font-weight:700;
+margin-bottom:24px;
+color:#8b5cf6;
+display:flex;
+align-items:center;
+gap:12px;
+}
+.question{
+margin-bottom:28px;
+}
+.question-label{
+font-weight:600;
+color:var(--text-primary);
+margin-bottom:12px;
+display:flex;
+align-items:center;
+gap:8px;
+font-size:1.05rem;
+}
+.radio-group{
+display:flex;
+flex-wrap:wrap;
+gap:12px;
+margin-top:12px;
+}
+.radio-option{
+display:flex;
+align-items:center;
+gap:8px;
+padding:12px 16px;
+background:white;
+border:2px solid #e5e7eb;
+border-radius:12px;
+cursor:pointer;
+transition:all 0.3s ease;
+flex:1;
+min-width:fit-content;
+}
+.radio-option:hover{
+border-color:#ff9aa2;
+background:#fef2f4;
+transform:translateY(-2px);
+}
+.radio-option input[type="radio"]{
+width:18px;
+height:18px;
+cursor:pointer;
+accent-color:#ff758f;
+}
+.radio-option input[type="radio"]:checked{
+transform:scale(1.1);
+}
+.radio-option.selected{
+border-color:#ff758f;
+background:linear-gradient(135deg,#ffd6e7 0%,rgba(255,214,231,0.7) 100%);
+}
+textarea{
+width:100%;
+padding:16px;
+border:2px solid #e5e7eb;
+border-radius:12px;
+font-size:1rem;
+font-family:inherit;
+resize:vertical;
+min-height:100px;
+transition:border-color 0.3s ease;
+}
+textarea:focus{
+outline:none;
+border-color:#ff9aa2;
+}
+.btn{
+padding:16px 32px;
+background:linear-gradient(135deg,#ff9aa2,#ff758f);
+color:white;
+border:none;
+border-radius:12px;
+font-size:1.125rem;
+font-weight:600;
+cursor:pointer;
+transition:all 0.3s ease;
+box-shadow:0 4px 12px rgba(255,117,143,0.3);
+width:100%;
+}
+.btn:hover{
+transform:translateY(-2px);
+box-shadow:0 6px 20px rgba(255,117,143,0.4);
+}
+.btn:active{
+transform:translateY(0);
+}
+.back-btn{
+display:inline-flex;
+align-items:center;
+gap:8px;
+padding:12px 24px;
+background:white;
+color:#6b7280;
+border:2px solid #e5e7eb;
+border-radius:12px;
+font-weight:600;
+text-decoration:none;
+transition:all 0.3s ease;
+margin-bottom:24px;
+}
+.back-btn:hover{
+border-color:#ff9aa2;
+color:#ff758f;
+transform:translateX(-4px);
+}
+.success-message{
+display:none;
+padding:24px;
+background:linear-gradient(135deg,#d1fae5 0%,rgba(209,250,229,0.7) 100%);
+border-radius:16px;
+border:2px solid #10b981;
+text-align:center;
+}
+.success-message.show{
+display:block;
+}
+@media(max-width:768px){
+.radio-group{
+flex-direction:column;
+}
+.radio-option{
+flex:none;
+width:100%;
+}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<a href="index.html" class="back-btn">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<path d="M19 12H5M12 19l-7-7 7-7"/>
+</svg>
+Back to Tracker
+</a>
+
+<div class="header-hero">
+<div class="header-overlay"></div>
+<div class="header-content">
+<h1 class="page-title">
+<svg width="32" height="32" viewBox="0 0 24 24" fill="white" style="display:inline-block;vertical-align:middle;margin-right:8px;">
+<path d="M20 3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h3l-1 1v2h12v-2l-1-1h3c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 13H4V5h16v11z"/>
+</svg>
+Habit Tracker Feedback
+</h1>
+<p class="page-subtitle">Help us grow by sharing your experience</p>
+</div>
+</div>
+
+<div id="successMessage" class="success-message">
+<svg width="64" height="64" viewBox="0 0 24 24" fill="#10b981" style="margin:0 auto 16px;">
+<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+</svg>
+<h2 style="color:#059669;font-size:1.5rem;margin-bottom:8px;">Thank you for your feedback!</h2>
+<p style="color:#047857;">Your insights help us improve Learn Thy Self 🌱</p>
+</div>
+
+<form id="feedbackForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+
+<!-- Ease of Use Section -->
+<div class="card">
+<h2 class="section-title">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+</svg>
+Ease of Use
+</h2>
+
+<div class="question">
+<label class="question-label">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+<path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+</svg>
+1. How easy was it to use the habit tracker overall?
+</label>
+<div class="radio-group">
+<label class="radio-option">
+<input type="radio" name="ease_overall" value="Very confusing" required>
+<span>Very confusing</span>
+</label>
+<label class="radio-option">
+<input type="radio" name="ease_overall" value="Somewhat difficult">
+<span>Somewhat difficult</span>
+</label>
+<label class="radio-option">
+<input type="radio" name="ease_overall" value="Easy">
+<span>Easy</span>
+</label>
+<label class="radio-option">
+<input type="radio" name="ease_overall" value="Super easy">
+<span>Super easy</span>
+</label>
+</div>
+</div>
+
+<div class="question">
+<label class="question-label">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+<path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/>
+</svg>
+2. Did you understand how to add or track habits?
+</label>
+<div class="radio-group">
+<label class="radio-option">
+<input type="radio" name="ease_understand" value="Not really" required>
+<span>Not really</span>
+</label>
+<label class="radio-option">
+<input type="radio" name="ease_understand" value="Mostly">
+<span>Mostly</span>
+</label>
+<label class="radio-option">
+<input type="radio" name="ease_understand" value="Yes, completely">
+<span>Yes, completely</span>
+</label>
+</div>
+</div>
+
+<div class="question">
+<label class="question-label">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+<path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+</svg>
+3. How smooth was your daily tracking experience?
+</label>
+<div class="radio-group">
+<label class="radio-option">
+<input type="radio" name="ease_smooth" value="Slow / tedious" required>
+<span>Slow / tedious</span>
+</label>
+<label class="radio-option">
+<input type="radio" name="ease_smooth" value="Okay">
+<span>Okay</span>
+</label>
+<label class="radio-option">
+<input type="radio" name="ease_smooth" value="Fast & effortless">
+<span>Fast & effortless</span>
+</label>
+</div>
+</div>
+</div>
+
+<!-- User Experience & Design Section -->
+<div class="card">
+<h2 class="section-title">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+</svg>
+User Experience & Design
+</h2>
+
+<div class="question">
+<label class="question-label">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+<path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+</svg>
+1. How do you feel about the look & design?
+</label>
+<div class="radio-group">
+<label class="radio-option">
+<input type="radio" name="ux_design" value="Not my vibe" required>
+<span>Not my vibe</span>
+</label>
+<label class="radio-option">
+<input type="radio" name="ux_design" value="Okay">
+<span>Okay</span>
+</label>
+<label class="radio-option">
+<input type="radio" name="ux_design" value="Clean & pleasant">
+<span>Clean & pleasant</span>
+</label>
+<label class="radio-option">
+<input type="radio" name="ux_design" value="Beautiful & motivating">
+<span>Beautiful & motivating</span>
+</label>
+</div>
+</div>
+
+<div class="question">
+<label class="question-label">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+<path d="M12 2l-5.5 9h11z M12 22l5.5-9h-11z"/>
+<path d="M3 12h18"/>
+</svg>
+2. Was navigation (menus, buttons, icons) intuitive?
+</label>
+<div class="radio-group">
+<label class="radio-option">
+<input type="radio" name="ux_navigation" value="Hard to find things" required>
+<span>Hard to find things</span>
+</label>
+<label class="radio-option">
+<input type="radio" name="ux_navigation" value="Mostly clear">
+<span>Mostly clear</span>
+</label>
+<label class="radio-option">
+<input type="radio" name="ux_navigation" value="Super intuitive">
+<span>Super intuitive</span>
+</label>
+</div>
+</div>
+
+<div class="question">
+<label class="question-label">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+</svg>
+3. Did the tracker help you stay consistent with your habits?
+</label>
+<div class="radio-group">
+<label class="radio-option">
+<input type="radio" name="ux_consistency" value="Nope" required>
+<span>Nope</span>
+</label>
+<label class="radio-option">
+<input type="radio" name="ux_consistency" value="A little">
+<span>A little</span>
+</label>
+<label class="radio-option">
+<input type="radio" name="ux_consistency" value="Yes!">
+<span>Yes!</span>
+</label>
+</div>
+</div>
+</div>
+
+<!-- Feedback & Improvements Section -->
+<div class="card">
+<h2 class="section-title">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+<path d="M21 6h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1zm-4 6V3c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v14l4-4h10c.55 0 1-.45 1-1z"/>
+</svg>
+Feedback & Improvements
+</h2>
+
+<div class="question">
+<label class="question-label">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+</svg>
+1. What features did you enjoy the most?
+</label>
+<textarea name="enjoy_most" placeholder="Tell us what you loved..."></textarea>
+</div>
+
+<div class="question">
+<label class="question-label">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+<path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+</svg>
+2. What could be improved to make it easier or more fun?
+</label>
+<textarea name="improvements" placeholder="Share your suggestions..."></textarea>
+</div>
+
+<div class="question">
+<label class="question-label">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+<path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/>
+</svg>
+3. Any ideas or new features you'd love to see?
+</label>
+<textarea name="new_features" placeholder="Dream big! What would make this even better?"></textarea>
+</div>
+</div>
+
+<!-- Final Thoughts Section -->
+<div class="card">
+<h2 class="section-title">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+<path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+</svg>
+Final Thoughts
+</h2>
+
+<div class="question">
+<label class="question-label">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+</svg>
+1. How likely are you to recommend Learn Thy Self to a friend?
+</label>
+<div class="radio-group">
+<label class="radio-option">
+<input type="radio" name="recommend" value="1" required>
+<span>1</span>
+</label>
+<label class="radio-option">
+<input type="radio" name="recommend" value="2">
+<span>2</span>
+</label>
+<label class="radio-option">
+<input type="radio" name="recommend" value="3">
+<span>3</span>
+</label>
+<label class="radio-option">
+<input type="radio" name="recommend" value="4">
+<span>4</span>
+</label>
+<label class="radio-option">
+<input type="radio" name="recommend" value="5">
+<span>5</span>
+</label>
+</div>
+</div>
+
+<div class="question">
+<label class="question-label">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+<path d="M21 6h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1zm-4 6V3c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v14l4-4h10c.55 0 1-.45 1-1z"/>
+</svg>
+2. Anything else you'd like to share about your experience?
+</label>
+<textarea name="final_thoughts" placeholder="Your thoughts mean the world to us..."></textarea>
+</div>
+</div>
+
+<button type="submit" class="btn">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="white" style="display:inline-block;vertical-align:middle;margin-right:8px;">
+<path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+</svg>
+Submit Feedback
+</button>
+
+</form>
+
+</div>
+
+<script>
+// Add visual feedback for radio selection
+document.querySelectorAll('.radio-option input[type="radio"]').forEach(radio => {
+  radio.addEventListener('change', function() {
+    // Remove selected class from all options in this group
+    const groupName = this.name;
+    document.querySelectorAll(`input[name="${groupName}"]`).forEach(r => {
+      r.closest('.radio-option').classList.remove('selected');
+    });
+    // Add selected class to chosen option
+    this.closest('.radio-option').classList.add('selected');
+  });
+});
+
+// Handle form submission
+document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  // Get form data
+  const formData = new FormData(this);
+  
+  // Submit to Formspree
+  fetch(this.action, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'Accept': 'application/json'
+    }
+  }).then(response => {
+    if (response.ok) {
+      // Show success message
+      document.getElementById('successMessage').classList.add('show');
+      document.getElementById('feedbackForm').style.display = 'none';
+      // Scroll to top
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    } else {
+      alert('Oops! There was a problem submitting your form. Please try again.');
+    }
+  }).catch(error => {
+    alert('Oops! There was a problem submitting your form. Please try again.');
+  });
+});
+</script>
+
+</body>
+</html>

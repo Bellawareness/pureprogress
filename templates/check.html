@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bella Luna's Designer Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {poppins: ['Poppins', 'sans-serif']},
+            colors: {
+              primary: '#80DBFA',
+              secondary: '#4B6863',
+              accent: '#D0A6FF' /* Lilac Pink */,
+              dark: '#2a2a2a'
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      /* Twinkling Stars Styles */
+      .twinkling-stars {
+        position: absolute;
+        inset: 0;
+        background: transparent;
+        overflow: hidden;
+        pointer-events: none;
+      }
+
+      .star {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: white;
+        border-radius: 50%;
+        animation: twinkle 2s infinite ease-in-out;
+      }
+
+      @keyframes twinkle {
+        0%,
+        100% {
+          opacity: 0.2;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
+      /* Pointer-Following Stars */
+      .pointer-star {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        background: white;
+        border-radius: 50%;
+        box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.8);
+        animation: fade-out 1.5s ease-out forwards;
+      }
+
+      @keyframes fade-out {
+        0% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(0.5);
+          opacity: 0;
+        }
+      }
+
+      /* Buttons Animation and Glass Effect */
+      .glass-button {
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 0 0 15px 2px rgba(255, 255, 255, 0.3);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .glass-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 0 20px 4px rgba(255, 255, 255, 0.6);
+      }
+
+      /* Moon Animation */
+      @keyframes moon-fade-in {
+        0% {
+          opacity: 0;
+          transform: scale(0.5);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .moon-animation {
+        animation: moon-fade-in 5s ease-out forwards;
+      }
+
+      /* Glass Card Styles */
+      .glass-card {
+        background: rgba(255,255,255,0.08);
+        backdrop-filter: blur(18px) saturate(180%);
+        box-shadow: 0 8px 32px 0 rgba(30,34,56,0.35), 0 1.5px 8px 0 rgba(160,200,255,0.18);
+        border: 1.5px solid rgba(255,255,255,0.15);
+        transition: all 0.3s ease;
+      }
+      
+      .glass-card:hover {
+        background: rgba(255,255,255,0.12);
+        box-shadow: 0 12px 40px 0 rgba(30,34,56,0.45), 0 2px 12px 0 rgba(160,200,255,0.22);
+        transform: translateY(-4px) scale(1.02);
+      }
+
+      /* Smooth Scroll */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Timeline Styles */
+      .timeline-badge {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #D0A6FF, #80DBFA);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        box-shadow: 0 0 20px rgba(208, 166, 255, 0.6);
+        z-index: 10;
+      }
+
+      .timeline-line {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(180deg, #D0A6FF, #80DBFA);
+        opacity: 0.5;
+      }
+
+      @media (max-width: 768px) {
+        .timeline-badge {
+          left: 30px;
+          transform: translateX(0);
+        }
+        .timeline-line {
+          left: 30px;
+          transform: translateX(0);
+        }
+      }
+
+      /* Floating Animation */
+      @keyframes float {
+        0%, 100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+      }
+
+      .float-animation {
+        animation: float 6s ease-in-out infinite;
+      }
+
+      /* Pulse Animation */
+      @keyframes pulse-glow {
+        0%, 100% {
+          box-shadow: 0 0 20px rgba(208, 166, 255, 0.4);
+        }
+        50% {
+          box-shadow: 0 0 40px rgba(208, 166, 255, 0.8);
+        }
+      }
+
+      .pulse-glow {
+        animation: pulse-glow 2s ease-in-out infinite;
+      }
+
+      /* Stat Counter Animation */
+      @keyframes countUp {
+        from {
+          opacity: 0;
+          transform: scale(0.5);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .stat-item {
+        animation: countUp 0.6s ease-out forwards;
+      }
+
+      /* SVG Icon Styles */
+      .icon-svg {
+        width: 40px;
+        height: 40px;
+        fill: currentColor;
+      }
+
+      .timeline-badge .icon-svg {
+        width: 32px;
+        height: 32px;
+      }
+
+      .skill-icon {
+        width: 64px;
+        height: 64px;
+      }
+
+       a {
+    pointer-events: auto; 
+    transition: color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  a:hover,
+  a:focus {
+    color: #ffffff;
+    background-color: #D0A6FF;
+    box-shadow: 0 0 10px 2px #D0A6FF;
+    outline: 2px solid #D0A6FF;
+    outline-offset: 2px;
+  }
+    </style>
+  </head>
+  <body
+    class="bg-gradient-to-b from-[#1A2238] via-[#2A2A72] to-[#1A2238] font-poppins text-white flex flex-col min-h-screen"
+  >
+    <!-- Header Section -->
+    <header class="fixed top-0 w-full z-50 py-3 px-4 bg-[#1A2238] bg-opacity-90 backdrop-blur-md shadow-lg text-center sm:text-left">
+      <div class="flex flex-col sm:flex-row justify-between items-center">
+        <a href="index.html">
+          <img src="luna-logo.png" alt="Bella Luna's Logo" class="w-20 sm:w-28" />
+        </a>
+
+        <!-- Desktop Menu -->
+        <nav class="hidden sm:flex space-x-6 mt-4 sm:mt-0" aria-label="Main Navigation">
+          <a
+            href="index.html"
+            class="text-accent opacity-90 hover:opacity-100 transition-opacity font-medium text-lg focus:outline-none focus:ring-2 focus:ring-accent"
+            tabindex="0"
+            >Home</a
+          >
+          <a
+            href="designworks.html"
+            class="text-accent opacity-90 hover:opacity-100 transition-opacity font-medium text-lg focus:outline-none focus:ring-2 focus:ring-accent"
+            tabindex="0"
+            >Portfolio</a
+          >
+          <a
+            href="blog.html"
+            class="text-accent opacity-90 hover:opacity-100 transition-opacity font-medium text-lg focus:outline-none focus:ring-2 focus:ring-accent"
+            tabindex="0"
+            >Blog</a
+          >
+        </nav>
+
+        <!-- Mobile Menu Button -->
+        <button class="sm:hidden text-accent text-2xl mt-4 sm:mt-0 focus:outline-none focus:ring-2 focus:ring-accent" id="mobile-menu-button" aria-label="Open mobile menu" aria-expanded="false">
+          ☰
+        </button>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div id="mobile-menu" class="sm:hidden mt-4 hidden" aria-label="Mobile Navigation">
+        <a
+          href="about.html"
+          class="block text-accent opacity-90 hover:opacity-100 transition-opacity font-medium text-lg focus:outline-none focus:ring-2 focus:ring-accent"
+          tabindex="0"
+          >About</a
+        >
+        <a
+          href="designworks.html"
+          class="block text-accent opacity-90 hover:opacity-100 transition-opacity font-medium text-lg focus:outline-none focus:ring-2 focus:ring-accent"
+          tabindex="0"
+          >Portfolio</a
+        >
+        <a
+          href="blog.html"
+          class="block text-accent opacity-90 hover:opacity-100 transition-opacity font-medium text-lg focus:outline-none focus:ring-2 focus:ring-accent"
+          tabindex="0"
+          >Blog</a
+        >
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section
+      class="relative flex flex-col items-center justify-center h-[70vh] bg-cover bg-center px-4 pt-24 sm:pt-28"
+    >
+      <div
+        class="absolute inset-0 bg-[url('stars.gif')] bg-cover bg-center bg-fixed opacity-80"
+        aria-hidden="true"
+      ></div>
+
+      <div class="relative z-10 flex flex-col items-center text-center gap-4 animate__animated animate__fadeIn">
+        <div class="animate__animated animate__fadeInDown">
+          <img src="phase.svg" alt="Moon" class="w-64 sm:w-80 lg:w-96 mx-auto moon-animation" />
+        </div>
+
+        <!-- Text Content -->
+        <div class="animate__animated animate__fadeInUp">
+          <h1 class="text-3xl sm:text-5xl lg:text-6xl font-bold text-accent drop-shadow-lg">
+My Design Journey          </h1>
+          <h3 class="mt-4 text-lg sm:text-xl lg:text-2xl text-primary">
+            Creative mind with a passion for Design, Art, and Technology
+          </h3>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="relative mt-6 flex flex-col sm:flex-row gap-4 z-10 animate__animated animate__fadeIn animate__delay-1s">
+        <a href="sign-up.html" class="glass-button py-3 px-6 sm:px-8 rounded-lg text-sm sm:text-base font-semibold focus:outline-none focus:ring-2 focus:ring-accent" tabindex="0"
+          >Get In Touch</a
+        >
+        <a
+          href="designworks.html"
+          class="glass-button py-3 px-6 sm:px-8 rounded-lg text-sm sm:text-base font-semibold focus:outline-none focus:ring-2 focus:ring-accent" tabindex="0"
+          >Explore Projects</a
+        >
+      </div>
+    </section>
+
+    <!-- Twinkling Stars -->
+    <div class="twinkling-stars" aria-hidden="true">
+      <script>
+        const starsContainer = document.querySelector('.twinkling-stars')
+        for (let i = 0; i < 100; i++) {
+          const star = document.createElement('div')
+          star.classList.add('star')
+          star.style.top = `${Math.random() * 100}%`
+          star.style.left = `${Math.random() * 100}%`
+          star.style.animationDelay = `${Math.random() * 5}s`
+          starsContainer.appendChild(star)
+        }
+      </script>
+    </div>
+
+    <!-- JavaScript for Mouse-Follow Stars -->
+    <script>
+      document.body.addEventListener('mousemove', e => {
+        const star = document.createElement('div')
+        star.classList.add('pointer-star')
+        star.style.left = `${e.pageX}px`
+        star.style.top = `${e.pageY}px`
+        document.body.appendChild(star)
+
+        // Remove the star after animation
+        setTimeout(() => {
+          star.remove()
+        }, 1500)
+      })
+
+      // Toggle mobile menu visibility
+      const mobileMenuButton = document.getElementById('mobile-menu-button')
+      const mobileMenu = document.getElementById('mobile-menu')
+      mobileMenuButton.addEventListener('click', () => {
+        const expanded = mobileMenu.classList.toggle('hidden')
+        mobileMenuButton.setAttribute('aria-expanded', !expanded)
+      })
+    </script>
+
+    <!-- Stats Section -->
+    <section class="container mx-auto px-6 py-16">
+      <div class="glass-card p-8 rounded-3xl">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          <div class="stat-item">
+            <div class="text-4xl sm:text-5xl font-bold text-accent mb-2">5+</div>
+            <div class="text-sm sm:text-base text-white/80">Years Experience</div>
+          </div>
+          <div class="stat-item" style="animation-delay: 0.1s">
+            <div class="text-4xl sm:text-5xl font-bold text-primary mb-2">50+</div>
+            <div class="text-sm sm:text-base text-white/80">Projects Completed</div>
+          </div>
+          <div class="stat-item" style="animation-delay: 0.2s">
+            <div class="text-4xl sm:text-5xl font-bold text-accent mb-2">3</div>
+            <div class="text-sm sm:text-base text-white/80">Certifications</div>
+          </div>
+          <div class="stat-item" style="animation-delay: 0.3s">
+            <div class="text-4xl sm:text-5xl font-bold text-primary mb-2">∞</div>
+            <div class="text-sm sm:text-base text-white/80">Creative Ideas</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Timeline Journey Section -->
+    <section class="container mx-auto px-6 py-20 relative">
+      <h2 class="text-3xl sm:text-4xl font-bold text-accent text-center mb-20 animate__animated animate__fadeInUp">
+        <svg class="icon-svg inline-block mr-2 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+        My Journey
+      </h2>
+      
+      <!-- Timeline Line (hidden on mobile) -->
+      <div class="hidden md:block timeline-line" style="top: 100px; height: calc(100% - 200px);"></div>
+      
+      <div class="space-y-24 relative">
+        <!-- Timeline Item 1 -->
+        <div class="relative">
+          <div class="timeline-badge pulse-glow">
+            <svg class="icon-svg text-white" viewBox="0 0 24 24" fill="currentColor">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+              <line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" stroke-width="2" fill="none"/>
+              <line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="2" fill="none"/>
+            </svg>
+          </div>
+          <div class="flex flex-col md:flex-row items-center justify-between md:space-x-12 pt-16 md:pt-0">
+            <div class="md:w-5/12 md:text-right mb-8 md:mb-0 animate__animated">
+              <div class="glass-card p-6 rounded-2xl hover:shadow-2xl transition-all duration-300">
+                <h3 class="text-2xl font-bold text-accent mb-3">
+                  <svg class="icon-svg inline-block mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
+                    <path d="M12 6v6l4 2"/>
+                  </svg>
+                  The Beginning
+                </h3>
+                <p class="text-white leading-relaxed text-base sm:text-lg">
+                  Growing up in Linden, Guyana, my fascination with computers began early. I remember
+                  the excitement of attending computer classes in my hometown, and learning about
+                  hardware and software. Little did I know, this exposure would shape my future in
+                  profound ways. When my family moved to the United States, my passion for technology
+                  only intensified. Despite the challenges of adjusting to a new life, I immersed myself
+                  in the world of computers, even participating in a cutting-edge college Cyber Tech
+                  program while still in high school.
+                </p>
+              </div>
+            </div>
+            <div class="md:w-5/12 animate__animated">
+              <img
+                src="oldschool.png"
+                alt="Young Bella learning computers"
+                class="w-full rounded-2xl shadow-2xl transform hover:scale-105 hover:rotate-2 transition-all duration-500 border-4 border-accent/30 float-animation"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Timeline Item 2 -->
+        <div class="relative">
+          <div class="timeline-badge pulse-glow" style="animation-delay: 0.5s">
+            <svg class="icon-svg text-white" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            </svg>
+          </div>
+          <div class="flex flex-col md:flex-row-reverse items-center justify-between md:space-x-12 md:space-x-reverse pt-16 md:pt-0">
+            <div class="md:w-5/12 md:text-left mb-8 md:mb-0 animate__animated">
+              <div class="glass-card p-6 rounded-2xl hover:shadow-2xl transition-all duration-300">
+                <h3 class="text-2xl font-bold text-primary mb-3">
+                  <svg class="icon-svg inline-block mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                    <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                  </svg>
+                  Learning & Growing
+                </h3>
+                <p class="text-white leading-relaxed text-base sm:text-lg">
+                  Throughout my educational journey, I maintained an unrelenting curiosity. In college,
+                  I stumbled upon web development, initially as an academic requirement. But it soon
+                  turned into a passion project that evolved into a thriving side business. Each website
+                  I built took me deeper into the realm of digital creation, helping me understand how
+                  technology can turn ideas into profitable digital experiences. As my skills grew, so
+                  did my ambition.
+                </p>
+              </div>
+            </div>
+            <div class="md:w-5/12 animate__animated">
+              <img
+                src="college.jpg"
+                alt="College coding"
+                class="w-full rounded-2xl shadow-2xl transform hover:scale-105 hover:-rotate-2 transition-all duration-500 border-4 border-primary/30 float-animation"
+                style="animation-delay: 1s"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Timeline Item 3 -->
+        <div class="relative">
+          <div class="timeline-badge pulse-glow" style="animation-delay: 1s">
+            <svg class="icon-svg text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+            </svg>
+          </div>
+          <div class="flex flex-col md:flex-row items-center justify-between md:space-x-12 pt-16 md:pt-0">
+            <div class="md:w-5/12 md:text-right mb-8 md:mb-0 animate__animated">
+              <div class="glass-card p-6 rounded-2xl hover:shadow-2xl transition-all duration-300">
+                <h3 class="text-2xl font-bold text-accent mb-3">
+                  <svg class="icon-svg inline-block mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+                  </svg>
+                  Today & Beyond
+                </h3>
+                <p class="text-white leading-relaxed text-base sm:text-lg">
+                  Today, I am fully immersed in the world of creativity and innovation. Combining my
+                  expertise in web development and A.I. with a strong design sense, I bring imagination
+                  to life, whether through sleek corporate websites or useful e-commerce platforms. The
+                  journey from an avid learner to a digital creator has been life changing. As I
+                  continue to hone my craft and expand my horizons, I am filled with excitement for the
+                  future, eager to push the boundaries of what is possible and leave my mark on the
+                  digital landscape.
+                </p>
+              </div>
+            </div>
+            <div class="md:w-5/12 animate__animated">
+              <img
+                src="screen-shot-2025-02-23-at-7.59.40-am.png"
+                alt="Bella creating a website"
+                class="w-full rounded-2xl shadow-2xl transform hover:scale-105 hover:rotate-2 transition-all duration-500 border-4 border-accent/30 float-animation"
+                style="animation-delay: 2s"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="container mx-auto px-6 py-20">
+      <h2 class="text-3xl sm:text-4xl font-bold text-accent text-center mb-12 animate__animated">
+        <svg class="icon-svg inline-block mr-2 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="currentColor" opacity="0.3"/>
+        </svg>
+        Skills & Expertise
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <div class="glass-card p-6 rounded-2xl text-center group hover:scale-105 transition-transform duration-300 animate__animated">
+          <svg class="skill-icon mx-auto mb-4 text-accent group-hover:text-primary transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            <path d="M3 9h18M9 21V9"/>
+          </svg>
+          <h3 class="text-xl font-bold text-accent mb-3 group-hover:text-primary transition-colors">UX/UI Design</h3>
+          <p class="text-white/80 text-sm">Creating intuitive and beautiful user experiences</p>
+        </div>
+        <div class="glass-card p-6 rounded-2xl text-center group hover:scale-105 transition-transform duration-300 animate__animated" style="animation-delay: 0.1s">
+          <svg class="skill-icon mx-auto mb-4 text-primary group-hover:text-accent transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <polyline points="16 18 22 12 16 6"/>
+            <polyline points="8 6 2 12 8 18"/>
+          </svg>
+          <h3 class="text-xl font-bold text-primary mb-3 group-hover:text-accent transition-colors">Web Development</h3>
+          <p class="text-white/80 text-sm">Building responsive and performant websites</p>
+        </div>
+        <div class="glass-card p-6 rounded-2xl text-center group hover:scale-105 transition-transform duration-300 animate__animated" style="animation-delay: 0.2s">
+          <svg class="skill-icon mx-auto mb-4 text-accent group-hover:text-primary transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="10"/>
+            <circle cx="12" cy="12" r="3" fill="currentColor"/>
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+          </svg>
+          <h3 class="text-xl font-bold text-accent mb-3 group-hover:text-primary transition-colors">AI Integration</h3>
+          <p class="text-white/80 text-sm">Leveraging artificial intelligence for innovation</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="container mx-auto px-6 py-12">
+      <div class="glass-card p-8 sm:p-12 rounded-3xl text-center animate__animated">
+        <h2 class="text-3xl sm:text-4xl font-bold text-accent mb-4">
+          <svg class="icon-svg inline-block mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+          Get My Resume
+        </h2>
+        <p class="text-lg sm:text-xl text-white/90 mb-8">Want to learn more details?</p>
+        <a
+          href="bella_archer_resume_25.pdf"
+          class="glass-button inline-block text-white text-base sm:text-lg py-4 px-8 rounded-xl font-semibold focus:outline-none focus:ring-2 focus:ring-accent"
+          download
+          tabindex="0"
+        >
+          Download My Resume
+        </a>
+      </div>
+    </section>
+
+    <!-- Personality Assessment Section -->
+    <section class="container mx-auto px-6 py-12">
+      <div class="glass-card p-8 sm:p-12 rounded-3xl text-center animate__animated pulse-glow">
+        <h2 class="text-3xl sm:text-4xl font-bold text-primary mb-4">
+          <svg class="icon-svg inline-block mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 16v-4"/>
+            <path d="M12 8h.01"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+          </svg>
+          Personality Assessment Chart
+        </h2>
+        <p class="text-lg sm:text-xl text-white/90 mb-4">Comprehensive Analysis of Traits, Motivations & Behaviors</p>
+        <p class="text-base text-white/80 mb-8">Deep dive into what makes me tick - my strengths, work style, and core values</p>
+        <a
+          href="personality-assessment.html"
+          class="glass-button inline-block text-white text-base sm:text-lg py-4 px-10 rounded-xl font-semibold focus:outline-none focus:ring-2 focus:ring-primary hover:scale-105 transition-transform duration-300"
+          tabindex="0"
+        >
+           View My Personality Assessment
+        </a>
+      </div>
+    </section>
+
+    <!-- Certifications Section -->
+    <section
+      id="certifications"
+      class="container mx-auto px-6 py-20"
+    >
+      <h2 class="text-3xl sm:text-4xl font-bold text-center mb-12 text-accent animate__animated animate__fadeInUp">
+        <svg class="icon-svg inline-block mr-2 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="8" r="7"/>
+          <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>
+        </svg>
+        Certifications
+      </h2>
+
+      <div class="max-w-4xl mx-auto space-y-6 animate__animated">
+        <div class="glass-card p-6 rounded-2xl group cursor-pointer">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <span
+              class="bg-gradient-to-r from-accent to-primary text-white text-sm font-bold px-5 py-2 rounded-lg shadow-lg group-hover:scale-110 transition-transform duration-300"
+            >
+              Google
+            </span>
+            <span
+              class="text-white text-base sm:text-lg font-semibold group-hover:text-primary transition-colors duration-300"
+            >
+              UX Design Professional Certificate
+            </span>
+          </div>
+        </div>
+
+        <div class="glass-card p-6 rounded-2xl group cursor-pointer">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <span
+              class="bg-gradient-to-r from-accent to-primary text-white text-sm font-bold px-5 py-2 rounded-lg shadow-lg group-hover:scale-110 transition-transform duration-300"
+            >
+              Coursera
+            </span>
+            <span
+              class="text-white text-base sm:text-lg font-semibold group-hover:text-primary transition-colors duration-300"
+            >
+              Web Development and Design Basics
+            </span>
+          </div>
+        </div>
+
+        <div class="glass-card p-6 rounded-2xl group cursor-pointer">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <span
+              class="bg-gradient-to-r from-accent to-primary text-white text-sm font-bold px-5 py-2 rounded-lg shadow-lg group-hover:scale-110 transition-transform duration-300"
+            >
+              Oracle
+            </span>
+            <span
+              class="text-white text-base sm:text-lg font-semibold group-hover:text-primary transition-colors duration-300"
+            >
+              Oracle Cloud Infrastructure 2024 AI Foundations Associate
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Links Section -->
+    <section class="container mx-auto px-6 py-20">
+      <div class="glass-card max-w-2xl mx-auto p-8 sm:p-12 rounded-3xl text-center animate__animated">
+        <h3 class="text-3xl sm:text-4xl font-bold text-accent mb-6">
+          <svg class="icon-svg inline-block mr-2 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+            <polygon points="12 2 12 7 22 7" fill="currentColor" opacity="0.2"/>
+          </svg>
+          Connect with Me
+        </h3>
+        <p class="text-white/90 text-lg mb-10">
+          Feel free to reach out through any of the platforms below:
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6">
+          <a 
+            href="https://www.linkedin.com/in/bellaarcher/" 
+            target="_blank"
+            rel="noopener noreferrer"
+            class="glass-button px-8 py-3 rounded-xl text-base font-semibold hover:text-primary transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-accent"
+            tabindex="0"
+          >LinkedIn</a>
+          <a 
+            href="https://github.com/Bellawareness" 
+            target="_blank"
+            rel="noopener noreferrer"
+            class="glass-button px-8 py-3 rounded-xl text-base font-semibold hover:text-primary transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-accent"
+            tabindex="0"
+          >GitHub</a>
+          <a 
+            href="https://www.behance.net/bellawareness" 
+            target="_blank"
+            rel="noopener noreferrer"
+            class="glass-button px-8 py-3 rounded-xl text-base font-semibold hover:text-primary transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-accent"
+            tabindex="0"
+          >Behance</a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="bg-[#1A2238] py-6 text-center border-t border-accent border-opacity-20 mt-12">
+      <p class="text-white text-sm sm:text-base">© Bella Luna • made with stardust & strategy</p>
+    </footer>
+
+    <script>
+      // Scroll Animation Observer with directional animations
+      const observerOptions = {
+        threshold: 0.15,
+        rootMargin: '0px 0px -100px 0px'
+      }
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Check if element is in left or right column
+            const parent = entry.target.closest('.md\\:flex-row, .md\\:flex-row-reverse')
+            if (parent) {
+              const isReverse = parent.classList.contains('md:flex-row-reverse')
+              const isLeftSide = entry.target.classList.contains('md:w-5/12') && entry.target.parentElement.children[0] === entry.target
+              
+              if (window.innerWidth >= 768) {
+                if (isReverse) {
+                  entry.target.classList.add(isLeftSide ? 'animate__fadeInRight' : 'animate__fadeInLeft')
+                } else {
+                  entry.target.classList.add(isLeftSide ? 'animate__fadeInLeft' : 'animate__fadeInRight')
+                }
+              } else {
+                entry.target.classList.add('animate__fadeInUp')
+              }
+            } else {
+              entry.target.classList.add('animate__fadeInUp')
+            }
+            observer.unobserve(entry.target)
+          }
+        })
+      }, observerOptions)
+      
+      document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.animate__animated:not(.animate__fadeIn):not(.animate__fadeInDown):not(.animate__fadeInUp)').forEach(el => {
+          observer.observe(el)
+        })
+      })
+    </script>
+  </body>
+</html>
