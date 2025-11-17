@@ -1237,44 +1237,42 @@ No memories logged yet today. Start capturing moments!
 <button class="btn btn-sm" onclick="showMonthly()" id="monthlyBtn">Monthly</button>
 </div>
 
-<!-- Condensed Progress History -->
-<div id="condensedProgressHistory"></div>
-<button id="toggleHistoryBtn" class="btn btn-sm" style="margin-top:12px;">Show More</button>
+<!-- Weekly View -->
+<div id="weeklyStats">
+<h3 style="font-size:1.25rem;font-weight:600;color:#92400e;margin-bottom:24px;">This Week's Summary</h3>
+<div class="grid-desktop" style="margin-bottom:32px;">
+<div class="history-stat">
+<div class="history-stat-value" id="weekActivitiesCompleted">0</div>
+<div class="history-stat-label">Activities Completed</div>
+</div>
+<div class="history-stat">
+<div class="history-stat-value" id="weekAvgMood">-</div>
+<div class="history-stat-label">Average Mood</div>
+</div>
+<div class="history-stat">
+<div class="history-stat-value" id="weekAvgEnergy">-</div>
+<div class="history-stat-label">Average Energy</div>
+</div>
+<div class="history-stat">
+<div class="history-stat-value" id="weekTimeTracked">0h</div>
+<div class="history-stat-label">Time Tracked</div>
+</div>
+<div class="history-stat">
+<div class="history-stat-value" id="weekSpending">$0</div>
+<div class="history-stat-label">Total Spending</div>
+</div>
+<div class="history-stat">
+<div class="history-stat-value" id="weekCried">0</div>
+<div class="history-stat-label">Days Cried</div>
+</div>
+<div class="history-stat">
+<div class="history-stat-value" id="weekLost">0</div>
+<div class="history-stat-label">Items Lost</div>
+</div>
+</div>
 </div>
 
-<script>
-// Condensed/collapsible progress history logic
-function renderCondensedProgressHistory() {
-  const historyContainer = document.getElementById('condensedProgressHistory');
-  const toggleBtn = document.getElementById('toggleHistoryBtn');
-  const moodData = JSON.parse(localStorage.getItem('dailyMoodEnergy') || '{}');
-  const allDates = Object.keys(moodData).sort().reverse();
-  const showCount = window.showFullHistory ? allDates.length : 7;
-  let html = '<ul style="list-style:none;padding:0;">';
-  allDates.slice(0, showCount).forEach(date => {
-    const entry = moodData[date];
-    html += `<li style="padding:8px 0;border-bottom:1px solid #f3f4f6;font-size:0.95rem;display:flex;justify-content:space-between;align-items:center;">
-      <span style="color:#2563eb;font-weight:600;">${date}</span>
-      <span style="color:#92400e;">Mood: ${entry.mood ?? '-'} | Energy: ${entry.energy ?? '-'}</span>
-      <span style="color:#6b7280;font-size:0.85rem;">${entry.moodNote ? escapeHtml(entry.moodNote) : ''}</span>
-    </li>`;
-  });
-  html += '</ul>';
-  historyContainer.innerHTML = html;
-  toggleBtn.textContent = window.showFullHistory ? 'Show Less' : 'Show More';
-}
-window.showFullHistory = false;
-document.addEventListener('DOMContentLoaded', function() {
-  const toggleBtn = document.getElementById('toggleHistoryBtn');
-  if (toggleBtn) {
-    toggleBtn.addEventListener('click', function() {
-      window.showFullHistory = !window.showFullHistory;
-      renderCondensedProgressHistory();
-    });
-    renderCondensedProgressHistory();
-  }
-});
-</script>
+<!-- Monthly View -->
 <div id="monthlyStats" style="display:none;">
 <h3 style="font-size:1.25rem;font-weight:600;color:#92400e;margin-bottom:24px;">This Month's Summary</h3>
 <div class="grid-desktop" style="margin-bottom:32px;">
