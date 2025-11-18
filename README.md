@@ -1,4 +1,4 @@
-# Habit Tracker — Flask Backend
+# Habit Tracker with Flask Backend
 
 A Flask backend for the Learn Thyself habit tracker frontend. Provides endpoints to save and load daily habit data and is designed to integrate with the frontend served from the repository.
 
