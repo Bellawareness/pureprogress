@@ -91,6 +91,36 @@
       console.log('👤 No user logged in - showing login screen');
       if (loginModal) loginModal.style.display = 'flex';
       if (appContent) appContent.style.display = 'none';
+      
+      // Add local development bypass button
+      const isLocalDev = window.location.hostname === 'localhost' || 
+                        window.location.hostname === '127.0.0.1' ||
+                        window.location.protocol === 'file:';
+      
+      if (isLocalDev && loginModal && !document.getElementById('localDevBypass')) {
+        const bypassDiv = document.createElement('div');
+        bypassDiv.style.cssText = 'text-align:center;margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.2);';
+        bypassDiv.innerHTML = `
+          <p style="color:#fbbf24;font-size:0.875rem;margin-bottom:12px;">🚧 Local Development Mode</p>
+          <button id="localDevBypass" style="background:#f59e0b;color:white;border:none;padding:12px 24px;border-radius:8px;cursor:pointer;font-weight:600;font-size:0.875rem;">
+            Skip Login (Offline Mode)
+          </button>
+          <p style="color:#9ca3af;font-size:0.75rem;margin-top:8px;">Data will be saved locally only</p>
+        `;
+        loginModal.querySelector('.auth-container, form, div')?.parentElement?.appendChild(bypassDiv) 
+          || loginModal.appendChild(bypassDiv);
+        
+        document.getElementById('localDevBypass').addEventListener('click', () => {
+          console.log('🚧 Bypassing auth for local development');
+          if (loginModal) loginModal.style.display = 'none';
+          if (appContent) appContent.style.display = 'block';
+          // Show offline mode indicator
+          const indicator = document.createElement('div');
+          indicator.style.cssText = 'position:fixed;top:10px;right:10px;background:#f59e0b;color:white;padding:8px 16px;border-radius:20px;font-size:0.75rem;font-weight:600;z-index:9999;box-shadow:0 2px 8px rgba(0,0,0,0.2);';
+          indicator.textContent = '🚧 Offline Mode';
+          document.body.appendChild(indicator);
+        });
+      }
     }
   });
   
@@ -1065,6 +1095,17 @@ Water
 </div>
 </div>
 
+<!-- Pending Projects Card -->
+<div class="card" style="background:linear-gradient(135deg,#ddd6fe 0%,rgba(221,214,254,0.7) 100%);">
+<h2 class="card-title" style="color:#7c3aed;"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:inline-block;vertical-align:middle;margin-right:8px;"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>Pending Projects</h2>
+<p style="font-size:0.875rem;color:#6b7280;margin-bottom:16px;">Track projects from start to finish. Check off tasks as you complete them.</p>
+<div style="display:flex;gap:8px;margin-bottom:16px;">
+<input id="newProjectInput" type="text" placeholder="Project name..." style="flex:2;min-width:150px;"/>
+<button id="addProjectBtn" class="btn btn-sm" style="background:linear-gradient(135deg,#a78bfa,#8b5cf6);">Add Project</button>
+</div>
+<div id="projectsContainer" style="display:flex;flex-direction:column;gap:16px;max-height:500px;overflow-y:auto;"></div>
+</div>
+
 </div>
 <!-- End Habits & Activities Category -->
 
@@ -1350,11 +1391,23 @@ d.setHours(12,0,0,0);
 return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 }
 
+// Parse date string to local date (fixes timezone offset issue)
+function parseLocalDate(dateStr) {
+const [year, month, day] = dateStr.split('-').map(Number);
+return new Date(year, month - 1, day, 12, 0, 0);
+}
+
+// Format date for display using local timezone
+function formatDateForDisplay(dateStr, options) {
+const d = parseLocalDate(dateStr);
+return d.toLocaleDateString('en-US', options || {weekday:'short',month:'short',day:'numeric',year:'numeric'});
+}
+
 // Firebase Sync Helper Functions
 const STORAGE_KEYS = [
   'dailyMoodEnergy', 'activities', 'dailyRatings', 'activityCompletions',
   'dailyTodo', 'getItDone', 'dailySpending', 'daysCried', 'itemsLost',
-  'waterIntake', 'timeTracked', 'photos', 'selectedTheme'
+  'waterIntake', 'timeTracked', 'photos', 'selectedTheme', 'pendingProjects', 'dailyMemories'
 ];
 
 // Save data to Firebase
@@ -1781,6 +1834,216 @@ function createListHandler(inputId,btnId,listId,storageKey){const input=document
 function render(){list.innerHTML='';items.forEach((text,idx)=>{const li=document.createElement('li');li.className='todo-item';li.style.display='flex';li.style.justifyContent='space-between';li.style.alignItems='center';li.style.gap='12px';const textSpan=document.createElement('span');textSpan.textContent=text;textSpan.style.flex='1';textSpan.style.cursor='pointer';const btnGroup=document.createElement('div');btnGroup.style.display='flex';btnGroup.style.gap='8px';const editBtn=document.createElement('button');editBtn.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';editBtn.style.background='none';editBtn.style.border='none';editBtn.style.cursor='pointer';editBtn.style.padding='4px';editBtn.style.color='#6b7280';editBtn.title='Edit';editBtn.addEventListener('click',()=>{const newText=prompt('Edit task:',text);if(newText&&newText.trim()&&newText.trim()!==text){items[idx]=newText.trim();save();render();}});const delBtn=document.createElement('button');delBtn.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>';delBtn.style.background='none';delBtn.style.border='none';delBtn.style.cursor='pointer';delBtn.style.padding='4px';delBtn.style.color='#ef4444';delBtn.title='Delete';delBtn.addEventListener('click',()=>{if(confirm(`Delete "${text}"?`)){items.splice(idx,1);save();render();}});btnGroup.appendChild(editBtn);btnGroup.appendChild(delBtn);li.appendChild(textSpan);li.appendChild(btnGroup);list.appendChild(li);});}
 btn.addEventListener('click',()=>{const text=input.value.trim();if(!text)return;items.unshift(text);input.value='';save();render();});render();}
 createListHandler('newTodoInput','addTodoBtn','todoList','dailyTodo');createListHandler('newDoneInput','addDoneBtn','doneList','getItDone');
+
+// Pending Projects Handler
+(function(){
+const projectInput=document.getElementById('newProjectInput');
+const addProjectBtn=document.getElementById('addProjectBtn');
+const container=document.getElementById('projectsContainer');
+const storageKey='pendingProjects';
+
+let projects=JSON.parse(localStorage.getItem(storageKey)||'[]');
+
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8);}
+function save(){localStorage.setItem(storageKey,JSON.stringify(projects));}
+
+function calculateProgress(project){
+const totalTasks=project.tasks.length;
+if(totalTasks===0) return 0;
+const completed=project.tasks.filter(t=>t.done).length;
+return Math.round((completed/totalTasks)*100);
+}
+
+function render(){
+container.innerHTML='';
+if(projects.length===0){
+container.innerHTML='<div style="text-align:center;padding:32px;color:#9ca3af;"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto 12px;opacity:0.4;display:block;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><p style="font-size:0.875rem;">No projects yet. Add your first project above!</p></div>';
+return;
+}
+projects.forEach((project,pIdx)=>{
+const progress=calculateProgress(project);
+const isComplete=progress===100;
+const projectDiv=document.createElement('div');
+projectDiv.style.cssText='background:white;border-radius:12px;padding:16px;border:2px solid '+(isComplete?'#10b981':'#e9d5ff')+';transition:all 0.3s ease;';
+if(isComplete) projectDiv.style.opacity='0.8';
+
+// Project header with progress
+let headerHtml=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+<div style="display:flex;align-items:center;gap:8px;">
+${isComplete?'<span style="font-size:1.25rem;">✅</span>':'<span style="font-size:1.25rem;">📋</span>'}
+<span style="font-weight:600;color:#374151;${isComplete?'text-decoration:line-through;opacity:0.7;':''}">${escapeHtml(project.name)}</span>
+</div>
+<div style="display:flex;align-items:center;gap:8px;">
+<span style="font-size:0.75rem;color:#6b7280;">${progress}%</span>
+<button data-delete-project="${pIdx}" style="background:none;border:none;cursor:pointer;color:#ef4444;padding:4px;" title="Delete Project">×</button>
+</div>
+</div>`;
+
+// Progress bar
+headerHtml+=`<div style="height:6px;background:#e5e7eb;border-radius:3px;margin-bottom:12px;overflow:hidden;">
+<div style="height:100%;width:${progress}%;background:${isComplete?'#10b981':'linear-gradient(90deg,#a78bfa,#8b5cf6)'};transition:width 0.3s ease;border-radius:3px;"></div>
+</div>`;
+
+// Tasks list
+let tasksHtml='<div style="display:flex;flex-direction:column;gap:8px;">';
+project.tasks.forEach((task,tIdx)=>{
+tasksHtml+=`<div style="display:flex;align-items:center;gap:8px;padding:8px;background:${task.done?'rgba(16,185,129,0.1)':'rgba(139,92,246,0.05)'};border-radius:6px;">
+<input type="checkbox" data-project="${pIdx}" data-task="${tIdx}" ${task.done?'checked':''} style="cursor:pointer;"/>
+<span style="flex:1;font-size:0.875rem;color:${task.done?'#6b7280':'#374151'};${task.done?'text-decoration:line-through;':''}}">${escapeHtml(task.text)}</span>
+<button data-delete-task="${pIdx}-${tIdx}" style="background:none;border:none;cursor:pointer;color:#9ca3af;font-size:0.875rem;" title="Remove task">×</button>
+</div>`;
+});
+tasksHtml+='</div>';
+
+// Add task input
+let addTaskHtml=`<div style="display:flex;gap:8px;margin-top:12px;">
+<input type="text" data-add-task-input="${pIdx}" placeholder="Add a task..." style="flex:1;padding:8px;border:1px solid #e5e7eb;border-radius:6px;font-size:0.875rem;"/>
+<button data-add-task-btn="${pIdx}" style="background:#8b5cf6;color:white;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:0.75rem;font-weight:600;">+</button>
+</div>`;
+
+projectDiv.innerHTML=headerHtml+tasksHtml+addTaskHtml;
+container.appendChild(projectDiv);
+});
+
+// Event delegation for checkboxes
+container.querySelectorAll('input[type="checkbox"]').forEach(cb=>{
+cb.addEventListener('change',()=>{
+const pIdx=parseInt(cb.dataset.project);
+const tIdx=parseInt(cb.dataset.task);
+projects[pIdx].tasks[tIdx].done=cb.checked;
+save();
+render();
+});
+});
+
+// Event delegation for delete project buttons
+container.querySelectorAll('[data-delete-project]').forEach(btn=>{
+btn.addEventListener('click',()=>{
+const pIdx=parseInt(btn.dataset.deleteProject);
+if(confirm(`Delete project "${projects[pIdx].name}" and all its tasks?`)){
+projects.splice(pIdx,1);
+save();
+render();
+}
+});
+});
+
+// Event delegation for delete task buttons
+container.querySelectorAll('[data-delete-task]').forEach(btn=>{
+btn.addEventListener('click',()=>{
+const [pIdx,tIdx]=btn.dataset.deleteTask.split('-').map(Number);
+projects[pIdx].tasks.splice(tIdx,1);
+save();
+render();
+});
+});
+
+// Event delegation for add task
+container.querySelectorAll('[data-add-task-btn]').forEach(btn=>{
+btn.addEventListener('click',()=>{
+const pIdx=parseInt(btn.dataset.addTaskBtn);
+const input=container.querySelector(`[data-add-task-input="${pIdx}"]`);
+const text=input.value.trim();
+if(!text)return;
+projects[pIdx].tasks.push({text,done:false});
+save();
+render();
+});
+});
+
+// Enter key for add task inputs
+container.querySelectorAll('[data-add-task-input]').forEach(input=>{
+input.addEventListener('keypress',(e)=>{
+if(e.key==='Enter'){
+const pIdx=parseInt(input.dataset.addTaskInput);
+const text=input.value.trim();
+if(!text)return;
+projects[pIdx].tasks.push({text,done:false});
+save();
+render();
+}
+});
+});
+}
+
+addProjectBtn.addEventListener('click',()=>{
+const name=projectInput.value.trim();
+if(!name)return;
+projects.unshift({id:uid(),name,tasks:[],createdAt:new Date().toISOString()});
+projectInput.value='';
+save();
+render();
+});
+
+projectInput.addEventListener('keypress',(e)=>{
+if(e.key==='Enter'){
+const name=projectInput.value.trim();
+if(!name)return;
+projects.unshift({id:uid(),name,tasks:[],createdAt:new Date().toISOString()});
+projectInput.value='';
+save();
+render();
+}
+});
+
+render();
+})();
+
+// Daily Something to Remember Handler
+(function(){
+const input=document.getElementById('activityLogInput');
+const addBtn=document.getElementById('addActivityLogBtn');
+const listContainer=document.getElementById('activityLogList');
+const emptyMsg=document.getElementById('activityLogEmpty');
+const storageKey='dailyMemories';
+
+function getMemories(){return JSON.parse(localStorage.getItem(storageKey)||'{}');}
+function saveMemories(data){localStorage.setItem(storageKey,JSON.stringify(data));}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8);}
+
+function render(){
+const today=getTodayString();
+const memories=getMemories();
+const todayMemories=memories[today]||[];
+listContainer.innerHTML='';
+if(todayMemories.length===0){
+emptyMsg.style.display='block';
+return;
+}
+emptyMsg.style.display='none';
+todayMemories.forEach((mem,idx)=>{
+const div=document.createElement('div');
+div.style.cssText='display:flex;align-items:center;gap:12px;padding:12px;background:white;border-radius:8px;border:1px solid #c7d2fe;';
+div.innerHTML=`<span style="font-size:1.25rem;">📝</span>
+<span style="flex:1;color:#374151;">${escapeHtml(mem.text)}</span>
+<span style="font-size:0.75rem;color:#9ca3af;">${new Date(mem.createdAt).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span>
+<button data-delete="${idx}" style="background:none;border:none;cursor:pointer;color:#ef4444;font-size:1rem;padding:4px;">×</button>`;
+div.querySelector('[data-delete]').addEventListener('click',()=>{
+const memories=getMemories();
+memories[today].splice(idx,1);
+saveMemories(memories);
+render();
+});
+listContainer.appendChild(div);
+});
+}
+
+function addMemory(){
+const text=input.value.trim();
+if(!text)return;
+const today=getTodayString();
+const memories=getMemories();
+if(!memories[today])memories[today]=[];
+memories[today].push({id:uid(),text,createdAt:new Date().toISOString()});
+saveMemories(memories);
+input.value='';
+render();
+}
+
+addBtn.addEventListener('click',addMemory);
+input.addEventListener('keypress',(e)=>{if(e.key==='Enter')addMemory();});
+render();
+})();
 
 // Collapsible List Handler
 function setupCollapsibleList(listId,btnId){
@@ -2504,7 +2767,7 @@ timeData[date].forEach(e=>{weekTime+=parseFloat(e.hours||0);});
 });
 const avgMood=weekMoodCount>0?(weekMoodSum/weekMoodCount).toFixed(1):'-';
 const avgEnergy=weekEnergyCount>0?(weekEnergySum/weekEnergyCount).toFixed(1):'-';
-weekDiv.innerHTML=`<div style="font-weight:600;color:#374151;margin-bottom:4px;">Week ${w+1} (${new Date(weekDates[0]).toLocaleDateString('en-US',{month:'short',day:'numeric'})} - ${new Date(weekDates[weekDates.length-1]).toLocaleDateString('en-US',{month:'short',day:'numeric'})})</div>
+weekDiv.innerHTML=`<div style="font-weight:600;color:#374151;margin-bottom:4px;">Week ${w+1} (${formatDateForDisplay(weekDates[0],{month:'short',day:'numeric'})} - ${formatDateForDisplay(weekDates[weekDates.length-1],{month:'short',day:'numeric'})})</div>
 <div style="font-size:0.875rem;color:#6b7280;">✅ ${weekCompleted} activities | 😊 ${avgMood} | ⚡ ${avgEnergy} | ⏱️ ${weekTime.toFixed(1)}h</div>`;
 breakdown.appendChild(weekDiv);
 }
@@ -2565,34 +2828,41 @@ if(e<worstEnergy.energy){worstEnergy={date,energy:e};}
 container.innerHTML=`
 <div style="padding:12px;background:white;border-radius:8px;margin-bottom:8px;border:1px solid #fce7f3;">
 <div style="font-weight:600;color:#374151;margin-bottom:4px;">😊 Best Mood Day</div>
-<div style="font-size:0.875rem;color:#6b7280;">${new Date(bestMood.date).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})} - Mood: ${bestMood.mood}</div>
+<div style="font-size:0.875rem;color:#6b7280;">${formatDateForDisplay(bestMood.date,{weekday:'short',month:'short',day:'numeric'})} - Mood: ${bestMood.mood}</div>
 ${moodData[bestMood.date].moodNote?`<div style="font-size:0.875rem;color:#9333ea;margin-top:4px;font-style:italic;">"${escapeHtml(moodData[bestMood.date].moodNote)}"</div>`:''}
 </div>
 <div style="padding:12px;background:white;border-radius:8px;margin-bottom:8px;border:1px solid #fce7f3;">
 <div style="font-weight:600;color:#374151;margin-bottom:4px;">⚡ Best Energy Day</div>
-<div style="font-size:0.875rem;color:#6b7280;">${new Date(bestEnergy.date).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})} - Energy: ${bestEnergy.energy}</div>
+<div style="font-size:0.875rem;color:#6b7280;">${formatDateForDisplay(bestEnergy.date,{weekday:'short',month:'short',day:'numeric'})} - Energy: ${bestEnergy.energy}</div>
 ${moodData[bestEnergy.date].energyNote?`<div style="font-size:0.875rem;color:#9333ea;margin-top:4px;font-style:italic;">"${escapeHtml(moodData[bestEnergy.date].energyNote)}"</div>`:''}
 </div>`;
 }
 
-// Display all notes chronologically
+// Display all notes chronologically (including mood notes, energy notes, and memories)
 function displayAllNotes(moodData,dates){
 const container=document.getElementById('allNotes');
-// Sort dates in reverse chronological order (newest first)
-const datesWithNotes=dates.filter(d=>{
-if(!moodData[d]) return false;
-const hasMoodNote=moodData[d].moodNote && moodData[d].moodNote.trim().length>0;
-const hasEnergyNote=moodData[d].energyNote && moodData[d].energyNote.trim().length>0;
-return hasMoodNote || hasEnergyNote;
-}).reverse();
-if(datesWithNotes.length===0){
-container.innerHTML='<p style="color:#ec4899;font-style:italic;">No notes yet. Start adding notes in your Mood & Energy section!</p>';
+const memories=JSON.parse(localStorage.getItem('dailyMemories')||'{}');
+
+// Combine dates that have notes or memories
+const allDatesSet=new Set([...dates,...Object.keys(memories)]);
+const allDates=Array.from(allDatesSet).sort().reverse();
+
+const datesWithContent=allDates.filter(d=>{
+const hasMoodNote=moodData[d]?.moodNote && moodData[d].moodNote.trim().length>0;
+const hasEnergyNote=moodData[d]?.energyNote && moodData[d].energyNote.trim().length>0;
+const hasMemories=memories[d] && memories[d].length>0;
+return hasMoodNote || hasEnergyNote || hasMemories;
+});
+
+if(datesWithContent.length===0){
+container.innerHTML='<p style="color:#ec4899;font-style:italic;">No notes or memories yet. Start adding notes in your Mood & Energy section or memories in Daily Something to Remember!</p>';
 return;
 }
 let html='';
-datesWithNotes.forEach(date=>{
-const data=moodData[date];
-const dateStr=new Date(date).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
+datesWithContent.forEach(date=>{
+const data=moodData[date]||{};
+const dayMemories=memories[date]||[];
+const dateStr=formatDateForDisplay(date,{weekday:'short',month:'short',day:'numeric',year:'numeric'});
 html+=`<div style="padding:12px;background:white;border-radius:8px;margin-bottom:12px;border:1px solid #fce7f3;">
 <div style="font-weight:600;color:#374151;margin-bottom:8px;">${dateStr}</div>`;
 if(data.moodNote){
@@ -2602,10 +2872,18 @@ html+=`<div style="margin-bottom:6px;">
 </div>`;
 }
 if(data.energyNote){
-html+=`<div>
+html+=`<div style="margin-bottom:6px;">
 <span style="font-weight:500;color:#eab308;">⚡ Energy (${data.energy||'-'}):</span>
 <span style="color:#6b7280;margin-left:8px;">"${escapeHtml(data.energyNote)}"</span>
 </div>`;
+}
+if(dayMemories.length>0){
+dayMemories.forEach(mem=>{
+html+=`<div style="margin-bottom:6px;">
+<span style="font-weight:500;color:#4f46e5;">📝 Memory:</span>
+<span style="color:#6b7280;margin-left:8px;">"${escapeHtml(mem.text)}"</span>
+</div>`;
+});
 }
 html+=`</div>`;
 });
