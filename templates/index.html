@@ -1588,6 +1588,7 @@ async function autoSyncFromFirebase(user) {
   console.log('🔄 Auto-syncing data from Firebase...');
   try {
     let synced = 0;
+    window.isSyncingFromFirebase = true; // Flag to prevent re-syncing
     
     for (const key of STORAGE_KEYS) {
       try {
@@ -1618,7 +1619,9 @@ async function autoSyncFromFirebase(user) {
           }
           
           if (shouldSync) {
-            localStorage.setItem(key, typeof cloudData === 'string' ? cloudData : JSON.stringify(cloudData));
+            // Directly set localStorage without triggering override
+            localStorage.getItem(key); // Just read to ensure it exists
+            Object.getPrototypeOf(localStorage).setItem.call(localStorage, key, typeof cloudData === 'string' ? cloudData : JSON.stringify(cloudData));
             synced++;
             console.log(`✓ Synced ${key} from cloud`);
           }
@@ -1628,11 +1631,13 @@ async function autoSyncFromFirebase(user) {
       }
     }
     
+    window.isSyncingFromFirebase = false;
     console.log(`✅ Auto-sync complete! Downloaded ${synced} items from cloud`);
     
     // Show sync indicator briefly
     showSyncIndicator(`✅ Synced ${synced} items from cloud`);
   } catch(error) {
+    window.isSyncingFromFirebase = false;
     console.error('❌ Auto-sync failed:', error);
   }
 }
@@ -1720,8 +1725,9 @@ const originalSetItem = localStorage.setItem;
 localStorage.setItem = function(key, value) {
   originalSetItem.call(localStorage, key, value);
   
-  // Sync to Firebase if it's one of our tracked keys
-  if (STORAGE_KEYS.includes(key) && window.firebaseUserId) {
+  // Skip Firebase sync if we're currently syncing FROM Firebase (prevent loops)
+  // AND sync to Firebase only for tracked keys when user is logged in
+  if (!window.isSyncingFromFirebase && STORAGE_KEYS.includes(key) && window.firebaseUserId) {
     try {
       const data = JSON.parse(value);
       saveToFirebase(key, data);
