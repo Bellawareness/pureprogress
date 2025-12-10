@@ -1,0 +1,15 @@
+[build]
+  # Netlify will publish the templates and static folders
+  publish = "templates"
+  command = "echo 'Static site - no build needed'"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Allow static assets to be served from the static folder
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
