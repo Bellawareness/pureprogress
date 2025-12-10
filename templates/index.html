@@ -1881,15 +1881,54 @@ function handleSignup() {
 
 window.handleLogout = function() {
   if (confirm('Are you sure you want to logout?')) {
-    window.firebaseSignOut(window.firebaseAuth)
-      .then(() => {
-        console.log('✓ Logged out');
-        location.reload();
-      })
-      .catch((error) => {
-        console.error('Logout error:', error);
-        alert('Logout failed: ' + error.message);
-      });
+    // Force save all current data to Firebase before logout
+    console.log('💾 Saving all data to Firebase before logout...');
+    
+    let savePromises = [];
+    STORAGE_KEYS.forEach(key => {
+      try {
+        const data = localStorage.getItem(key);
+        if (data && window.firebaseUserId) {
+          const savePromise = new Promise((resolve) => {
+            try {
+              const parsed = JSON.parse(data);
+              saveToFirebase(key, parsed);
+              resolve();
+            } catch(e) {
+              saveToFirebase(key, data);
+              resolve();
+            }
+          });
+          savePromises.push(savePromise);
+        }
+      } catch(e) {
+        console.warn(`Failed to save ${key} before logout:`, e.message);
+      }
+    });
+    
+    // Wait a bit for all Firebase saves to complete, then logout
+    Promise.all(savePromises).then(() => {
+      console.log('✓ All data saved to Firebase');
+      setTimeout(() => {
+        window.firebaseSignOut(window.firebaseAuth)
+          .then(() => {
+            console.log('✓ Logged out');
+            location.reload();
+          })
+          .catch((error) => {
+            console.error('Logout error:', error);
+            alert('Logout failed: ' + error.message);
+          });
+      }, 500); // Give Firebase a moment to complete
+    }).catch((error) => {
+      console.error('Error saving data before logout:', error);
+      // Logout anyway even if save fails
+      window.firebaseSignOut(window.firebaseAuth)
+        .then(() => {
+          console.log('✓ Logged out (with save errors)');
+          location.reload();
+        });
+    });
   }
 };
 
@@ -4198,6 +4237,35 @@ Track yourself. Know yourself. Grow yourself.
 </footer>
 </div>
 <!-- End of appContent -->
+
+<!-- Force sync to Firebase before page unload -->
+<script>
+window.addEventListener('beforeunload', function() {
+  // Ensure all data is synced to Firebase before user leaves page
+  if (window.firebaseUserId && window.firebaseDatabase) {
+    console.log('⚠️ Page unloading - forcing sync to Firebase...');
+    
+    // Get all tracked data from localStorage and immediately push to Firebase
+    STORAGE_KEYS.forEach(key => {
+      const data = localStorage.getItem(key);
+      if (data) {
+        try {
+          const parsed = JSON.parse(data);
+          const dataRef = window.firebaseRef(window.firebaseDatabase, `users/${window.firebaseUserId}/${key}`);
+          // Use synchronous sendBeacon or fetch with keepalive to ensure it completes
+          window.firebaseSet(dataRef, parsed).catch(err => {
+            console.error(`Failed to sync ${key} on unload:`, err);
+          });
+        } catch(e) {
+          console.warn(`Could not parse ${key} for unload sync:`, e);
+        }
+      }
+    });
+    
+    console.log('✅ Unload sync initiated for all keys');
+  }
+});
+</script>
 
 </body>
 </html>
