@@ -1155,6 +1155,49 @@ Water
 </div>
 </div>
 
+<!-- Credit Card Manager -->
+<div class="card" style="background:linear-gradient(135deg,#dbeafe 0%,rgba(219,234,254,0.7) 100%);margin-top:20px;">
+<h2 class="card-title" style="color:#0369a1;"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:inline-block;vertical-align:middle;margin-right:8px;"><path d="M20 8H4V4h16m0 12H4c-1.1 0-2 .9-2 2v4h20v-4c0-1.1-.9-2-2-2zm-10 5.5c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>Credit Cards</h2>
+
+<!-- Credit Card Summary -->
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:20px;">
+<div style="text-align:center;padding:12px;background:rgba(255,255,255,0.8);border-radius:8px;border:2px solid #0369a1;">
+<div style="font-size:0.7rem;color:#0369a1;font-weight:600;margin-bottom:4px;">TOTAL BALANCE</div>
+<div style="font-size:1.5rem;font-weight:700;color:#0369a1;">$<span id="ccTotalBalance">0.00</span></div>
+</div>
+<div style="text-align:center;padding:12px;background:rgba(255,255,255,0.8);border-radius:8px;border:2px solid #0369a1;">
+<div style="font-size:0.7rem;color:#0369a1;font-weight:600;margin-bottom:4px;">TOTAL CARDS</div>
+<div style="font-size:1.5rem;font-weight:700;color:#0369a1;"><span id="ccTotalCards">0</span></div>
+</div>
+<div style="text-align:center;padding:12px;background:rgba(255,255,255,0.8);border-radius:8px;border:2px solid #0369a1;">
+<div style="font-size:0.7rem;color:#0369a1;font-weight:600;margin-bottom:4px;">MIN. PAYMENTS</div>
+<div style="font-size:1.5rem;font-weight:700;color:#0369a1;">$<span id="ccMinPayments">0.00</span></div>
+</div>
+<div style="text-align:center;padding:12px;background:rgba(255,255,255,0.8);border-radius:8px;border:2px solid #0369a1;">
+<div style="font-size:0.7rem;color:#0369a1;font-weight:600;margin-bottom:4px;">MONTHLY INTEREST</div>
+<div style="font-size:1.5rem;font-weight:700;color:#0369a1;">$<span id="ccMonthlyInterest">0.00</span></div>
+</div>
+</div>
+
+<!-- Credit Cards List -->
+<div id="creditCardsList" style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px;"></div>
+
+<!-- Add Credit Card Form -->
+<div style="padding:16px;background:rgba(255,255,255,0.6);border-radius:8px;border:2px dashed #0369a1;">
+<div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center;">
+<input type="text" id="newCardName" placeholder="Card Name (e.g., Chase Sapphire)" style="flex:1;min-width:200px;padding:10px;border:1px solid #0369a1;border-radius:6px;font-size:0.9rem;"/>
+<input type="text" id="newCardLast4" placeholder="Last 4 digits" style="width:100px;padding:10px;border:1px solid #0369a1;border-radius:6px;font-size:0.9rem;"/>
+<input type="number" id="newCardLimit" placeholder="Limit" step="0.01" min="0" style="width:120px;padding:10px;border:1px solid #0369a1;border-radius:6px;font-size:0.9rem;"/>
+<input type="number" id="newCardAPR" placeholder="APR %" step="0.1" min="0" max="100" style="width:100px;padding:10px;border:1px solid #0369a1;border-radius:6px;font-size:0.9rem;"/>
+</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+<input type="number" id="newCardBalance" placeholder="Current Balance" step="0.01" min="0" style="flex:1;min-width:150px;padding:10px;border:1px solid #0369a1;border-radius:6px;font-size:0.9rem;"/>
+<input type="number" id="newCardMinPayment" placeholder="Min Payment" step="0.01" min="0" style="width:120px;padding:10px;border:1px solid #0369a1;border-radius:6px;font-size:0.9rem;"/>
+<button id="addCreditCardBtn" class="btn" style="background:linear-gradient(135deg,#0369a1,#0284c7);padding:10px 20px;">Add Card</button>
+</div>
+</div>
+</div>
+
 </div>
 <!-- End Finance & Spending Category -->
 
@@ -1407,7 +1450,7 @@ return d.toLocaleDateString('en-US', options || {weekday:'short',month:'short',d
 const STORAGE_KEYS = [
   'dailyMoodEnergy', 'activities', 'dailyRatings', 'activityCompletions',
   'dailyTodo', 'getItDone', 'dailySpending', 'daysCried', 'itemsLost',
-  'waterIntake', 'timeTracked', 'photos', 'selectedTheme', 'pendingProjects', 'dailyMemories'
+  'waterIntake', 'timeTracked', 'photos', 'selectedTheme', 'pendingProjects', 'dailyMemories', 'creditCards'
 ];
 
 // Save data to Firebase
@@ -2082,6 +2125,182 @@ updateCollapseState();
 setupCollapsibleList('todoList','todoExpandBtn');
 setupCollapsibleList('doneList','doneExpandBtn');
 setupCollapsibleList('activitiesContainer','activitiesExpandBtn');
+
+// Credit Card Manager
+(function(){
+const container=document.getElementById('creditCardsList');
+const addBtn=document.getElementById('addCreditCardBtn');
+const nameInput=document.getElementById('newCardName');
+const last4Input=document.getElementById('newCardLast4');
+const limitInput=document.getElementById('newCardLimit');
+const aprInput=document.getElementById('newCardAPR');
+const balanceInput=document.getElementById('newCardBalance');
+const minPaymentInput=document.getElementById('newCardMinPayment');
+
+let cards=JSON.parse(localStorage.getItem('creditCards')||'[]');
+
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8);}
+function save(){localStorage.setItem('creditCards',JSON.stringify(cards));updateSummary();render();}
+
+function calculateMonthlyInterest(balance,apr){return(balance*(apr/100))/12;}
+function getUtilization(balance,limit){return limit>0?(balance/limit*100).toFixed(1):0;}
+
+function updateSummary(){
+let totalBalance=0,totalMinPayments=0,totalInterest=0;
+cards.forEach(card=>{
+totalBalance+=parseFloat(card.balance||0);
+totalMinPayments+=parseFloat(card.minPayment||0);
+totalInterest+=calculateMonthlyInterest(card.balance||0,card.apr||0);
+});
+document.getElementById('ccTotalBalance').textContent=totalBalance.toFixed(2);
+document.getElementById('ccTotalCards').textContent=cards.length;
+document.getElementById('ccMinPayments').textContent=totalMinPayments.toFixed(2);
+document.getElementById('ccMonthlyInterest').textContent=totalInterest.toFixed(2);
+}
+
+function render(){
+container.innerHTML='';
+cards.forEach((card,idx)=>{
+const utilization=getUtilization(card.balance,card.limit);
+const monthlyInterest=calculateMonthlyInterest(card.balance,card.apr);
+const cardDiv=document.createElement('div');
+cardDiv.style.cssText='cursor:pointer;transition:all 0.3s ease;';
+const isExpanded=cardDiv.dataset.expanded==='true'?true:false;
+
+cardDiv.innerHTML=`
+<div style="padding:12px;background:white;border-radius:8px;border:2px solid #0284c7;overflow:hidden;">
+<!-- Card Header (Click to expand) -->
+<div class="cc-header" style="display:flex;justify-content:space-between;align-items:center;gap:12px;cursor:pointer;user-select:none;">
+<div style="flex:1;">
+<div style="font-weight:600;color:#0369a1;font-size:1rem;">${escapeHtml(card.name)}</div>
+<div style="font-size:0.8rem;color:#6b7280;margin-top:4px;">•••• ${escapeHtml(card.last4)}</div>
+</div>
+<div style="text-align:right;">
+<div style="font-size:1.25rem;font-weight:700;color:#0369a1;">$${parseFloat(card.balance||0).toFixed(2)}</div>
+<div style="font-size:0.7rem;color:#6b7280;margin-top:2px;">${card.apr}% APR</div>
+</div>
+<div style="font-size:1.5rem;color:#0369a1;">▼</div>
+</div>
+
+<!-- Card Details (Hidden by default) -->
+<div class="cc-details" style="display:none;margin-top:12px;padding-top:12px;border-top:1px solid #e0f2fe;">
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px;">
+<div style="text-align:center;padding:8px;background:#dbeafe;border-radius:6px;">
+<div style="font-size:0.7rem;color:#0369a1;font-weight:600;">UTILIZATION</div>
+<div style="font-size:1.25rem;font-weight:700;color:#0369a1;">${utilization}%</div>
+</div>
+<div style="text-align:center;padding:8px;background:#dbeafe;border-radius:6px;">
+<div style="font-size:0.7rem;color:#0369a1;font-weight:600;">MIN PAYMENT</div>
+<div style="font-size:1.25rem;font-weight:700;color:#0369a1;">$${parseFloat(card.minPayment||0).toFixed(2)}</div>
+</div>
+<div style="text-align:center;padding:8px;background:#dbeafe;border-radius:6px;">
+<div style="font-size:0.7rem;color:#0369a1;font-weight:600;">MONTHLY INTEREST</div>
+<div style="font-size:1.25rem;font-weight:700;color:#ef4444;">$${monthlyInterest.toFixed(2)}</div>
+</div>
+<div style="text-align:center;padding:8px;background:#dbeafe;border-radius:6px;">
+<div style="font-size:0.7rem;color:#0369a1;font-weight:600;">LIMIT</div>
+<div style="font-size:1.25rem;font-weight:700;color:#0369a1;">$${parseFloat(card.limit||0).toFixed(2)}</div>
+</div>
+</div>
+
+<!-- Balance Update & Payment Controls -->
+<div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center;">
+<input type="number" class="new-balance" placeholder="New balance" step="0.01" min="0" style="flex:1;min-width:140px;padding:8px;border:1px solid #0284c7;border-radius:6px;font-size:0.9rem;" value="${parseFloat(card.balance||0).toFixed(2)}"/>
+<button class="update-balance" data-idx="${idx}" style="background:#10b981;color:white;border:none;border-radius:6px;padding:8px 16px;cursor:pointer;font-size:0.9rem;font-weight:600;">Update Balance</button>
+</div>
+
+<!-- Payment Options -->
+<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+<button class="pay-min" data-idx="${idx}" style="background:#3b82f6;color:white;border:none;border-radius:6px;padding:8px 16px;cursor:pointer;font-size:0.9rem;font-weight:600;flex:1;min-width:120px;">Pay Min ($${parseFloat(card.minPayment||0).toFixed(2)})</button>
+<input type="number" class="pay-amount" placeholder="Pay amount" step="0.01" min="0" style="flex:1;min-width:120px;padding:8px;border:1px solid #3b82f6;border-radius:6px;font-size:0.9rem;"/>
+<button class="pay-custom" data-idx="${idx}" style="background:#3b82f6;color:white;border:none;border-radius:6px;padding:8px 16px;cursor:pointer;font-size:0.9rem;font-weight:600;white-space:nowrap;">Pay Custom</button>
+<button class="delete-card" data-idx="${idx}" style="background:#ef4444;color:white;border:none;border-radius:6px;padding:8px 12px;cursor:pointer;font-size:0.9rem;font-weight:600;">Delete</button>
+</div>
+</div>
+</div>
+`;
+
+const header=cardDiv.querySelector('.cc-header');
+const details=cardDiv.querySelector('.cc-details');
+const toggleChevron=cardDiv.querySelector('[style*="▼"]');
+
+header.addEventListener('click',()=>{
+const isShown=details.style.display!=='none';
+details.style.display=isShown?'none':'block';
+toggleChevron.textContent=isShown?'▶':'▼';
+});
+
+// Update balance
+cardDiv.querySelector('.update-balance').addEventListener('click',()=>{
+const newBalance=parseFloat(cardDiv.querySelector('.new-balance').value);
+if(isNaN(newBalance)||newBalance<0)return;
+cards[idx].balance=newBalance;
+save();
+});
+
+// Pay minimum
+cardDiv.querySelector('.pay-min').addEventListener('click',()=>{
+cards[idx].balance=Math.max(0,cards[idx].balance-cards[idx].minPayment);
+save();
+});
+
+// Pay custom
+cardDiv.querySelector('.pay-custom').addEventListener('click',()=>{
+const amount=parseFloat(cardDiv.querySelector('.pay-amount').value);
+if(isNaN(amount)||amount<=0)return;
+cards[idx].balance=Math.max(0,cards[idx].balance-amount);
+cardDiv.querySelector('.pay-amount').value='';
+save();
+});
+
+// Delete card
+cardDiv.querySelector('.delete-card').addEventListener('click',()=>{
+if(confirm(`Delete ${card.name}?`)){
+cards.splice(idx,1);
+save();
+}
+});
+
+container.appendChild(cardDiv);
+});
+updateSummary();
+}
+
+addBtn.addEventListener('click',()=>{
+const name=nameInput.value.trim();
+const last4=last4Input.value.trim();
+const limit=parseFloat(limitInput.value);
+const apr=parseFloat(aprInput.value);
+const balance=parseFloat(balanceInput.value);
+const minPayment=parseFloat(minPaymentInput.value);
+
+if(!name||!last4||isNaN(limit)||isNaN(apr)||isNaN(balance)||isNaN(minPayment))return;
+
+cards.unshift({id:uid(),name,last4,limit,apr,balance,minPayment,createdAt:new Date().toISOString()});
+nameInput.value='';last4Input.value='';limitInput.value='';aprInput.value='';balanceInput.value='';minPaymentInput.value='';
+save();
+});
+
+// Initialize with sample data on first load (only if empty)
+if(cards.length===0){
+const sampleCards=[
+{id:'1-chase',name:'Chase Sapphire',last4:'0000',limit:35000,apr:0,balance:911.98,minPayment:40,createdAt:new Date().toISOString()},
+{id:'2-bofa',name:'Bank of America',last4:'1111',limit:25000,apr:25.6,balance:7022.08,minPayment:222,createdAt:new Date().toISOString()},
+{id:'3-bofa-ul',name:'Bank of America Unlimited',last4:'2222',limit:30000,apr:23.2,balance:7235.81,minPayment:210,createdAt:new Date().toISOString()},
+{id:'4-apple',name:'Apple',last4:'3333',limit:15000,apr:26.6,balance:2926.12,minPayment:100,createdAt:new Date().toISOString()},
+{id:'5-paypal',name:'PayPal',last4:'4444',limit:10000,apr:0,balance:2145.2,minPayment:53,createdAt:new Date().toISOString()},
+{id:'6-citi',name:'Citi Card',last4:'5555',limit:18000,apr:23.3,balance:3681.12,minPayment:111.02,createdAt:new Date().toISOString()},
+{id:'7-priceline',name:'Priceline',last4:'6666',limit:15000,apr:19.9,balance:2562.43,minPayment:70.15,createdAt:new Date().toISOString()},
+{id:'8-carnival',name:'Carnival',last4:'7777',limit:20000,apr:23.6,balance:3872.53,minPayment:113.11,createdAt:new Date().toISOString()},
+{id:'9-ulta',name:'Ulta',last4:'8888',limit:5000,apr:0,balance:100,minPayment:20,createdAt:new Date().toISOString()}
+];
+cards=sampleCards;
+localStorage.setItem('creditCards',JSON.stringify(cards));
+render();
+}else{
+render();
+}
+})();
 
 // Spending Categories
 (function(){
