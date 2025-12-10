@@ -74,6 +74,9 @@
         return;
       }
       
+      // Auto-sync data from Firebase on login
+      autoSyncFromFirebase(user);
+      
       // Check if this account has cloud data or needs migration
       checkAndMigrateData(user);
       
@@ -482,7 +485,10 @@ input[type="checkbox"]{width:24px;height:24px;cursor:pointer;accent-color:#ff9aa
 .category-item{background:rgba(255,255,255,0.6);border-radius:8px;padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;transition:all 0.3s ease;border:1px solid rgba(0,0,0,0.1);}
 .category-item:hover{background:rgba(255,255,255,0.9);transform:translateX(4px);box-shadow:0 2px 8px rgba(0,0,0,0.1);}
 @keyframes slideInUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@keyframes slideIn{from{opacity:0;transform:translateX(400px);}to{opacity:1;transform:translateX(0);}}
+@keyframes slideOut{from{opacity:1;transform:translateX(0);}to{opacity:0;transform:translateX(400px);}}
 @keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
+@keyframes fadeInScale{from{opacity:0;transform:scale(0.8);}to{opacity:1;transform:scale(1);}}
 .animate-slide-in{animation:slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);}
 .animate-pulse{animation:pulse 0.6s ease;}
 @media(max-width:768px){
@@ -562,6 +568,13 @@ input[type="range"]{max-width:100%;margin:8px 0;}
 .health-tracker-grid .mood-btn svg{width:18px !important;height:18px !important;}
 .health-tracker-grid .water-glass svg{width:20px !important;height:20px !important;}
 .health-tracker-grid input[type="number"]{padding:6px !important;font-size:0.875rem !important;}
+/* Credit card form - stack on mobile */
+#newCardName,#newCardLast4,#newCardAPR,#newCardBalance,#newCardMinPayment{width:100% !important;min-width:unset !important;margin-bottom:8px;}
+#addCreditCardBtn{width:100%;margin-top:8px;}
+/* Peruse demo view adjustments for mobile */
+#peruseView .card-title{font-size:1.5rem !important;padding:0 !important;}
+#peruseView h2{font-size:1.3rem !important;margin:16px 0 !important;}
+#peruseView > div:first-child{padding:12px !important;}
 }
 
 /* Touch feedback for mobile */
@@ -660,18 +673,25 @@ transform:translateY(0);
 <body>
 <!-- Loading Screen -->
 <div id="authLoader" style="display:flex;position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);z-index:10000;align-items:center;justify-content:center;">
-<div style="text-align:center;">
-<div style="width:60px;height:60px;border:4px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 20px;"></div>
-<h2 style="color:white;font-family:'Pacifico',cursive;font-size:1.5rem;margin:0;">Learn Thyself</h2>
-<p style="color:rgba(255,255,255,0.8);margin-top:8px;font-size:0.9rem;">Loading...</p>
+<div style="text-align:center;display:flex;flex-direction:column;align-items:center;">
+<img src="/static/images/Pure.png" alt="Pure Progress Logo" style="width:140px;height:auto;margin-bottom:30px;filter:drop-shadow(0 8px 16px rgba(0,0,0,0.3));animation:fadeInScale 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);">
+<div style="width:60px;height:60px;border:4px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 1s linear infinite;margin-bottom:20px;"></div>
+<p style="color:rgba(255,255,255,0.8);font-size:0.9rem;">Loading...</p>
 </div>
 </div>
 
 <!-- Login Modal -->
 <div id="loginModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);z-index:9999;align-items:center;justify-content:center;padding:16px;overflow-y:auto;">
-<div style="background:white;padding:32px 24px;border-radius:24px;box-shadow:0 20px 60px rgba(0,0,0,0.3);max-width:460px;width:100%;margin:auto;">
-<h1 style="font-family:'Pacifico',cursive;font-size:clamp(1.75rem, 5vw, 2.5rem);text-align:center;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;line-height:1.2;">Learn Thyself</h1>
-<p style="text-align:center;color:#6b7280;margin-bottom:20px;font-size:clamp(0.875rem, 2.5vw, 0.95rem);font-weight:500;">Your personal habit & wellness tracker</p>
+<div style="background:white;padding:40px 24px;border-radius:24px;box-shadow:0 20px 60px rgba(0,0,0,0.3);max-width:500px;width:100%;margin:auto;">
+<div style="text-align:center;margin-bottom:28px;display:flex;justify-content:center;">
+<img src="/static/images/Pure.png" alt="Pure Progress Logo" style="width:220px;height:auto;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.15));object-fit:contain;">
+</div>
+<p style="text-align:center;color:#6b7280;margin-bottom:24px;font-size:clamp(0.875rem, 2.5vw, 0.95rem);font-weight:500;">Your personal habit & wellness tracker</p>
+
+<!-- Explore Features Button -->
+<div style="margin-bottom:20px;">
+<button onclick="showPeruseView()" style="width:100%;padding:14px;background:linear-gradient(135deg,#8b5cf6,#a78bfa);color:white;border:none;border-radius:12px;font-size:clamp(0.95rem, 2.5vw, 1rem);font-weight:600;cursor:pointer;transition:transform 0.2s,opacity 0.2s;touch-action:manipulation;">✨ Explore What You Can Track</button>
+</div>
 
 <!-- Feature List -->
 <div style="background:linear-gradient(135deg,#f0f4ff,#faf5ff);border-radius:12px;padding:16px;margin-bottom:20px;">
@@ -752,6 +772,107 @@ transform:translateY(0);
 <!-- Account Actions -->
 <div style="border-top:1px solid #e5e7eb;padding-top:20px;">
 <button onclick="handleLogout()" style="width:100%;padding:14px;background:linear-gradient(135deg,#ef4444,#f87171);color:white;border:none;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer;transition:transform 0.2s;">Logout</button>
+</div>
+</div>
+</div>
+
+<!-- Peruse/Demo View (Read-Only) -->
+<div id="peruseView" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#f9fafb;overflow-y:auto;z-index:9000;">
+<div style="position:sticky;top:0;background:white;border-bottom:1px solid #e5e7eb;padding:20px 16px;box-shadow:0 2px 4px rgba(0,0,0,0.05);z-index:100;">
+<div style="max-width:1200px;margin:0 auto;display:flex;justify-content:center;align-items:center;position:relative;">
+<img src="/static/images/Pure.png" alt="Pure Progress Logo" style="width:180px;height:auto;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.1));">
+<button onclick="closePeruseView()" style="position:absolute;right:0;background:#ef4444;color:white;border:none;border-radius:50%;width:44px;height:44px;font-size:1.5rem;cursor:pointer;font-weight:bold;transition:background 0.2s,transform 0.2s;padding:0;display:flex;align-items:center;justify-content:center;">×</button>
+</div>
+</div>
+
+<div style="max-width:1200px;margin:0 auto;padding:32px 16px;">
+<!-- Peruse/Features Section -->
+<div style="background:white;border-radius:16px;padding:32px;margin-bottom:32px;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+<h2 style="font-size:2rem;font-weight:700;color:#374151;margin-bottom:24px;text-align:center;">Your Personal Habit & Wellness Tracker</h2>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:24px;margin-bottom:32px;">
+<div style="text-align:center;padding:24px;background:linear-gradient(135deg,#fee2e2,rgba(254,226,226,0.5));border-radius:12px;">
+<div style="font-size:3rem;margin-bottom:12px;">😊</div>
+<h3 style="font-size:1.25rem;font-weight:600;color:#dc2626;margin-bottom:8px;">Mood & Energy Tracking</h3>
+<p style="color:#6b7280;font-size:0.95rem;">Track your daily mood, energy levels, and emotions. Add notes to reflect on your feelings.</p>
+</div>
+<div style="text-align:center;padding:24px;background:linear-gradient(135deg,#dbeafe,rgba(219,234,254,0.5));border-radius:12px;">
+<div style="font-size:3rem;margin-bottom:12px;">💳</div>
+<h3 style="font-size:1.25rem;font-weight:600;color:#0369a1;margin-bottom:8px;">Credit Card Manager</h3>
+<p style="color:#6b7280;font-size:0.95rem;">Manage multiple credit cards, track balances, APR, and monthly interest. Pay down debt strategically.</p>
+</div>
+<div style="text-align:center;padding:24px;background:linear-gradient(135deg,#fef3c7,rgba(254,243,199,0.5));border-radius:12px;">
+<div style="font-size:3rem;margin-bottom:12px;">💰</div>
+<h3 style="font-size:1.25rem;font-weight:600;color:#d97706;margin-bottom:8px;">Spending Tracker</h3>
+<p style="color:#6b7280;font-size:0.95rem;">Track daily spending by categories, view weekly/monthly totals, and manage your budget.</p>
+</div>
+<div style="text-align:center;padding:24px;background:linear-gradient(135deg,#d1fae5,rgba(209,250,229,0.5));border-radius:12px;">
+<div style="font-size:3rem;margin-bottom:12px;">✅</div>
+<h3 style="font-size:1.25rem;font-weight:600;color:#059669;margin-bottom:8px;">Daily Activities</h3>
+<p style="color:#6b7280;font-size:0.95rem;">Build habits with daily activity tracking. Monitor completion streaks and stay motivated.</p>
+</div>
+<div style="text-align:center;padding:24px;background:linear-gradient(135deg,#c7d2fe,rgba(199,210,254,0.5));border-radius:12px;">
+<div style="font-size:3rem;margin-bottom:12px;">📝</div>
+<h3 style="font-size:1.25rem;font-weight:600;color:#4f46e5;margin-bottom:8px;">Memory Journal</h3>
+<p style="color:#6b7280;font-size:0.95rem;">Capture meaningful moments and things you want to remember from each day.</p>
+</div>
+<div style="text-align:center;padding:24px;background:linear-gradient(135deg,#e9d5ff,rgba(233,213,255,0.5));border-radius:12px;">
+<div style="font-size:3rem;margin-bottom:12px;">📊</div>
+<h3 style="font-size:1.25rem;font-weight:600;color:#7c3aed;margin-bottom:8px;">History & Insights</h3>
+<p style="color:#6b7280;font-size:0.95rem;">View your historical data, patterns, and insights over time. See your progress and growth.</p>
+</div>
+<div style="text-align:center;padding:24px;background:linear-gradient(135deg,#fce7f3,rgba(252,231,243,0.5));border-radius:12px;">
+<div style="font-size:3rem;margin-bottom:12px;">✓</div>
+<h3 style="font-size:1.25rem;font-weight:600;color:#ec4899;margin-bottom:8px;">Projects & Tasks</h3>
+<p style="color:#6b7280;font-size:0.95rem;">Create and track projects with checkoff items. Stay organized and boost productivity with completion tracking.</p>
+</div>
+<div style="text-align:center;padding:24px;background:linear-gradient(135deg,#f0fdf4,rgba(240,253,244,0.5));border-radius:12px;">
+<div style="font-size:3rem;margin-bottom:12px;">📌</div>
+<h3 style="font-size:1.25rem;font-weight:600;color:#16a34a;margin-bottom:8px;">Miscellaneous Tracking</h3>
+<p style="color:#6b7280;font-size:0.95rem;">Track life events like days you cried, items lost, and other special moments that matter to you.</p>
+</div>
+</div>
+
+<!-- Key Benefits -->
+<div style="background:linear-gradient(135deg,#f0f4ff,#faf5ff);border-radius:12px;padding:24px;border:2px solid #e0e7ff;">
+<h3 style="font-size:1.25rem;font-weight:700;color:#4f46e5;margin-bottom:16px;">Why Choose Learn Thyself?</h3>
+<div style="display:grid;gap:12px;">
+<div style="display:flex;align-items:flex-start;gap:12px;">
+<span style="font-size:1.5rem;flex-shrink:0;">☁️</span>
+<div>
+<div style="font-weight:600;color:#374151;margin-bottom:4px;">Sync Across All Devices</div>
+<p style="color:#6b7280;font-size:0.9rem;margin:0;">Your data automatically syncs to the cloud. Access your habits and data from any device.</p>
+</div>
+</div>
+<div style="display:flex;align-items:flex-start;gap:12px;">
+<span style="font-size:1.5rem;flex-shrink:0;">🔐</span>
+<div>
+<div style="font-weight:600;color:#374151;margin-bottom:4px;">Private & Secure</div>
+<p style="color:#6b7280;font-size:0.9rem;margin:0;">Only you can see your personal data. We use enterprise-grade encryption and secure authentication.</p>
+</div>
+</div>
+<div style="display:flex;align-items:flex-start;gap:12px;">
+<span style="font-size:1.5rem;flex-shrink:0;">📈</span>
+<div>
+<div style="font-weight:600;color:#374151;margin-bottom:4px;">Understand Your Patterns</div>
+<p style="color:#6b7280;font-size:0.9rem;margin:0;">See how your mood, spending, and habits evolve. Make data-driven decisions for your wellness.</p>
+</div>
+</div>
+<div style="display:flex;align-items:flex-start;gap:12px;">
+<span style="font-size:1.5rem;flex-shrink:0;">💯</span>
+<div>
+<div style="font-weight:600;color:#374151;margin-bottom:4px;">Simple & Intuitive</div>
+<p style="color:#6b7280;font-size:0.9rem;margin:0;">Easy-to-use interface designed for daily tracking. No complex setup or learning curve.</p>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Call to Action -->
+<div style="text-align:center;margin-top:32px;padding:24px;background:white;border-radius:12px;border:2px solid #e5e7eb;">
+<h3 style="font-size:1.25rem;font-weight:700;color:#374151;margin-bottom:16px;">Ready to Learn Thyself?</h3>
+<p style="color:#6b7280;margin-bottom:24px;font-size:0.95rem;">Create a free account to start tracking your habits, mood, spending, and wellness journey.</p>
+<button onclick="closePeruseView();document.getElementById('signupTab').click();" style="padding:14px 32px;background:linear-gradient(135deg,#667eea,#764ba2);color:white;border:none;border-radius:12px;font-size:1.1rem;font-weight:600;cursor:pointer;transition:transform 0.2s;">Sign Up Free</button>
+</div>
 </div>
 </div>
 </div>
@@ -1187,7 +1308,6 @@ Water
 <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center;">
 <input type="text" id="newCardName" placeholder="Card Name (e.g., Chase Sapphire)" style="flex:1;min-width:200px;padding:10px;border:1px solid #0369a1;border-radius:6px;font-size:0.9rem;"/>
 <input type="text" id="newCardLast4" placeholder="Last 4 digits" style="width:100px;padding:10px;border:1px solid #0369a1;border-radius:6px;font-size:0.9rem;"/>
-<input type="number" id="newCardLimit" placeholder="Limit" step="0.01" min="0" style="width:120px;padding:10px;border:1px solid #0369a1;border-radius:6px;font-size:0.9rem;"/>
 <input type="number" id="newCardAPR" placeholder="APR %" step="0.1" min="0" max="100" style="width:100px;padding:10px;border:1px solid #0369a1;border-radius:6px;font-size:0.9rem;"/>
 </div>
 <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
@@ -1450,7 +1570,8 @@ return d.toLocaleDateString('en-US', options || {weekday:'short',month:'short',d
 const STORAGE_KEYS = [
   'dailyMoodEnergy', 'activities', 'dailyRatings', 'activityCompletions',
   'dailyTodo', 'getItDone', 'dailySpending', 'daysCried', 'itemsLost',
-  'waterIntake', 'timeTracked', 'photos', 'selectedTheme', 'pendingProjects', 'dailyMemories', 'creditCards'
+  'waterIntake', 'timeTracked', 'photos', 'selectedTheme', 'pendingProjects', 
+  'dailyMemories', 'creditCards', 'activityLog', 'categoryData'
 ];
 
 // Save data to Firebase
@@ -1458,6 +1579,76 @@ function saveToFirebase(key, data) {
   if (!window.firebaseUserId || !window.firebaseDatabase) return;
   const dataRef = window.firebaseRef(window.firebaseDatabase, `users/${window.firebaseUserId}/${key}`);
   window.firebaseSet(dataRef, data).catch(err => console.error('Firebase save error:', err));
+}
+
+// Auto-sync data from Firebase on login (silent background sync)
+async function autoSyncFromFirebase(user) {
+  if (!window.firebaseUserId || !window.firebaseDatabase) return;
+  
+  console.log('🔄 Auto-syncing data from Firebase...');
+  try {
+    let synced = 0;
+    
+    for (const key of STORAGE_KEYS) {
+      try {
+        const dataRef = window.firebaseRef(window.firebaseDatabase, `users/${window.firebaseUserId}/${key}`);
+        const snapshot = await window.firebaseGet(dataRef);
+        
+        if (snapshot.exists()) {
+          const cloudData = snapshot.val();
+          const localData = localStorage.getItem(key);
+          
+          // Compare timestamps if available, otherwise just use cloud data
+          // This prevents overwriting newer local data with older cloud data
+          let shouldSync = true;
+          
+          if (localData) {
+            try {
+              const localParsed = JSON.parse(localData);
+              const cloudParsed = typeof cloudData === 'string' ? JSON.parse(cloudData) : cloudData;
+              
+              // If both have updatedAt, use the newer one
+              if (localParsed.updatedAt && cloudParsed.updatedAt) {
+                shouldSync = new Date(cloudParsed.updatedAt) > new Date(localParsed.updatedAt);
+              }
+            } catch(e) {
+              // If can't parse, use cloud data
+              shouldSync = true;
+            }
+          }
+          
+          if (shouldSync) {
+            localStorage.setItem(key, typeof cloudData === 'string' ? cloudData : JSON.stringify(cloudData));
+            synced++;
+            console.log(`✓ Synced ${key} from cloud`);
+          }
+        }
+      } catch(e) {
+        console.warn(`⚠️ Failed to sync ${key}:`, e.message);
+      }
+    }
+    
+    console.log(`✅ Auto-sync complete! Downloaded ${synced} items from cloud`);
+    
+    // Show sync indicator briefly
+    showSyncIndicator(`✅ Synced ${synced} items from cloud`);
+  } catch(error) {
+    console.error('❌ Auto-sync failed:', error);
+  }
+}
+
+// Show temporary sync indicator
+function showSyncIndicator(message) {
+  const indicator = document.createElement('div');
+  indicator.style.cssText = 'position:fixed;top:20px;right:20px;background:#10b981;color:white;padding:12px 20px;border-radius:8px;font-size:0.9rem;font-weight:600;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.15);animation:slideIn 0.3s ease;';
+  indicator.textContent = message;
+  document.body.appendChild(indicator);
+  
+  // Auto-hide after 3 seconds
+  setTimeout(() => {
+    indicator.style.animation = 'slideOut 0.3s ease';
+    setTimeout(() => indicator.remove(), 300);
+  }, 3000);
 }
 
 // Load all data from Firebase (manual - no auto-reload)
@@ -1540,6 +1731,26 @@ localStorage.setItem = function(key, value) {
     }
   }
 };
+
+// Peruse/Demo View Functions
+function showPeruseView() {
+  const loginModal = document.getElementById('loginModal');
+  const peruseView = document.getElementById('peruseView');
+  
+  if (loginModal) loginModal.style.display = 'none';
+  if (peruseView) peruseView.style.display = 'block';
+  
+  // Scroll to top
+  window.scrollTo(0, 0);
+}
+
+function closePeruseView() {
+  const loginModal = document.getElementById('loginModal');
+  const peruseView = document.getElementById('peruseView');
+  
+  if (peruseView) peruseView.style.display = 'none';
+  if (loginModal) loginModal.style.display = 'flex';
+}
 
 // Authentication Functions
 function switchAuthTab(tab) {
@@ -2132,7 +2343,6 @@ const container=document.getElementById('creditCardsList');
 const addBtn=document.getElementById('addCreditCardBtn');
 const nameInput=document.getElementById('newCardName');
 const last4Input=document.getElementById('newCardLast4');
-const limitInput=document.getElementById('newCardLimit');
 const aprInput=document.getElementById('newCardAPR');
 const balanceInput=document.getElementById('newCardBalance');
 const minPaymentInput=document.getElementById('newCardMinPayment');
@@ -2196,10 +2406,6 @@ cardDiv.innerHTML=`
 <div style="text-align:center;padding:8px;background:#dbeafe;border-radius:6px;">
 <div style="font-size:0.7rem;color:#0369a1;font-weight:600;">MONTHLY INTEREST</div>
 <div style="font-size:1.25rem;font-weight:700;color:#ef4444;">$${monthlyInterest.toFixed(2)}</div>
-</div>
-<div style="text-align:center;padding:8px;background:#dbeafe;border-radius:6px;">
-<div style="font-size:0.7rem;color:#0369a1;font-weight:600;">LIMIT</div>
-<div style="font-size:1.25rem;font-weight:700;color:#0369a1;">$${parseFloat(card.limit||0).toFixed(2)}</div>
 </div>
 </div>
 
@@ -2269,37 +2475,18 @@ updateSummary();
 addBtn.addEventListener('click',()=>{
 const name=nameInput.value.trim();
 const last4=last4Input.value.trim();
-const limit=parseFloat(limitInput.value);
 const apr=parseFloat(aprInput.value);
 const balance=parseFloat(balanceInput.value);
 const minPayment=parseFloat(minPaymentInput.value);
 
-if(!name||!last4||isNaN(limit)||isNaN(apr)||isNaN(balance)||isNaN(minPayment))return;
+if(!name||!last4||isNaN(apr)||isNaN(balance)||isNaN(minPayment))return;
 
-cards.unshift({id:uid(),name,last4,limit,apr,balance,minPayment,createdAt:new Date().toISOString()});
-nameInput.value='';last4Input.value='';limitInput.value='';aprInput.value='';balanceInput.value='';minPaymentInput.value='';
+cards.unshift({id:uid(),name,last4,apr,balance,minPayment,createdAt:new Date().toISOString()});
+nameInput.value='';last4Input.value='';aprInput.value='';balanceInput.value='';minPaymentInput.value='';
 save();
 });
 
-// Initialize with sample data on first load (only if empty)
-if(cards.length===0){
-const sampleCards=[
-{id:'1-chase',name:'Chase Sapphire',last4:'0000',limit:35000,apr:0,balance:911.98,minPayment:40,createdAt:new Date().toISOString()},
-{id:'2-bofa',name:'Bank of America',last4:'1111',limit:25000,apr:25.6,balance:7022.08,minPayment:222,createdAt:new Date().toISOString()},
-{id:'3-bofa-ul',name:'Bank of America Unlimited',last4:'2222',limit:30000,apr:23.2,balance:7235.81,minPayment:210,createdAt:new Date().toISOString()},
-{id:'4-apple',name:'Apple',last4:'3333',limit:15000,apr:26.6,balance:2926.12,minPayment:100,createdAt:new Date().toISOString()},
-{id:'5-paypal',name:'PayPal',last4:'4444',limit:10000,apr:0,balance:2145.2,minPayment:53,createdAt:new Date().toISOString()},
-{id:'6-citi',name:'Citi Card',last4:'5555',limit:18000,apr:23.3,balance:3681.12,minPayment:111.02,createdAt:new Date().toISOString()},
-{id:'7-priceline',name:'Priceline',last4:'6666',limit:15000,apr:19.9,balance:2562.43,minPayment:70.15,createdAt:new Date().toISOString()},
-{id:'8-carnival',name:'Carnival',last4:'7777',limit:20000,apr:23.6,balance:3872.53,minPayment:113.11,createdAt:new Date().toISOString()},
-{id:'9-ulta',name:'Ulta',last4:'8888',limit:5000,apr:0,balance:100,minPayment:20,createdAt:new Date().toISOString()}
-];
-cards=sampleCards;
-localStorage.setItem('creditCards',JSON.stringify(cards));
 render();
-}else{
-render();
-}
 })();
 
 // Spending Categories
