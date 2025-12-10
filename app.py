@@ -2,11 +2,14 @@ from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import sqlite3
 from datetime import datetime
-import os
+import os, time
 
 app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), 'static'))
 CORS(app)
 DB_NAME = 'habits.db'
+
+# Simple cache-busting version for static files
+ASSET_VER = os.getenv('ASSET_VER', str(int(time.time())))
 
 # Initialize DB
 def init_db():
@@ -62,7 +65,7 @@ def get_habit(date):
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('index.html', asset_version=ASSET_VER)
 
 if __name__ == '__main__':
     app.run(debug=True)
