@@ -14,8 +14,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Learn Thyself">
 <link rel="manifest" href="/manifest.json">
-<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
-<link rel="apple-touch-icon" href="/icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/Pure.png">
+<link rel="apple-touch-icon" href="/Pure.png">
 
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
@@ -668,6 +668,203 @@ opacity:0.95;
 #settingsModal button:active{
 transform:translateY(0);
 }
+
+/* Collapsible Card Styles */
+.card-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:12px;
+margin-bottom:24px;
+}
+
+.card-title{
+margin:0;
+flex:1;
+}
+
+.card-controls{
+display:flex;
+gap:8px;
+align-items:center;
+}
+
+.card-toggle-btn,.card-delete-btn,.card-menu-btn{
+background:none;
+border:none;
+cursor:pointer;
+padding:4px;
+border-radius:6px;
+transition:all 0.2s;
+font-size:18px;
+display:flex;
+align-items:center;
+justify-content:center;
+width:32px;
+height:32px;
+}
+
+.card-toggle-btn:hover{
+background:rgba(0,0,0,0.05);
+transform:scale(1.1);
+}
+
+.card-toggle-btn.collapsed:after{
+content:'▼';
+}
+
+.card-toggle-btn:after{
+content:'▲';
+transition:transform 0.3s;
+}
+
+.card-delete-btn{
+color:#ef4444;
+opacity:0.7;
+}
+
+.card-delete-btn:hover{
+background:rgba(239,68,68,0.1);
+opacity:1;
+color:#dc2626;
+}
+
+.card-content{
+max-height:2000px;
+overflow:hidden;
+transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+
+.card-content.collapsed{
+max-height:0;
+opacity:0;
+pointer-events:none;
+}
+
+.collapse-arrow{
+display:inline-block;
+transition:transform 0.3s;
+}
+
+.card-collapsed .collapse-arrow{
+transform:rotate(-90deg);
+}
+
+
+.custom-cards-container{
+display:grid;
+gap:24px;
+margin-top:32px;
+}
+
+.custom-card{
+background:var(--card-bg);
+border-radius:20px;
+padding:24px;
+border:2px solid rgba(236,72,153,0.2);
+position:relative;
+transition:all 0.3s;
+}
+
+.custom-card:hover{
+border-color:rgba(236,72,153,0.4);
+box-shadow:0 8px 24px rgba(236,72,153,0.15);
+}
+
+.custom-card-header{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+gap:12px;
+margin-bottom:16px;
+}
+
+.custom-card-title-input{
+font-size:1.25rem;
+font-weight:700;
+border:none;
+background:transparent;
+padding:0;
+width:100%;
+cursor:text;
+}
+
+.custom-card-content{
+color:var(--text-secondary);
+word-break:break-word;
+white-space:pre-wrap;
+}
+
+.add-custom-card-btn{
+padding:16px;
+border:2px dashed rgba(236,72,153,0.3);
+border-radius:12px;
+background:transparent;
+cursor:pointer;
+text-align:center;
+transition:all 0.3s;
+color:var(--text-secondary);
+font-weight:600;
+}
+
+.add-custom-card-btn:hover{
+border-color:rgba(236,72,153,0.6);
+background:rgba(236,72,153,0.05);
+color:var(--text-primary);
+}
+
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+right:0;
+bottom:0;
+background:rgba(0,0,0,0.5);
+z-index:9999;
+align-items:center;
+justify-content:center;
+}
+
+.modal.active{
+display:flex;
+}
+
+.modal-content{
+background:white;
+border-radius:16px;
+padding:32px;
+max-width:500px;
+width:90%;
+box-shadow:0 20px 60px rgba(0,0,0,0.3);
+}
+
+.modal-content h3{
+margin-top:0;
+margin-bottom:20px;
+}
+
+.modal-content input{
+width:100%;
+margin-bottom:16px;
+}
+
+.modal-content textarea{
+width:100%;
+min-height:150px;
+margin-bottom:16px;
+resize:vertical;
+}
+
+.modal-buttons{
+display:flex;
+gap:12px;
+}
+
+.modal-buttons button{
+flex:1;
+}
+
 </style>
 </head>
 <body>
@@ -948,7 +1145,7 @@ window.switchTab = function(tab) {
 
 <!-- Category Navigation -->
 <div style="margin-bottom:24px;background:linear-gradient(135deg,rgba(255,255,255,0.98),rgba(255,255,255,0.95));padding:16px;border-radius:20px;box-shadow:0 8px 32px rgba(0,0,0,0.12);">
-<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;">
 <button class="category-tab active" onclick="switchCategory('wellness')" style="padding:16px 12px;border:3px solid #ec4899;background:linear-gradient(135deg,#fce7f3,#fbcfe8);color:#be185d;border-radius:16px;font-weight:700;cursor:pointer;transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;box-shadow:0 4px 12px rgba(236,72,153,0.25);">
 <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,transparent,rgba(255,255,255,0.5));pointer-events:none;"></div>
 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="filter:drop-shadow(0 2px 4px rgba(236,72,153,0.3));"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
@@ -968,6 +1165,11 @@ window.switchTab = function(tab) {
 <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,transparent,rgba(255,255,255,0.5));pointer-events:none;"></div>
 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
 <span style="font-size:0.85rem;text-align:center;line-height:1.3;font-weight:800;letter-spacing:0.5px;">Reflections &<br>Insights</span>
+</button>
+<button class="category-tab" onclick="switchCategory('customCards')" style="padding:16px 12px;border:3px solid #a78bfa;background:linear-gradient(135deg,#faf5ff,#f3e8ff);color:#7c3aed;border-radius:16px;font-weight:700;cursor:pointer;transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;">
+<div style="position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,transparent,rgba(255,255,255,0.5));pointer-events:none;"></div>
+<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+<span style="font-size:0.85rem;text-align:center;line-height:1.3;font-weight:800;letter-spacing:0.5px;">My Cards</span>
 </button>
 </div>
 </div>
@@ -1149,6 +1351,21 @@ Water
 
 </div>
 </div>
+
+<!-- Custom Cards Category -->
+<div id="customCardsCategory" class="category-content" style="display:none;">
+
+<div style="text-align:center;padding:40px 20px;color:#6b7280;">
+<p style="font-size:1.125rem;font-weight:600;margin-bottom:16px;">📝 Create Your Own Tracking Cards</p>
+<p style="margin-bottom:24px;">Keep tabs on anything that matters to you</p>
+</div>
+
+<div id="customCardsContainer" class="custom-cards-container"></div>
+
+<button id="addCustomCardBtn" class="btn" style="width:100%;padding:16px;margin:24px auto;display:block;">+ Create New Card</button>
+
+</div>
+
 <!-- End Health & Wellness Category -->
 
 <!-- Habits & Activities Category -->
@@ -1428,12 +1645,6 @@ No memories logged yet today. Start capturing moments!
 <!-- History View -->
 <div id="historyView" class="view-section">
 
-<!-- Weekly Summary Card -->
-<div class="card" style="background:linear-gradient(135deg,#c7d2fe 0%,rgba(199,210,254,0.7) 100%);">
-<h2 class="card-title" style="color:#4f46e5;">📋 Weekly Summary</h2>
-<div id="weeklySummary" style="padding:20px;background:white;border-radius:12px;"></div>
-</div>
-
 <div class="card" style="background:linear-gradient(135deg,#fef3c7 0%,rgba(254,243,199,0.7) 100%);">
 <h2 class="card-title" style="color:#d97706;">📊 Your Progress History</h2>
 <div style="display:flex;gap:16px;margin-bottom:32px;">
@@ -1570,8 +1781,9 @@ return d.toLocaleDateString('en-US', options || {weekday:'short',month:'short',d
 const STORAGE_KEYS = [
   'dailyMoodEnergy', 'activities', 'dailyRatings', 'activityCompletions',
   'dailyTodo', 'getItDone', 'dailySpending', 'daysCried', 'itemsLost',
-  'waterIntake', 'timeTracked', 'photos', 'selectedTheme', 'pendingProjects', 
-  'dailyMemories', 'creditCards', 'activityLog', 'categoryData'
+  'waterIntake', 'timeTracker', 'photos', 'photoAlbum', 'selectedTheme', 'pendingProjects', 
+  'dailyMemories', 'creditCards', 'activityLog', 'categoryData', 'sleepData', 
+  'painData', 'clarityData', 'waterIntakeNew', 'customCards'
 ];
 
 // Save data to Firebase
@@ -1581,13 +1793,538 @@ function saveToFirebase(key, data) {
   window.firebaseSet(dataRef, data).catch(err => console.error('Firebase save error:', err));
 }
 
+// Card Collapse/Expand functionality
+function initializeCardCollapse() {
+  const cards = document.querySelectorAll('.card');
+  cards.forEach(card => {
+    if (card.classList.contains('card-initialized')) return; // Already initialized
+    card.classList.add('card-initialized');
+    
+    const title = card.querySelector('.card-title');
+    if (!title) return;
+    
+    // Create wrapper for content
+    const wrapper = document.createElement('div');
+    wrapper.className = 'card-content';
+    
+    // Move all children except the title into the wrapper
+    const titleParent = title.parentElement;
+    const titleIndex = Array.from(titleParent.children).indexOf(title);
+    
+    // Get all siblings after title
+    let node = title.nextSibling;
+    while (node) {
+      const next = node.nextSibling;
+      if (node.nodeType === 1) { // Element node
+        wrapper.appendChild(node);
+      } else if (node.nodeType === 3 && node.textContent.trim()) { // Text node with content
+        wrapper.appendChild(node);
+      } else {
+        node = next;
+        continue;
+      }
+      node = next;
+    }
+    
+    // Insert wrapper after title
+    titleParent.insertBefore(wrapper, title.nextSibling);
+    
+    // Make title clickable for collapse
+    title.style.cursor = 'pointer';
+    title.style.userSelect = 'none';
+    title.addEventListener('click', (e) => {
+      e.stopPropagation();
+      wrapper.classList.toggle('collapsed');
+      card.classList.toggle('card-collapsed');
+    });
+    
+    // Add visual indicator (arrow)
+    const arrow = document.createElement('span');
+    arrow.className = 'collapse-arrow';
+    arrow.innerHTML = '▼';
+    arrow.style.marginLeft = '8px';
+    arrow.style.fontSize = '12px';
+    arrow.style.transition = 'transform 0.3s';
+    title.appendChild(arrow);
+  });
+}
+
+// Show delete buttons on Ctrl+Shift+D
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+    e.preventDefault();
+    const deleteButtons = document.querySelectorAll('.card-delete-btn');
+    deleteButtons.forEach(btn => {
+      btn.style.display = btn.style.display === 'none' ? 'flex' : 'none';
+    });
+  }
+});
+
+// Long-press to show delete buttons on mobile
+let touchStart = 0;
+document.addEventListener('touchstart', (e) => {
+  touchStart = Date.now();
+});
+
+document.addEventListener('touchend', (e) => {
+  if (Date.now() - touchStart > 1000) {
+    const deleteButtons = document.querySelectorAll('.card-delete-btn');
+    deleteButtons.forEach(btn => {
+      btn.style.display = btn.style.display === 'none' ? 'flex' : 'none';
+    });
+  }
+});
+
+// Custom Cards Management
+function initializeCustomCards() {
+  const container = document.getElementById('customCardsContainer');
+  if (!container) return;
+  
+  const customCards = JSON.parse(localStorage.getItem('customCards') || '[]');
+  
+  // Clear existing cards but keep the button
+  const existingCards = container.querySelectorAll('.custom-card');
+  existingCards.forEach(card => card.remove());
+  
+  // If more than 4 cards, create a collapsible container
+  let cardsWrapper = container.querySelector('.custom-cards-wrapper');
+  if (!cardsWrapper) {
+    cardsWrapper = document.createElement('div');
+    cardsWrapper.className = 'custom-cards-wrapper';
+    cardsWrapper.style.maxHeight = customCards.length > 4 ? '600px' : 'none';
+    cardsWrapper.style.overflow = 'hidden';
+    cardsWrapper.style.transition = 'max-height 0.4s ease';
+    container.insertBefore(cardsWrapper, container.firstChild);
+  }
+  
+  customCards.forEach(card => {
+    const cardEl = createCustomCardElement(card);
+    cardsWrapper.appendChild(cardEl);
+  });
+  
+  // Add expand button if more than 4 cards
+  if (customCards.length > 4) {
+    let expandBtn = container.querySelector('.expand-custom-cards-btn');
+    if (!expandBtn) {
+      expandBtn = document.createElement('button');
+      expandBtn.className = 'expand-custom-cards-btn';
+      expandBtn.style.cssText = 'width:100%;padding:12px;background:rgba(124,58,237,0.1);border:2px dashed #a78bfa;border-radius:8px;cursor:pointer;font-weight:600;color:#7c3aed;margin:12px 0;transition:all 0.3s;';
+      expandBtn.textContent = `📂 Show ${customCards.length - 4} more card${customCards.length - 4 !== 1 ? 's' : ''}`;
+      expandBtn.onmouseover = () => expandBtn.style.background = 'rgba(124,58,237,0.2)';
+      expandBtn.onmouseout = () => expandBtn.style.background = 'rgba(124,58,237,0.1)';
+      expandBtn.addEventListener('click', () => {
+        const isExpanded = cardsWrapper.style.maxHeight !== '600px';
+        cardsWrapper.style.maxHeight = isExpanded ? '600px' : 'none';
+        expandBtn.textContent = isExpanded ? `📂 Show ${customCards.length - 4} more card${customCards.length - 4 !== 1 ? 's' : ''}` : '📁 Collapse';
+      });
+      const addBtn = document.getElementById('addCustomCardBtn');
+      if (addBtn) {
+        addBtn.parentElement.insertBefore(expandBtn, addBtn);
+      } else {
+        container.appendChild(expandBtn);
+      }
+    }
+  }
+  
+  // Attach button listener if exists
+  const addBtn = document.getElementById('addCustomCardBtn');
+  if (addBtn) {
+    addBtn.onclick = openCustomCardModal;
+  }
+}
+
+function createCustomCardElement(cardData) {
+  const el = document.createElement('div');
+  el.className = 'custom-card';
+  el.setAttribute('data-card-id', cardData.id);
+  
+  // Default color if not set
+  const cardColor = cardData.color || '#e9d5ff';
+  const textColor = cardData.textColor || '#7c3aed';
+  const trackingType = cardData.trackingType || 'notes';
+  
+  el.style.borderColor = textColor;
+  el.style.background = cardColor;
+  
+  let trackingContent = '';
+  if (trackingType === 'streak') {
+    trackingContent = `
+      <div style="display:flex;gap:12px;align-items:center;margin-top:12px;padding-top:12px;border-top:1px solid rgba(0,0,0,0.1);">
+        <span style="font-size:1.5rem;">🔥</span>
+        <div>
+          <div style="font-weight:700;font-size:1.25rem;color:${textColor};">${cardData.streak || 0}</div>
+          <div style="font-size:0.75rem;color:rgba(0,0,0,0.6);">day streak</div>
+        </div>
+        <button onclick="incrementCardStreak('${cardData.id}')" style="margin-left:auto;padding:8px 16px;background:${textColor};color:white;border:none;border-radius:6px;cursor:pointer;font-weight:600;">✓ Done</button>
+      </div>
+    `;
+  } else if (trackingType === 'count') {
+    trackingContent = `
+      <div style="display:flex;gap:12px;align-items:center;margin-top:12px;padding-top:12px;border-top:1px solid rgba(0,0,0,0.1);">
+        <span style="font-size:1.5rem;">📊</span>
+        <div>
+          <div style="font-weight:700;font-size:1.25rem;color:${textColor};">${cardData.count || 0}</div>
+          <div style="font-size:0.75rem;color:rgba(0,0,0,0.6);">total count</div>
+        </div>
+        <button onclick="incrementCardCount('${cardData.id}')" style="margin-left:auto;padding:8px 16px;background:${textColor};color:white;border:none;border-radius:6px;cursor:pointer;font-weight:600;">+1</button>
+      </div>
+    `;
+  } else if (trackingType === 'list') {
+    const listItems = cardData.listItems || [];
+    const completedCount = listItems.filter(item => item.completed).length;
+    const visibleItems = listItems.slice(0, 3);
+    const hasMore = listItems.length > 3;
+    
+    let listHTML = '';
+    visibleItems.forEach((item, idx) => {
+      listHTML += `<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(0,0,0,0.05);">
+        <input type="checkbox" ${item.completed ? 'checked' : ''} onchange="toggleListItem('${cardData.id}', ${idx})" style="cursor:pointer;width:18px;height:18px;"/>
+        <span style="flex:1;${item.completed ? 'text-decoration:line-through;color:#9ca3af;' : 'color:rgba(0,0,0,0.8);'}font-size:0.9rem;">${escapeHtml(item.text)}</span>
+      </div>`;
+    });
+    
+    trackingContent = `
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(0,0,0,0.1);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <span style="font-size:0.85rem;font-weight:600;color:${textColor};">Progress: ${completedCount}/${listItems.length}</span>
+          <button onclick="toggleCardListCollapse('${cardData.id}')" style="background:none;border:none;cursor:pointer;color:${textColor};font-weight:600;font-size:0.9rem;padding:0;">▼</button>
+        </div>
+        <div id="list-${cardData.id}" style="max-height:200px;overflow-y:auto;">
+          ${listHTML}
+          ${hasMore ? `<div style="padding:8px 0;text-align:center;font-size:0.8rem;color:#6b7280;">+${listItems.length - 3} more items</div>` : ''}
+        </div>
+        <div style="display:flex;gap:6px;margin-top:10px;">
+          <input type="text" placeholder="Add item..." data-card-id="${cardData.id}" class="list-item-input" style="flex:1;padding:6px;font-size:0.85rem;border:1px solid #e5e7eb;border-radius:4px;"/>
+          <button onclick="addCardListItem('${cardData.id}')" style="padding:6px 12px;background:${textColor};color:white;border:none;border-radius:4px;cursor:pointer;font-weight:600;font-size:0.8rem;">Add</button>
+        </div>
+      </div>
+    `;
+  }
+  
+  el.innerHTML = `
+    <div class="custom-card-header">
+      <div style="flex:1;">
+        <h3 style="margin:0;color:${textColor};font-weight:700;">${escapeHtml(cardData.title)}</h3>
+        ${cardData.content ? `<p style="margin:4px 0;font-size:0.85rem;color:rgba(0,0,0,0.6);">${escapeHtml(cardData.content)}</p>` : ''}
+        <p style="margin:4px 0;font-size:0.75rem;color:rgba(0,0,0,0.5);">Last updated: ${new Date(cardData.updatedAt).toLocaleDateString()}</p>
+      </div>
+      <div style="display:flex;gap:8px;align-items:flex-start;">
+        <button class="btn btn-sm" style="padding:6px 12px;font-size:0.75rem;" onclick="editCustomCard('${cardData.id}')">✏️ Edit</button>
+        <button style="background:none;border:none;cursor:pointer;font-size:20px;padding:4px;color:#ef4444;" onclick="deleteCustomCard('${cardData.id}')" title="Delete card">🗑️</button>
+      </div>
+    </div>
+    ${trackingContent}
+  `;
+  
+  return el;
+}
+
+function incrementCardStreak(cardId) {
+  const customCards = JSON.parse(localStorage.getItem('customCards') || '[]');
+  const card = customCards.find(c => c.id === cardId);
+  if (card) {
+    const now = new Date().toISOString();
+    card.streak = (card.streak || 0) + 1;
+    card.lastCompletedDate = now.split('T')[0];
+    card.updatedAt = now;
+    // Log history - preserve all changes
+    if (!card.history) card.history = [];
+    card.history.push({timestamp: now, action: 'streak_incremented', newStreak: card.streak});
+    localStorage.setItem('customCards', JSON.stringify(customCards));
+    initializeCustomCards();
+  }
+}
+
+function incrementCardCount(cardId) {
+  const customCards = JSON.parse(localStorage.getItem('customCards') || '[]');
+  const card = customCards.find(c => c.id === cardId);
+  if (card) {
+    const now = new Date().toISOString();
+    card.count = (card.count || 0) + 1;
+    card.updatedAt = now;
+    // Log history - preserve all changes
+    if (!card.history) card.history = [];
+    card.history.push({timestamp: now, action: 'count_incremented', newCount: card.count});
+    localStorage.setItem('customCards', JSON.stringify(customCards));
+    initializeCustomCards();
+  }
+}
+
+function deleteCustomCard(cardId) {
+  if (confirm('Delete this card? This cannot be undone.')) {
+    const customCards = JSON.parse(localStorage.getItem('customCards') || '[]');
+    localStorage.setItem('customCards', JSON.stringify(customCards.filter(c => c.id !== cardId)));
+    initializeCustomCards();
+  }
+}
+
+function openCustomCardModal() {
+  const modal = document.getElementById('customCardModal') || createCustomCardModal();
+  modal.classList.add('active');
+  modal.querySelector('input[name="title"]').value = '';
+  modal.querySelector('textarea[name="content"]').value = '';
+  modal.querySelector('input[name="cardId"]').value = '';
+  modal.querySelector('input[name="cardColor"]').value = '#e9d5ff';
+  modal.querySelector('input[name="cardTextColor"]').value = '#7c3aed';
+  modal.querySelector('#customCardModalTitle').textContent = 'Create New Card';
+  
+  // Reset color selection
+  setTimeout(() => {
+    const defaultColorBtn = modal.querySelector('[data-color="#e9d5ff"]');
+    if (defaultColorBtn) {
+      modal.querySelectorAll('.color-btn').forEach(b => b.style.boxShadow = 'none');
+      defaultColorBtn.style.boxShadow = '0 0 0 3px rgba(0,0,0,0.2)';
+    }
+  }, 10);
+}
+
+function editCustomCard(cardId) {
+  const customCards = JSON.parse(localStorage.getItem('customCards') || '[]');
+  const card = customCards.find(c => c.id === cardId);
+  if (!card) return;
+  
+  const modal = document.getElementById('customCardModal') || createCustomCardModal();
+  modal.classList.add('active');
+  modal.querySelector('input[name="title"]').value = card.title;
+  modal.querySelector('textarea[name="content"]').value = card.content || '';
+  modal.querySelector('input[name="cardId"]').value = card.id;
+  modal.querySelector('input[name="cardColor"]').value = card.color || '#e9d5ff';
+  modal.querySelector('input[name="cardTextColor"]').value = card.textColor || '#7c3aed';
+  
+  // Set tracking type
+  const trackingType = card.trackingType || 'streak';
+  const typeRadio = modal.querySelector(`input[name="trackingType"][value="${trackingType}"]`);
+  if (typeRadio) typeRadio.checked = true;
+  
+  modal.querySelector('#customCardModalTitle').textContent = 'Edit Card';
+  
+  // Highlight the current color
+  setTimeout(() => {
+    const currentColorBtn = modal.querySelector(`[data-color="${card.color || '#e9d5ff'}"]`);
+    if (currentColorBtn) {
+      modal.querySelectorAll('.color-btn').forEach(b => b.style.boxShadow = 'none');
+      currentColorBtn.style.boxShadow = '0 0 0 3px rgba(0,0,0,0.2)';
+    }
+  }, 10);
+}
+
+function createCustomCardModal() {
+  const modal = document.createElement('div');
+  modal.id = 'customCardModal';
+  modal.className = 'modal';
+  modal.innerHTML = `
+    <div class="modal-content" style="max-width:600px;">
+      <h3 id="customCardModalTitle" style="margin-top:0;margin-bottom:20px;">Create New Card</h3>
+      
+      <input type="hidden" name="cardId">
+      <input type="text" name="title" placeholder="What do you want to track?" maxlength="100" required style="margin-bottom:16px;">
+      <textarea name="content" placeholder="Optional notes or description..." style="margin-bottom:16px;min-height:80px;"></textarea>
+      
+      <!-- Tracking Type -->
+      <div style="margin-bottom:20px;">
+        <p style="font-weight:600;margin-bottom:12px;font-size:0.95rem;">How do you want to track this?</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;">
+          <label style="display:flex;align-items:center;padding:10px;border:2px solid #e5e7eb;border-radius:8px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='#3b82f6';this.style.background='rgba(59,130,246,0.05)'" onmouseout="this.style.borderColor='#e5e7eb';this.style.background='white'">
+            <input type="radio" name="trackingType" value="streak" checked style="margin-right:8px;cursor:pointer;">
+            <span style="font-weight:600;">🔥 Streak</span>
+          </label>
+          <label style="display:flex;align-items:center;padding:10px;border:2px solid #e5e7eb;border-radius:8px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='#10b981';this.style.background='rgba(16,185,129,0.05)'" onmouseout="this.style.borderColor='#e5e7eb';this.style.background='white'">
+            <input type="radio" name="trackingType" value="count" style="margin-right:8px;cursor:pointer;">
+            <span style="font-weight:600;">📊 Count</span>
+          </label>
+          <label style="display:flex;align-items:center;padding:10px;border:2px solid #e5e7eb;border-radius:8px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='#8b5cf6';this.style.background='rgba(139,92,246,0.05)'" onmouseout="this.style.borderColor='#e5e7eb';this.style.background='white'">
+            <input type="radio" name="trackingType" value="notes" style="margin-right:8px;cursor:pointer;">
+            <span style="font-weight:600;">📝 Notes</span>
+          </label>
+          <label style="display:flex;align-items:center;padding:10px;border:2px solid #e5e7eb;border-radius:8px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='#ec4899';this.style.background='rgba(236,72,153,0.05)'" onmouseout="this.style.borderColor='#e5e7eb';this.style.background='white'">
+            <input type="radio" name="trackingType" value="list" style="margin-right:8px;cursor:pointer;">
+            <span style="font-weight:600;">☑️ List</span>
+          </label>
+        </div>
+        <p style="font-size:0.85rem;color:#6b7280;margin-top:10px;">
+          🔥 <strong>Streak:</strong> Check off daily to build a streak | 
+          📊 <strong>Count:</strong> Track how many times | 
+          📝 <strong>Notes:</strong> Just keep notes/info |
+          ☑️ <strong>List:</strong> Collapsible to-do list
+        </p>
+      </div>
+      
+      <!-- Color Selection -->
+      <div style="margin-bottom:16px;">
+        <p style="font-weight:600;margin-bottom:12px;font-size:0.95rem;">Card Color:</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(40px,1fr));gap:8px;">
+          <button class="color-btn" data-color="#e9d5ff" data-text="#7c3aed" style="width:40px;height:40px;background:#e9d5ff;border:3px solid #7c3aed;border-radius:8px;cursor:pointer;"></button>
+          <button class="color-btn" data-color="#e0f2fe" data-text="#0369a1" style="width:40px;height:40px;background:#e0f2fe;border:2px solid #0369a1;border-radius:8px;cursor:pointer;"></button>
+          <button class="color-btn" data-color="#d1fae5" data-text="#047857" style="width:40px;height:40px;background:#d1fae5;border:2px solid #047857;border-radius:8px;cursor:pointer;"></button>
+          <button class="color-btn" data-color="#fef3c7" data-text="#d97706" style="width:40px;height:40px;background:#fef3c7;border:2px solid #d97706;border-radius:8px;cursor:pointer;"></button>
+          <button class="color-btn" data-color="#fce7f3" data-text="#be185d" style="width:40px;height:40px;background:#fce7f3;border:2px solid #be185d;border-radius:8px;cursor:pointer;"></button>
+          <button class="color-btn" data-color="#cffafe" data-text="#0891b2" style="width:40px;height:40px;background:#cffafe;border:2px solid #0891b2;border-radius:8px;cursor:pointer;"></button>
+          <button class="color-btn" data-color="#fed7aa" data-text="#ea580c" style="width:40px;height:40px;background:#fed7aa;border:2px solid #ea580c;border-radius:8px;cursor:pointer;"></button>
+          <button class="color-btn" data-color="#fecaca" data-text="#dc2626" style="width:40px;height:40px;background:#fecaca;border:2px solid #dc2626;border-radius:8px;cursor:pointer;"></button>
+        </div>
+        <input type="hidden" name="cardColor" value="#e9d5ff">
+        <input type="hidden" name="cardTextColor" value="#7c3aed">
+      </div>
+      
+      <div class="modal-buttons">
+        <button class="btn" onclick="saveCustomCard()">Save</button>
+        <button class="btn" style="background:rgba(107,114,128,0.2);color:#6b7280;" onclick="closeCustomCardModal()">Cancel</button>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(modal);
+  
+  // Add color selection functionality
+  modal.querySelectorAll('.color-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      // Remove previous selection
+      modal.querySelectorAll('.color-btn').forEach(b => b.style.boxShadow = 'none');
+      // Add selection to clicked button
+      btn.style.boxShadow = '0 0 0 3px rgba(0,0,0,0.2)';
+      modal.querySelector('input[name="cardColor"]').value = btn.getAttribute('data-color');
+      modal.querySelector('input[name="cardTextColor"]').value = btn.getAttribute('data-text');
+    });
+  });
+  
+  // Pre-select the default color
+  const defaultColorBtn = modal.querySelector('[data-color="#e9d5ff"]');
+  if (defaultColorBtn) {
+    defaultColorBtn.style.boxShadow = '0 0 0 3px rgba(0,0,0,0.2)';
+  }
+  
+  return modal;
+}
+
+function saveCustomCard() {
+  const modal = document.getElementById('customCardModal');
+  const cardId = modal.querySelector('input[name="cardId"]').value;
+  const title = modal.querySelector('input[name="title"]').value.trim();
+  const content = modal.querySelector('textarea[name="content"]').value.trim();
+  const color = modal.querySelector('input[name="cardColor"]').value;
+  const textColor = modal.querySelector('input[name="cardTextColor"]').value;
+  const trackingType = modal.querySelector('input[name="trackingType"]:checked').value;
+  
+  if (!title) {
+    alert('Please enter a card name');
+    return;
+  }
+  
+  let customCards = JSON.parse(localStorage.getItem('customCards') || '[]');
+  const now = new Date().toISOString();
+  
+  if (cardId) {
+    // Edit existing
+    const card = customCards.find(c => c.id === cardId);
+    if (card) {
+      card.title = title;
+      card.content = content;
+      card.color = color;
+      card.textColor = textColor;
+      card.trackingType = trackingType;
+      card.updatedAt = now;
+      // Log history - preserve all changes
+      if (!card.history) card.history = [];
+      card.history.push({timestamp: now, action: 'edited', title, content});
+    }
+  } else {
+    // Create new
+    customCards.push({
+      id: Date.now().toString(),
+      title,
+      content,
+      color,
+      textColor,
+      trackingType,
+      streak: 0,
+      count: 0,
+      lastCompletedDate: null,
+      createdAt: now,
+      updatedAt: now,
+      createdBy: window.firebaseAuthUser?.email || 'unknown',
+      history: [{timestamp: now, action: 'created', title}]
+    });
+  }
+  
+  localStorage.setItem('customCards', JSON.stringify(customCards));
+  closeCustomCardModal();
+  initializeCustomCards();
+}
+
+function closeCustomCardModal() {
+  const modal = document.getElementById('customCardModal');
+  if (modal) modal.classList.remove('active');
+}
+
+// List item handling for custom cards
+function addCardListItem(cardId) {
+  const customCards = JSON.parse(localStorage.getItem('customCards') || '[]');
+  const card = customCards.find(c => c.id === cardId);
+  if (!card) return;
+  
+  const input = document.querySelector(`input.list-item-input[data-card-id="${cardId}"]`);
+  const itemText = input?.value.trim();
+  
+  if (!itemText) return;
+  
+  if (!card.listItems) card.listItems = [];
+  card.listItems.push({text: itemText, completed: false, addedAt: new Date().toISOString()});
+  card.updatedAt = new Date().toISOString();
+  
+  localStorage.setItem('customCards', JSON.stringify(customCards));
+  initializeCustomCards();
+}
+
+function toggleListItem(cardId, itemIndex) {
+  const customCards = JSON.parse(localStorage.getItem('customCards') || '[]');
+  const card = customCards.find(c => c.id === cardId);
+  if (!card || !card.listItems || !card.listItems[itemIndex]) return;
+  
+  card.listItems[itemIndex].completed = !card.listItems[itemIndex].completed;
+  card.updatedAt = new Date().toISOString();
+  
+  localStorage.setItem('customCards', JSON.stringify(customCards));
+  initializeCustomCards();
+}
+
+function toggleCardListCollapse(cardId) {
+  const listEl = document.getElementById(`list-${cardId}`);
+  if (!listEl) return;
+  
+  const isCollapsed = listEl.style.maxHeight === '0px';
+  listEl.style.transition = 'max-height 0.3s ease';
+  listEl.style.maxHeight = isCollapsed ? '200px' : '0px';
+  
+  const btn = document.querySelector(`button[onclick="toggleCardListCollapse('${cardId}')"]`);
+  if (btn) {
+    btn.textContent = isCollapsed ? '▼' : '▶';
+  }
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    initializeCardCollapse();
+    initializeCustomCards();
+  }, 500);
+});
+
+// Also initialize when page fully loads
+window.addEventListener('load', () => {
+  setTimeout(initializeCardCollapse, 100);
+  setTimeout(initializeCustomCards, 100);
+});
+
 // Auto-sync data from Firebase on login (silent background sync)
+
 async function autoSyncFromFirebase(user) {
   if (!window.firebaseUserId || !window.firebaseDatabase) return;
   
   console.log('🔄 Auto-syncing data from Firebase...');
   try {
     let synced = 0;
+    let kept = 0;
     window.isSyncingFromFirebase = true; // Flag to prevent re-syncing
     
     for (const key of STORAGE_KEYS) {
@@ -1597,33 +2334,56 @@ async function autoSyncFromFirebase(user) {
         
         if (snapshot.exists()) {
           const cloudData = snapshot.val();
-          const localData = localStorage.getItem(key);
+          const localDataStr = localStorage.getItem(key);
           
-          // Compare timestamps if available, otherwise just use cloud data
-          // This prevents overwriting newer local data with older cloud data
           let shouldSync = true;
           
-          if (localData) {
+          // Smart sync: compare timestamps to use the NEWER version (critical for consistency)
+          if (localDataStr) {
             try {
-              const localParsed = JSON.parse(localData);
-              const cloudParsed = typeof cloudData === 'string' ? JSON.parse(cloudData) : cloudData;
+              let localTimestamp = null;
+              let cloudTimestamp = null;
               
-              // If both have updatedAt, use the newer one
-              if (localParsed.updatedAt && cloudParsed.updatedAt) {
-                shouldSync = new Date(cloudParsed.updatedAt) > new Date(localParsed.updatedAt);
+              // Try to extract timestamp from local data
+              const localParsed = JSON.parse(localDataStr);
+              if (localParsed && typeof localParsed === 'object') {
+                // Check for multiple timestamp fields
+                localTimestamp = localParsed.updatedAt || localParsed.timestamp || localParsed.lastUpdated;
+              }
+              
+              // Try to extract timestamp from cloud data
+              const cloudParsed = typeof cloudData === 'string' ? JSON.parse(cloudData) : cloudData;
+              if (cloudParsed && typeof cloudParsed === 'object') {
+                cloudTimestamp = cloudParsed.updatedAt || cloudParsed.timestamp || cloudParsed.lastUpdated;
+              }
+              
+              // If both have timestamps, use the newer one
+              if (localTimestamp && cloudTimestamp) {
+                const localTime = new Date(localTimestamp).getTime();
+                const cloudTime = new Date(cloudTimestamp).getTime();
+                shouldSync = cloudTime > localTime; // Only sync if cloud is NEWER
+                console.log(`⏱️ ${key}: cloud=${new Date(cloudTime).toISOString()} vs local=${new Date(localTime).toISOString()} → sync=${shouldSync}`);
+              } else if (!localTimestamp && cloudTimestamp) {
+                // Only cloud has timestamp, use cloud
+                shouldSync = true;
+              } else {
+                // No timestamps to compare, keep local (safer default)
+                shouldSync = false;
               }
             } catch(e) {
-              // If can't parse, use cloud data
-              shouldSync = true;
+              console.warn(`Could not compare timestamps for ${key}:`, e.message);
+              shouldSync = false; // Keep local if we can't compare
             }
           }
           
           if (shouldSync) {
             // Directly set localStorage without triggering override
-            localStorage.getItem(key); // Just read to ensure it exists
             Object.getPrototypeOf(localStorage).setItem.call(localStorage, key, typeof cloudData === 'string' ? cloudData : JSON.stringify(cloudData));
             synced++;
-            console.log(`✓ Synced ${key} from cloud`);
+            console.log(`✓ Synced ${key} from cloud (newer version)`);
+          } else if (localDataStr) {
+            kept++;
+            console.log(`⏭️ Kept local ${key} (local version is newer)`);
           }
         }
       } catch(e) {
@@ -1632,10 +2392,12 @@ async function autoSyncFromFirebase(user) {
     }
     
     window.isSyncingFromFirebase = false;
-    console.log(`✅ Auto-sync complete! Downloaded ${synced} items from cloud`);
+    console.log(`✅ Auto-sync complete! Synced ${synced} items, kept ${kept} local (newer)`);
     
     // Show sync indicator briefly
-    showSyncIndicator(`✅ Synced ${synced} items from cloud`);
+    if (synced > 0) {
+      showSyncIndicator(`✅ Synced ${synced} items from cloud`);
+    }
   } catch(error) {
     window.isSyncingFromFirebase = false;
     console.error('❌ Auto-sync failed:', error);
