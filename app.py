@@ -5,7 +5,7 @@ from datetime import datetime
 import os, time
 
 app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), 'static'))
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 DB_NAME = 'habits.db'
 
 # Simple cache-busting version for static files
@@ -72,47 +72,16 @@ def get_habit(date):
     return jsonify({'error': 'No data for this date'}), 404
 
 # Cities/Travels API
-@app.route('/cities', methods=['POST'])
-def add_city():
-    payload = request.get_json()
-    city_name = payload.get('city_name', '').strip()
-    country = payload.get('country', '').strip()
-    date_visited = payload.get('date_visited', '').strip()
-    notes = payload.get('notes', '').strip()
-    
-    if not city_name:
-        return jsonify({'error': 'City name is required'}), 400
-    
+@app.route('/cities/stats', methods=['GET'])
+def get_cities_stats():
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
-    added_date = datetime.now().strftime('%Y-%m-%d')
-    c.execute('''INSERT INTO cities (city_name, country, date_visited, notes, added_date)
-                VALUES (?, ?, ?, ?, ?)''',
-              (city_name, country, date_visited, notes, added_date))
-    conn.commit()
-    city_id = c.lastrowid
+    c.execute('SELECT COUNT(*) FROM cities')
+    total_cities = c.fetchone()[0]
+    c.execute('SELECT COUNT(DISTINCT country) FROM cities WHERE country IS NOT NULL AND country != ""')
+    total_countries = c.fetchone()[0]
     conn.close()
-    return jsonify({'message': 'City added', 'id': city_id}), 201
-
-@app.route('/cities', methods=['GET'])
-def list_cities():
-    conn = sqlite3.connect(DB_NAME)
-    c = conn.cursor()
-    c.execute('''SELECT id, city_name, country, date_visited, notes, added_date 
-                FROM cities ORDER BY date_visited DESC, added_date DESC''')
-    rows = c.fetchall()
-    conn.close()
-    cities = []
-    for row in rows:
-        cities.append({
-            'id': row[0],
-            'city_name': row[1],
-            'country': row[2],
-            'date_visited': row[3],
-            'notes': row[4],
-            'added_date': row[5]
-        })
-    return jsonify(cities)
+    return jsonify({'total_cities': total_cities, 'total_countries': total_countries})
 
 @app.route('/cities/<int:city_id>', methods=['GET'])
 def get_city(city_id):
@@ -157,16 +126,47 @@ def delete_city(city_id):
     conn.close()
     return jsonify({'message': 'City deleted'})
 
-@app.route('/cities/stats', methods=['GET'])
-def get_cities_stats():
+@app.route('/cities', methods=['POST'])
+def add_city():
+    payload = request.get_json()
+    city_name = payload.get('city_name', '').strip()
+    country = payload.get('country', '').strip()
+    date_visited = payload.get('date_visited', '').strip()
+    notes = payload.get('notes', '').strip()
+    
+    if not city_name:
+        return jsonify({'error': 'City name is required'}), 400
+    
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
-    c.execute('SELECT COUNT(*) FROM cities')
-    total_cities = c.fetchone()[0]
-    c.execute('SELECT COUNT(DISTINCT country) FROM cities WHERE country IS NOT NULL AND country != ""')
-    total_countries = c.fetchone()[0]
+    added_date = datetime.now().strftime('%Y-%m-%d')
+    c.execute('''INSERT INTO cities (city_name, country, date_visited, notes, added_date)
+                VALUES (?, ?, ?, ?, ?)''',
+              (city_name, country, date_visited, notes, added_date))
+    conn.commit()
+    city_id = c.lastrowid
     conn.close()
-    return jsonify({'total_cities': total_cities, 'total_countries': total_countries})
+    return jsonify({'message': 'City added', 'id': city_id}), 201
+
+@app.route('/cities', methods=['GET'])
+def list_cities():
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    c.execute('''SELECT id, city_name, country, date_visited, notes, added_date 
+                FROM cities ORDER BY date_visited DESC, added_date DESC''')
+    rows = c.fetchall()
+    conn.close()
+    cities = []
+    for row in rows:
+        cities.append({
+            'id': row[0],
+            'city_name': row[1],
+            'country': row[2],
+            'date_visited': row[3],
+            'notes': row[4],
+            'added_date': row[5]
+        })
+    return jsonify(cities)
 
 @app.route('/')
 def home():

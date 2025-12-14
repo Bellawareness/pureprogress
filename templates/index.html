@@ -489,8 +489,10 @@ input[type="checkbox"]{width:24px;height:24px;cursor:pointer;accent-color:#ff9aa
 @keyframes slideOut{from{opacity:1;transform:translateX(0);}to{opacity:0;transform:translateX(400px);}}
 @keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
 @keyframes fadeInScale{from{opacity:0;transform:scale(0.8);}to{opacity:1;transform:scale(1);}}
+@keyframes cardFadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
 .animate-slide-in{animation:slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);}
 .animate-pulse{animation:pulse 0.6s ease;}
+.animate-card{animation:cardFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);}
 @media(max-width:768px){
 .container{padding:0;}
 .content-wrapper{padding:0 16px 32px 16px;}
@@ -897,10 +899,7 @@ flex:1;
 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:inline-block;vertical-align:middle;"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg>
 <span style="font-size:clamp(0.8rem, 2vw, 0.875rem);color:#4b5563;">Track mood, energy, habits & activities</span>
 </div>
-<div style="display:flex;align-items:center;gap:10px;">
-<span style="font-size:1.25rem;">☁️</span>
-<span style="font-size:clamp(0.8rem, 2vw, 0.875rem);color:#4b5563;">Sync across all your devices</span>
-</div>
+
 <div style="display:flex;align-items:center;gap:10px;">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:inline-block;vertical-align:middle;"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
 <span style="font-size:clamp(0.8rem, 2vw, 0.875rem);color:#4b5563;">Private & secure - only you see your data</span>
@@ -963,7 +962,7 @@ flex:1;
 </button>
 <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importData(event);toggleSettingsMenu();">
 </div>
-<div style="font-size:0.75rem;color:#6b7280;margin-top:8px;text-align:center;">Your data is automatically synced to the cloud. Export for offline backup.</div>
+<div style="font-size:0.75rem;color:#6b7280;margin-top:8px;text-align:center;">Export your data for backup and sharing.</div>
 </div>
 
 <!-- Account Actions -->
@@ -1038,13 +1037,7 @@ flex:1;
 <div style="background:linear-gradient(135deg,#f0f4ff,#faf5ff);border-radius:12px;padding:24px;border:2px solid #e0e7ff;">
 <h3 style="font-size:1.25rem;font-weight:700;color:#4f46e5;margin-bottom:16px;">Why Choose Learn Thyself?</h3>
 <div style="display:grid;gap:12px;">
-<div style="display:flex;align-items:flex-start;gap:12px;">
-<span style="font-size:1.5rem;flex-shrink:0;">☁️</span>
-<div>
-<div style="font-weight:600;color:#374151;margin-bottom:4px;">Sync Across All Devices</div>
-<p style="color:#6b7280;font-size:0.9rem;margin:0;">Your data automatically syncs to the cloud. Access your habits and data from any device.</p>
-</div>
-</div>
+
 <div style="display:flex;align-items:flex-start;gap:12px;">
 <span style="font-size:1.5rem;flex-shrink:0;">🔐</span>
 <div>
@@ -1779,39 +1772,25 @@ No memories logged yet today. Start capturing moments!
 </div>
 </div>
 
-<!-- Add City Form -->
-<div class="card" style="background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border:2px solid #0284c7;padding:24px;">
-<h2 class="card-title" style="color:#0284c7;">Add a City</h2>
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(250px,100%),1fr));gap:16px;margin-top:16px;">
-<div>
-<label style="display:block;font-weight:600;color:#1e40af;margin-bottom:6px;font-size:0.95rem;">City Name *</label>
-<input type="text" id="cityNameInput" placeholder="e.g., Paris, Tokyo, New York" style="width:100%;padding:12px;border:2px solid #7dd3fc;border-radius:8px;font-size:1rem;"/>
+<!-- Add Location Form -->
+<div class="card" style="background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border:2px solid #0284c7;padding:20px;margin-bottom:12px;">
+<h2 class="card-title" style="color:#0284c7;font-size:1.1rem;">✈️ Add a Location</h2>
+<div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
+<input type="text" id="locationInput" placeholder="City..." style="flex:1;min-width:120px;padding:14px;border:2px solid #7dd3fc;border-radius:8px;font-size:1rem;transition:all 0.3s ease;box-shadow:0 2px 4px rgba(2,132,199,0.05);" onfocus="this.style.boxShadow='0 0 0 3px rgba(2,132,199,0.1)';this.style.borderColor='#0284c7'" onblur="this.style.boxShadow='0 2px 4px rgba(2,132,199,0.05)';this.style.borderColor='#7dd3fc'"/>
+<input type="text" id="countryInput" placeholder="Country..." style="flex:1;min-width:120px;padding:14px;border:2px solid #7dd3fc;border-radius:8px;font-size:1rem;transition:all 0.3s ease;box-shadow:0 2px 4px rgba(2,132,199,0.05);" onfocus="this.style.boxShadow='0 0 0 3px rgba(2,132,199,0.1)';this.style.borderColor='#0284c7'" onblur="this.style.boxShadow='0 2px 4px rgba(2,132,199,0.05)';this.style.borderColor='#7dd3fc'"/>
+<button id="addLocationBtn" class="btn" style="background:linear-gradient(135deg,#0284c7,#0369a1);color:white;border:none;padding:14px 24px;font-weight:600;border-radius:8px;white-space:nowrap;transition:all 0.2s ease;box-shadow:0 4px 12px rgba(2,132,199,0.2);" onmouseenter="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(2,132,199,0.3)'" onmouseleave="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 12px rgba(2,132,199,0.2)'">Add</button>
 </div>
-<div>
-<label style="display:block;font-weight:600;color:#1e40af;margin-bottom:6px;font-size:0.95rem;">Country</label>
-<input type="text" id="countryInput" placeholder="e.g., France, Japan, USA" style="width:100%;padding:12px;border:2px solid #7dd3fc;border-radius:8px;font-size:1rem;"/>
-</div>
-<div>
-<label style="display:block;font-weight:600;color:#1e40af;margin-bottom:6px;font-size:0.95rem;">When did you visit?</label>
-<input type="month" id="dateVisitedInput" style="width:100%;padding:12px;border:2px solid #7dd3fc;border-radius:8px;font-size:1rem;"/>
-</div>
-</div>
-<div style="margin-top:16px;">
-<label style="display:block;font-weight:600;color:#1e40af;margin-bottom:6px;font-size:0.95rem;">Notes</label>
-<textarea id="notesInput" placeholder="What do you remember? Favorite food? Memorable moments?" rows="3" style="width:100%;padding:12px;border:2px solid #7dd3fc;border-radius:8px;font-size:1rem;font-family:inherit;"></textarea>
-</div>
-<div style="display:flex;gap:12px;margin-top:16px;">
-<button id="addCityBtn" class="btn" style="background:linear-gradient(135deg,#0284c7,#0369a1);color:white;border:none;padding:12px 32px;font-weight:600;">Add City</button>
-<span id="addCityStatus" style="display:none;color:#0284c7;font-weight:600;font-size:1rem;"></span>
-</div>
+<span id="addLocationStatus" style="display:inline-block;margin-top:12px;color:#0284c7;font-weight:600;font-size:0.95rem;animation:fadeInScale 0.3s ease;"></span>
 </div>
 
-<!-- Cities List -->
-<div class="card" style="background:linear-gradient(135deg,rgba(240,249,255,0.95),rgba(224,242,254,0.95));border:2px solid #bfdbfe;padding:20px;">
-<h3 style="color:#1e40af;font-weight:700;margin-bottom:16px;font-size:1.1rem;display:flex;align-items:center;gap:8px;">Your Cities <span id="citiesCountLabel" style="font-size:0.85rem;color:#6b7280;font-weight:500;"></span></h3>
-<div id="citiesList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:16px;">
-<div style="grid-column:1/-1;text-align:center;padding:40px;color:#6b7280;">
-<p>No cities added yet. Add your first city above!</p>
+<!-- Locations List - Long list support -->
+<div class="card" style="background:linear-gradient(135deg,rgba(240,249,255,0.95),rgba(224,242,254,0.95));border:2px solid #bfdbfe;padding:16px;margin-bottom:12px;">
+<h3 style="color:#1e40af;font-weight:700;margin:0 0 12px 0;font-size:1rem;display:flex;align-items:center;justify-content:space-between;">
+<span>📍 Your Locations <span id="citiesCountLabel" style="font-size:0.85rem;color:#6b7280;font-weight:500;"></span></span>
+</h3>
+<div id="citiesList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:12px;max-height:600px;overflow-y:auto;padding-right:8px;">
+<div style="grid-column:1/-1;text-align:center;padding:32px 12px;color:#6b7280;font-size:0.95rem;">
+<p>No locations added yet. Add your first location above!</p>
 </div>
 </div>
 </div>
@@ -2186,44 +2165,44 @@ function createCustomCardModal() {
       <!-- Tracking Type -->
       <div style="margin-bottom:20px;">
         <p style="font-weight:600;margin-bottom:12px;font-size:0.95rem;">How do you want to track this?</p>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;">
-          <label style="display:flex;align-items:center;padding:10px;border:2px solid #e5e7eb;border-radius:8px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='#3b82f6';this.style.background='rgba(59,130,246,0.05)'" onmouseout="this.style.borderColor='#e5e7eb';this.style.background='white'">
-            <input type="radio" name="trackingType" value="streak" checked style="margin-right:8px;cursor:pointer;">
-            <span style="font-weight:600;">🔥 Streak</span>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(calc(50% - 4px),1fr));gap:8px;">
+          <label style="display:flex;align-items:center;padding:14px;border:2px solid #e5e7eb;border-radius:8px;cursor:pointer;transition:all 0.2s;-webkit-user-select:none;user-select:none;min-height:50px;" onmouseover="this.style.borderColor='#3b82f6';this.style.background='rgba(59,130,246,0.05)'" onmouseout="this.style.borderColor='#e5e7eb';this.style.background='white'">
+            <input type="radio" name="trackingType" value="streak" checked style="margin-right:10px;cursor:pointer;width:18px;height:18px;">
+            <span style="font-weight:600;font-size:0.95rem;">🔥 Streak</span>
           </label>
-          <label style="display:flex;align-items:center;padding:10px;border:2px solid #e5e7eb;border-radius:8px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='#10b981';this.style.background='rgba(16,185,129,0.05)'" onmouseout="this.style.borderColor='#e5e7eb';this.style.background='white'">
-            <input type="radio" name="trackingType" value="count" style="margin-right:8px;cursor:pointer;">
-            <span style="font-weight:600;">📊 Count</span>
+          <label style="display:flex;align-items:center;padding:14px;border:2px solid #e5e7eb;border-radius:8px;cursor:pointer;transition:all 0.2s;-webkit-user-select:none;user-select:none;min-height:50px;" onmouseover="this.style.borderColor='#10b981';this.style.background='rgba(16,185,129,0.05)'" onmouseout="this.style.borderColor='#e5e7eb';this.style.background='white'">
+            <input type="radio" name="trackingType" value="count" style="margin-right:10px;cursor:pointer;width:18px;height:18px;">
+            <span style="font-weight:600;font-size:0.95rem;">📊 Count</span>
           </label>
-          <label style="display:flex;align-items:center;padding:10px;border:2px solid #e5e7eb;border-radius:8px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='#8b5cf6';this.style.background='rgba(139,92,246,0.05)'" onmouseout="this.style.borderColor='#e5e7eb';this.style.background='white'">
-            <input type="radio" name="trackingType" value="notes" style="margin-right:8px;cursor:pointer;">
-            <span style="font-weight:600;">📝 Notes</span>
+          <label style="display:flex;align-items:center;padding:14px;border:2px solid #e5e7eb;border-radius:8px;cursor:pointer;transition:all 0.2s;-webkit-user-select:none;user-select:none;min-height:50px;" onmouseover="this.style.borderColor='#8b5cf6';this.style.background='rgba(139,92,246,0.05)'" onmouseout="this.style.borderColor='#e5e7eb';this.style.background='white'">
+            <input type="radio" name="trackingType" value="notes" style="margin-right:10px;cursor:pointer;width:18px;height:18px;">
+            <span style="font-weight:600;font-size:0.95rem;">📝 Notes</span>
           </label>
-          <label style="display:flex;align-items:center;padding:10px;border:2px solid #e5e7eb;border-radius:8px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='#ec4899';this.style.background='rgba(236,72,153,0.05)'" onmouseout="this.style.borderColor='#e5e7eb';this.style.background='white'">
-            <input type="radio" name="trackingType" value="list" style="margin-right:8px;cursor:pointer;">
-            <span style="font-weight:600;">☑️ List</span>
+          <label style="display:flex;align-items:center;padding:14px;border:2px solid #e5e7eb;border-radius:8px;cursor:pointer;transition:all 0.2s;-webkit-user-select:none;user-select:none;min-height:50px;" onmouseover="this.style.borderColor='#ec4899';this.style.background='rgba(236,72,153,0.05)'" onmouseout="this.style.borderColor='#e5e7eb';this.style.background='white'">
+            <input type="radio" name="trackingType" value="list" style="margin-right:10px;cursor:pointer;width:18px;height:18px;">
+            <span style="font-weight:600;font-size:0.95rem;">☑️ List</span>
           </label>
         </div>
-        <p style="font-size:0.85rem;color:#6b7280;margin-top:10px;">
-          🔥 <strong>Streak:</strong> Check off daily to build a streak | 
-          📊 <strong>Count:</strong> Track how many times | 
-          📝 <strong>Notes:</strong> Just keep notes/info |
-          ☑️ <strong>List:</strong> Collapsible to-do list
+        <p style="font-size:0.8rem;color:#6b7280;margin-top:10px;line-height:1.4;">
+          🔥 <strong>Streak:</strong> Check off daily | 
+          📊 <strong>Count:</strong> Track amount | 
+          📝 <strong>Notes:</strong> Keep notes |
+          ☑️ <strong>List:</strong> To-do list
         </p>
       </div>
       
       <!-- Color Selection -->
       <div style="margin-bottom:16px;">
         <p style="font-weight:600;margin-bottom:12px;font-size:0.95rem;">Card Color:</p>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(40px,1fr));gap:8px;">
-          <button class="color-btn" data-color="#e9d5ff" data-text="#7c3aed" style="width:40px;height:40px;background:#e9d5ff;border:3px solid #7c3aed;border-radius:8px;cursor:pointer;"></button>
-          <button class="color-btn" data-color="#e0f2fe" data-text="#0369a1" style="width:40px;height:40px;background:#e0f2fe;border:2px solid #0369a1;border-radius:8px;cursor:pointer;"></button>
-          <button class="color-btn" data-color="#d1fae5" data-text="#047857" style="width:40px;height:40px;background:#d1fae5;border:2px solid #047857;border-radius:8px;cursor:pointer;"></button>
-          <button class="color-btn" data-color="#fef3c7" data-text="#d97706" style="width:40px;height:40px;background:#fef3c7;border:2px solid #d97706;border-radius:8px;cursor:pointer;"></button>
-          <button class="color-btn" data-color="#fce7f3" data-text="#be185d" style="width:40px;height:40px;background:#fce7f3;border:2px solid #be185d;border-radius:8px;cursor:pointer;"></button>
-          <button class="color-btn" data-color="#cffafe" data-text="#0891b2" style="width:40px;height:40px;background:#cffafe;border:2px solid #0891b2;border-radius:8px;cursor:pointer;"></button>
-          <button class="color-btn" data-color="#fed7aa" data-text="#ea580c" style="width:40px;height:40px;background:#fed7aa;border:2px solid #ea580c;border-radius:8px;cursor:pointer;"></button>
-          <button class="color-btn" data-color="#fecaca" data-text="#dc2626" style="width:40px;height:40px;background:#fecaca;border:2px solid #dc2626;border-radius:8px;cursor:pointer;"></button>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(50px,1fr));gap:10px;max-width:100%;">
+          <button class="color-btn" data-color="#e9d5ff" data-text="#7c3aed" style="width:100%;aspect-ratio:1/1;min-height:50px;background:#e9d5ff;border:3px solid #7c3aed;border-radius:8px;cursor:pointer;"></button>
+          <button class="color-btn" data-color="#e0f2fe" data-text="#0369a1" style="width:100%;aspect-ratio:1/1;min-height:50px;background:#e0f2fe;border:2px solid #0369a1;border-radius:8px;cursor:pointer;"></button>
+          <button class="color-btn" data-color="#d1fae5" data-text="#047857" style="width:100%;aspect-ratio:1/1;min-height:50px;background:#d1fae5;border:2px solid #047857;border-radius:8px;cursor:pointer;"></button>
+          <button class="color-btn" data-color="#fef3c7" data-text="#d97706" style="width:100%;aspect-ratio:1/1;min-height:50px;background:#fef3c7;border:2px solid #d97706;border-radius:8px;cursor:pointer;"></button>
+          <button class="color-btn" data-color="#fce7f3" data-text="#be185d" style="width:100%;aspect-ratio:1/1;min-height:50px;background:#fce7f3;border:2px solid #be185d;border-radius:8px;cursor:pointer;"></button>
+          <button class="color-btn" data-color="#cffafe" data-text="#0891b2" style="width:100%;aspect-ratio:1/1;min-height:50px;background:#cffafe;border:2px solid #0891b2;border-radius:8px;cursor:pointer;"></button>
+          <button class="color-btn" data-color="#fed7aa" data-text="#ea580c" style="width:100%;aspect-ratio:1/1;min-height:50px;background:#fed7aa;border:2px solid #ea580c;border-radius:8px;cursor:pointer;"></button>
+          <button class="color-btn" data-color="#fecaca" data-text="#dc2626" style="width:100%;aspect-ratio:1/1;min-height:50px;background:#fecaca;border:2px solid #dc2626;border-radius:8px;cursor:pointer;"></button>
         </div>
         <input type="hidden" name="cardColor" value="#e9d5ff">
         <input type="hidden" name="cardTextColor" value="#7c3aed">
@@ -4611,14 +4590,203 @@ glass.classList.add('animate-pulse');
 setTimeout(()=>glass.classList.remove('animate-pulse'),600);
 });
 });
-// Load today's data
-const today=getTodayString();
-const waterData=JSON.parse(localStorage.getItem('waterIntakeNew')||'{}');
-if(waterData[today]!==undefined){
-waterCount=waterData[today];
-updateWaterDisplay();
-}
 })();
+
+// ===== TRAVELS TRACKING FUNCTIONS (localStorage) =====
+
+// Load and display travels data
+function loadTravels() {
+  fetchCities();
+  displayCities(window.allCities || []);
+  updateTravelStats();
+  setupTravelsEventListeners();
+}
+
+// Fetch all cities from localStorage
+function fetchCities() {
+  try {
+    const cities = JSON.parse(localStorage.getItem('travels') || '[]');
+    window.allCities = cities;
+    console.log('✓ Cities loaded:', cities);
+    return cities;
+  } catch (error) {
+    console.error('Error loading cities:', error);
+    window.allCities = [];
+    return [];
+  }
+}
+
+// Setup event listeners for travels
+function setupTravelsEventListeners() {
+  const addBtn = document.getElementById('addLocationBtn');
+  const locationInput = document.getElementById('locationInput');
+  const countryInput = document.getElementById('countryInput');
+
+  if (addBtn) {
+    addBtn.addEventListener('click', addLocation);
+  }
+  
+  if (locationInput) {
+    locationInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') addLocation();
+    });
+  }
+
+  if (countryInput) {
+    countryInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') addLocation();
+    });
+  }
+}
+
+// Add a new location
+function addLocation() {
+  const location = document.getElementById('locationInput').value.trim();
+  const country = document.getElementById('countryInput').value.trim();
+  const statusSpan = document.getElementById('addLocationStatus');
+
+  if (!location) {
+    alert('Please enter a location');
+    return;
+  }
+
+  try {
+    statusSpan.style.display = 'inline-block';
+    statusSpan.textContent = '✨ Adding...';
+
+    // Get existing cities
+    const cities = JSON.parse(localStorage.getItem('travels') || '[]');
+    
+    // Create new city object
+    const newCity = {
+      id: Date.now(), // Use timestamp as unique ID
+      city_name: location,
+      country: country || 'Unknown',
+      added_date: new Date().toISOString().split('T')[0]
+    };
+    
+    // Add to array and save
+    cities.push(newCity);
+    localStorage.setItem('travels', JSON.stringify(cities));
+
+    statusSpan.textContent = `✅ Added!`;
+    setTimeout(() => {
+        statusSpan.style.display = 'none';
+        document.getElementById('locationInput').value = '';
+        document.getElementById('countryInput').value = '';
+        loadTravels();
+    }, 1200);
+  } catch (error) {
+    console.error('Error:', error);
+    statusSpan.textContent = '❌ Error: ' + error.message;
+    setTimeout(() => statusSpan.style.display = 'none', 3000);
+  }
+}
+
+// Sort and display cities by most recent
+function displayAllCities() {
+  const cities = window.allCities || [];
+  const sorted = [...cities].sort((a, b) => new Date(b.date_visited || 0) - new Date(a.date_visited || 0));
+  displayCities(sorted);
+}
+
+// Display locations in grid
+function displayCities(cities) {
+  const citiesList = document.getElementById('citiesList');
+  const citiesCount = document.getElementById('citiesCountLabel');
+  
+  if (!citiesList) return;
+
+  citiesCount.textContent = `(${cities.length})`;
+
+  if (cities.length === 0) {
+    citiesList.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:32px 12px;color:#6b7280;font-size:0.95rem;">
+        <p>No locations added yet. Add your first location above!</p>
+      </div>
+    `;
+    return;
+  }
+
+  citiesList.innerHTML = cities.map((city, idx) => `
+    <div style="background:white;border:2px solid #e0f2fe;border-radius:10px;padding:14px;transition:all 0.2s;display:flex;flex-direction:column;justify-content:space-between;animation:cardFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) ${idx * 30}ms both;" 
+         onmouseenter="this.style.boxShadow='0 4px 12px rgba(2,132,199,0.12)';this.style.transform='translateY(-2px)'" 
+         onmouseleave="this.style.boxShadow='none';this.style.transform='translateY(0)'">
+      <div style="margin-bottom:10px;">
+        <h4 style="font-size:1.1rem;font-weight:700;color:#1e40af;margin:0 0 4px 0;word-break:break-word;">${escapeHtml(city.city_name)}</h4>
+        ${city.country && city.country !== 'Unknown' ? `<p style="color:#6b7280;font-size:0.9rem;margin:0;">${escapeHtml(city.country)}</p>` : ''}
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:8px;">
+        <p style="color:#9ca3af;font-size:0.75rem;margin:0;flex:1;">Added ${formatAddedDate(city.added_date)}</p>
+        <button onclick="deleteCity(${city.id})" style="background:rgba(239,68,68,0.15);border:none;color:#ef4444;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:0.8rem;font-weight:600;transition:all 0.2s;flex-shrink:0;min-width:60px;"
+                onmouseenter="this.style.background='rgba(239,68,68,0.25)';this.style.transform='scale(1.05)'"
+                onmouseleave="this.style.background='rgba(239,68,68,0.15)';this.style.transform='scale(1)'">Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// Delete city
+function deleteCity(cityId) {
+  if (!confirm('Are you sure you want to delete this location from your travels?')) {
+    return;
+  }
+
+  try {
+    // Get existing cities
+    const cities = JSON.parse(localStorage.getItem('travels') || '[]');
+    
+    // Filter out the deleted city
+    const updated = cities.filter(c => c.id !== cityId);
+    
+    // Save back to localStorage
+    localStorage.setItem('travels', JSON.stringify(updated));
+    
+    // Reload display
+    loadTravels();
+  } catch (error) {
+    console.error('Error deleting city:', error);
+    alert('Error deleting location');
+  }
+}
+
+// Update travel stats
+function updateTravelStats() {
+  try {
+    const cities = JSON.parse(localStorage.getItem('travels') || '[]');
+    const uniqueCountries = new Set(
+      cities
+        .map(c => c.country)
+        .filter(country => country && country !== 'Unknown')
+    );
+    
+    document.getElementById('totalCitiesCount').textContent = cities.length;
+    document.getElementById('totalCountriesCount').textContent = uniqueCountries.size;
+  } catch (error) {
+    console.error('Error updating stats:', error);
+  }
+}
+
+// Format date visited
+function formatDateVisited(dateStr) {
+  if (!dateStr) return 'Unknown';
+  const date = new Date(dateStr + '-01');
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+}
+
+// Format added date
+function formatAddedDate(dateStr) {
+  if (!dateStr) return 'recently';
+  const date = new Date(dateStr);
+  const today = new Date();
+  const diff = Math.floor((today - date) / (1000 * 60 * 60 * 24));
+  
+  if (diff === 0) return 'today';
+  if (diff === 1) return 'yesterday';
+  if (diff < 7) return `${diff} days ago`;
+  if (diff < 30) return `${Math.floor(diff / 7)} weeks ago`;
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
 
 // Category Switching
 function switchCategory(category){
@@ -5097,194 +5265,6 @@ window.addEventListener('beforeunload', function() {
     console.log('✅ Unload sync initiated for all keys');
   }
 });
-
-// ===== TRAVELS TRACKING FUNCTIONS =====
-
-// Load and display travels data
-async function loadTravels() {
-  await fetchCities();
-  displayCities(window.allCities || []);
-  updateTravelStats();
-  setupTravelsEventListeners();
-}
-
-// Fetch all cities from server
-async function fetchCities() {
-  try {
-    const response = await fetch('/cities');
-    const cities = await response.json();
-    window.allCities = cities;
-    return cities;
-  } catch (error) {
-    console.error('Error fetching cities:', error);
-    return [];
-  }
-}
-
-// Setup event listeners for travels
-function setupTravelsEventListeners() {
-  const addCityBtn = document.getElementById('addCityBtn');
-  const cityNameInput = document.getElementById('cityNameInput');
-
-  if (addCityBtn) {
-    addCityBtn.addEventListener('click', addCity);
-  }
-  
-  if (cityNameInput) {
-    cityNameInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') addCity();
-    });
-  }
-}
-
-// Add a new city
-async function addCity() {
-  const cityName = document.getElementById('cityNameInput').value.trim();
-  const country = document.getElementById('countryInput').value.trim();
-  const dateVisited = document.getElementById('dateVisitedInput').value;
-  const notes = document.getElementById('notesInput').value.trim();
-  const statusSpan = document.getElementById('addCityStatus');
-
-  if (!cityName) {
-    alert('Please enter a city name');
-    return;
-  }
-
-  try {
-    statusSpan.style.display = 'block';
-    statusSpan.textContent = '✨ Adding city...';
-
-    const response = await fetch('/cities', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        city_name: cityName,
-        country: country || null,
-        date_visited: dateVisited || null,
-        notes: notes
-      })
-    });
-
-    if (response.ok) {
-      statusSpan.textContent = '✅ City added!';
-      setTimeout(() => {
-        statusSpan.style.display = 'none';
-        document.getElementById('cityNameInput').value = '';
-        document.getElementById('countryInput').value = '';
-        document.getElementById('dateVisitedInput').value = '';
-        document.getElementById('notesInput').value = '';
-        loadTravels();
-      }, 1500);
-    } else {
-      statusSpan.textContent = '❌ Failed to add city';
-    }
-  } catch (error) {
-    console.error('Error adding city:', error);
-    statusSpan.textContent = '❌ Error adding city';
-    setTimeout(() => statusSpan.style.display = 'none', 2000);
-  }
-}
-
-// Sort and display cities by most recent
-function displayAllCities() {
-  const cities = window.allCities || [];
-  const sorted = [...cities].sort((a, b) => new Date(b.date_visited || 0) - new Date(a.date_visited || 0));
-  displayCities(sorted);
-}
-
-// Display cities in grid
-function displayCities(cities) {
-  const citiesList = document.getElementById('citiesList');
-  const citiesCount = document.getElementById('citiesCountLabel');
-  
-  if (!citiesList) return;
-
-  citiesCount.textContent = `(${cities.length})`;
-
-  if (cities.length === 0) {
-    citiesList.innerHTML = `
-      <div style="grid-column:1/-1;text-align:center;padding:40px;color:#6b7280;">
-        <p>No cities added yet. Add your first city above!</p>
-      </div>
-    `;
-    return;
-  }
-
-  citiesList.innerHTML = cities.map(city => `
-    <div style="background:white;border:2px solid #e0f2fe;border-radius:12px;padding:16px;transition:all 0.3s;cursor:pointer;" 
-         onmouseenter="this.style.boxShadow='0 8px 24px rgba(2,132,199,0.15);this.style.transform='translateY(-4px)'" 
-         onmouseleave="this.style.boxShadow='none';this.style.transform='translateY(0)'">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px;">
-        <div>
-          <h4 style="font-size:1.25rem;font-weight:700;color:#1e40af;margin:0 0 4px 0;">${escapeHtml(city.city_name)}</h4>
-          ${city.country ? `<p style="color:#6b7280;font-size:0.95rem;margin:0;">${escapeHtml(city.country)}</p>` : ''}
-        </div>
-        <button onclick="deleteCity(${city.id})" style="background:rgba(239,68,68,0.1);border:none;color:#ef4444;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:0.85rem;font-weight:600;transition:all 0.2s;"
-                onmouseenter="this.style.background='rgba(239,68,68,0.2)'"
-                onmouseleave="this.style.background='rgba(239,68,68,0.1)'">Delete</button>
-      </div>
-      ${city.date_visited ? `<p style="color:#0369a1;font-size:0.9rem;margin:8px 0;"><strong>Visited:</strong> ${formatDateVisited(city.date_visited)}</p>` : ''}
-      ${city.notes ? `<p style="color:#6b7280;font-size:0.9rem;margin:8px 0;line-height:1.5;padding:12px;background:rgba(59,130,246,0.05);border-radius:8px;border-left:3px solid #0284c7;"><strong>Notes:</strong> ${escapeHtml(city.notes)}</p>` : ''}
-      <p style="color:#9ca3af;font-size:0.8rem;margin:12px 0 0 0;">Added ${formatAddedDate(city.added_date)}</p>
-    </div>
-  `).join('');
-}
-
-// Delete city
-async function deleteCity(cityId) {
-  if (!confirm('Are you sure you want to delete this city from your travels?')) {
-    return;
-  }
-
-  try {
-    const response = await fetch(`/cities/${cityId}`, {
-      method: 'DELETE'
-    });
-
-    if (response.ok) {
-      loadTravels();
-    } else {
-      alert('Failed to delete city');
-    }
-  } catch (error) {
-    console.error('Error deleting city:', error);
-    alert('Error deleting city');
-  }
-}
-
-// Update travel stats
-async function updateTravelStats() {
-  try {
-    const response = await fetch('/cities/stats');
-    const stats = await response.json();
-    
-    document.getElementById('totalCitiesCount').textContent = stats.total_cities;
-    document.getElementById('totalCountriesCount').textContent = stats.total_countries;
-  } catch (error) {
-    console.error('Error fetching stats:', error);
-  }
-}
-
-// Format date visited
-function formatDateVisited(dateStr) {
-  if (!dateStr) return 'Unknown';
-  const date = new Date(dateStr + '-01');
-  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
-}
-
-// Format added date
-function formatAddedDate(dateStr) {
-  if (!dateStr) return 'recently';
-  const date = new Date(dateStr);
-  const today = new Date();
-  const diff = Math.floor((today - date) / (1000 * 60 * 60 * 24));
-  
-  if (diff === 0) return 'today';
-  if (diff === 1) return 'yesterday';
-  if (diff < 7) return `${diff} days ago`;
-  if (diff < 30) return `${Math.floor(diff / 7)} weeks ago`;
-  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-}
 
 // Initialize travels on page load
 document.addEventListener('DOMContentLoaded', () => {
