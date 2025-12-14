@@ -500,7 +500,7 @@ input[type="checkbox"]{width:24px;height:24px;cursor:pointer;accent-color:#ff9aa
 .card-title{font-size:1.25rem;margin-bottom:16px;}
 .page-title{font-size:2rem;}
 .header-hero{height:280px;margin-bottom:24px;}
-.grid-desktop{grid-template-columns:1fr;gap:16px;}
+.grid-desktop{grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;}
 .mood-btn{width:48px;height:48px;font-size:1.5rem;}
 .photo-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;}
 input[type="range"]{max-width:100%;}
@@ -508,8 +508,9 @@ input[type="range"]{max-width:100%;}
 .activity-item{padding:16px;flex-direction:column;align-items:flex-start;gap:12px;}
 .tab-btn{padding:10px 16px;font-size:1rem;}
 .tab-nav>div{position:static !important;width:100%;margin-top:12px;justify-content:center;}
-.history-stat{padding:16px;}
-.history-stat-value{font-size:1.5rem;}
+.history-stat{padding:12px;gap:8px;}
+.history-stat-value{font-size:1.25rem;margin-bottom:4px;}
+.history-stat-label{font-size:0.75rem;}
 /* Activity input mobile - ensure full width */
 #newActivityInput{width:100% !important;min-width:0 !important;flex:1 !important;}
 .card-activities > div:first-of-type{width:100%;}
@@ -1766,6 +1767,10 @@ No memories logged yet today. Start capturing moments!
 <div style="font-size:2.5rem;font-weight:800;color:#1e40af;" id="totalCitiesCount">0</div>
 <div style="color:#1e3a8a;font-weight:600;margin-top:8px;">Cities Visited</div>
 </div>
+<div class="card" style="background:linear-gradient(135deg,#fce7f3,#fbcfe8);padding:20px;text-align:center;">
+<div style="font-size:2.5rem;font-weight:800;color:#be185d;" id="totalStatesCount">0</div>
+<div style="color:#831843;font-weight:600;margin-top:8px;">States Visited</div>
+</div>
 <div class="card" style="background:linear-gradient(135deg,#cffafe,#a5f3fc);padding:20px;text-align:center;">
 <div style="font-size:2.5rem;font-weight:800;color:#0369a1;" id="totalCountriesCount">0</div>
 <div style="color:#164e63;font-weight:600;margin-top:8px;">Countries</div>
@@ -1777,6 +1782,7 @@ No memories logged yet today. Start capturing moments!
 <h2 class="card-title" style="color:#0284c7;font-size:1.1rem;">✈️ Add a Location</h2>
 <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
 <input type="text" id="locationInput" placeholder="City..." style="flex:1;min-width:120px;padding:14px;border:2px solid #7dd3fc;border-radius:8px;font-size:1rem;transition:all 0.3s ease;box-shadow:0 2px 4px rgba(2,132,199,0.05);" onfocus="this.style.boxShadow='0 0 0 3px rgba(2,132,199,0.1)';this.style.borderColor='#0284c7'" onblur="this.style.boxShadow='0 2px 4px rgba(2,132,199,0.05)';this.style.borderColor='#7dd3fc'"/>
+<input type="text" id="stateInput" placeholder="State..." style="flex:1;min-width:120px;padding:14px;border:2px solid #7dd3fc;border-radius:8px;font-size:1rem;transition:all 0.3s ease;box-shadow:0 2px 4px rgba(2,132,199,0.05);" onfocus="this.style.boxShadow='0 0 0 3px rgba(2,132,199,0.1)';this.style.borderColor='#0284c7'" onblur="this.style.boxShadow='0 2px 4px rgba(2,132,199,0.05)';this.style.borderColor='#7dd3fc'"/>
 <input type="text" id="countryInput" placeholder="Country..." style="flex:1;min-width:120px;padding:14px;border:2px solid #7dd3fc;border-radius:8px;font-size:1rem;transition:all 0.3s ease;box-shadow:0 2px 4px rgba(2,132,199,0.05);" onfocus="this.style.boxShadow='0 0 0 3px rgba(2,132,199,0.1)';this.style.borderColor='#0284c7'" onblur="this.style.boxShadow='0 2px 4px rgba(2,132,199,0.05)';this.style.borderColor='#7dd3fc'"/>
 <button id="addLocationBtn" class="btn" style="background:linear-gradient(135deg,#0284c7,#0369a1);color:white;border:none;padding:14px 24px;font-weight:600;border-radius:8px;white-space:nowrap;transition:all 0.2s ease;box-shadow:0 4px 12px rgba(2,132,199,0.2);" onmouseenter="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(2,132,199,0.3)'" onmouseleave="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 12px rgba(2,132,199,0.2)'">Add</button>
 </div>
@@ -4642,6 +4648,7 @@ function setupTravelsEventListeners() {
 // Add a new location
 function addLocation() {
   const location = document.getElementById('locationInput').value.trim();
+  const state = document.getElementById('stateInput').value.trim();
   const country = document.getElementById('countryInput').value.trim();
   const statusSpan = document.getElementById('addLocationStatus');
 
@@ -4661,6 +4668,7 @@ function addLocation() {
     const newCity = {
       id: Date.now(), // Use timestamp as unique ID
       city_name: location,
+      state: state || 'Unknown',
       country: country || 'Unknown',
       added_date: new Date().toISOString().split('T')[0]
     };
@@ -4673,6 +4681,7 @@ function addLocation() {
     setTimeout(() => {
         statusSpan.style.display = 'none';
         document.getElementById('locationInput').value = '';
+        document.getElementById('stateInput').value = '';
         document.getElementById('countryInput').value = '';
         loadTravels();
     }, 1200);
@@ -4709,18 +4718,21 @@ function displayCities(cities) {
   }
 
   citiesList.innerHTML = cities.map((city, idx) => `
-    <div style="background:white;border:2px solid #e0f2fe;border-radius:10px;padding:14px;transition:all 0.2s;display:flex;flex-direction:column;justify-content:space-between;animation:cardFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) ${idx * 30}ms both;" 
-         onmouseenter="this.style.boxShadow='0 4px 12px rgba(2,132,199,0.12)';this.style.transform='translateY(-2px)'" 
+    <div style="background:#cffafe;border:1px solid #a5f3fc;border-radius:8px;padding:10px;transition:all 0.2s;display:flex;flex-direction:column;justify-content:space-between;animation:cardFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) ${idx * 30}ms both;" 
+         onmouseenter="this.style.boxShadow='0 2px 8px rgba(6,182,212,0.15)';this.style.transform='translateY(-1px)'" 
          onmouseleave="this.style.boxShadow='none';this.style.transform='translateY(0)'">
-      <div style="margin-bottom:10px;">
-        <h4 style="font-size:1.1rem;font-weight:700;color:#1e40af;margin:0 0 4px 0;word-break:break-word;">${escapeHtml(city.city_name)}</h4>
-        ${city.country && city.country !== 'Unknown' ? `<p style="color:#6b7280;font-size:0.9rem;margin:0;">${escapeHtml(city.country)}</p>` : ''}
+      <div style="margin-bottom:8px;">
+        <h4 style="font-size:0.95rem;font-weight:700;color:#0e7490;margin:0 0 3px 0;word-break:break-word;">${escapeHtml(city.city_name)}</h4>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:2px;">
+          ${city.state && city.state !== 'Unknown' ? `<p style="color:#164e63;font-size:0.8rem;margin:0;font-weight:500;">${escapeHtml(city.state)}</p>` : ''}
+          ${city.country && city.country !== 'Unknown' ? `<p style="color:#164e63;font-size:0.8rem;margin:0;">${escapeHtml(city.country)}</p>` : ''}
+        </div>
       </div>
-      <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:8px;">
-        <p style="color:#9ca3af;font-size:0.75rem;margin:0;flex:1;">Added ${formatAddedDate(city.added_date)}</p>
-        <button onclick="deleteCity(${city.id})" style="background:rgba(239,68,68,0.15);border:none;color:#ef4444;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:0.8rem;font-weight:600;transition:all 0.2s;flex-shrink:0;min-width:60px;"
-                onmouseenter="this.style.background='rgba(239,68,68,0.25)';this.style.transform='scale(1.05)'"
-                onmouseleave="this.style.background='rgba(239,68,68,0.15)';this.style.transform='scale(1)'">Delete</button>
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:6px;">
+        <p style="color:#67e8f9;font-size:0.7rem;margin:0;flex:1;">Added ${formatAddedDate(city.added_date)}</p>
+        <button onclick="deleteCity(${city.id})" style="background:rgba(239,68,68,0.1);border:none;color:#ef4444;padding:5px 10px;border-radius:5px;cursor:pointer;font-size:0.7rem;font-weight:600;transition:all 0.2s;flex-shrink:0;min-width:55px;padding:4px 8px;"
+                onmouseenter="this.style.background='rgba(239,68,68,0.2)';this.style.transform='scale(1.05)'"
+                onmouseleave="this.style.background='rgba(239,68,68,0.1)';this.style.transform='scale(1)'">Delete</button>
       </div>
     </div>
   `).join('');
@@ -4759,8 +4771,14 @@ function updateTravelStats() {
         .map(c => c.country)
         .filter(country => country && country !== 'Unknown')
     );
+    const uniqueStates = new Set(
+      cities
+        .map(c => c.state)
+        .filter(state => state && state !== 'Unknown')
+    );
     
     document.getElementById('totalCitiesCount').textContent = cities.length;
+    document.getElementById('totalStatesCount').textContent = uniqueStates.size;
     document.getElementById('totalCountriesCount').textContent = uniqueCountries.size;
   } catch (error) {
     console.error('Error updating stats:', error);

@@ -24,6 +24,7 @@ def init_db():
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         city_name TEXT NOT NULL,
         country TEXT,
+        state TEXT,
         date_visited TEXT,
         notes TEXT,
         added_date TEXT NOT NULL
@@ -87,7 +88,7 @@ def get_cities_stats():
 def get_city(city_id):
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
-    c.execute('SELECT id, city_name, country, date_visited, notes, added_date FROM cities WHERE id = ?', (city_id,))
+    c.execute('SELECT id, city_name, country, state, date_visited, notes, added_date FROM cities WHERE id = ?', (city_id,))
     row = c.fetchone()
     conn.close()
     if row:
@@ -95,9 +96,10 @@ def get_city(city_id):
             'id': row[0],
             'city_name': row[1],
             'country': row[2],
-            'date_visited': row[3],
-            'notes': row[4],
-            'added_date': row[5]
+            'state': row[3],
+            'date_visited': row[4],
+            'notes': row[5],
+            'added_date': row[6]
         })
     return jsonify({'error': 'City not found'}), 404
 
@@ -106,13 +108,14 @@ def update_city(city_id):
     payload = request.get_json()
     city_name = payload.get('city_name', '').strip()
     country = payload.get('country', '').strip()
+    state = payload.get('state', '').strip()
     date_visited = payload.get('date_visited', '').strip()
     notes = payload.get('notes', '').strip()
     
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
-    c.execute('''UPDATE cities SET city_name=?, country=?, date_visited=?, notes=? WHERE id=?''',
-              (city_name, country, date_visited, notes, city_id))
+    c.execute('''UPDATE cities SET city_name=?, country=?, state=?, date_visited=?, notes=? WHERE id=?''',
+              (city_name, country, state, date_visited, notes, city_id))
     conn.commit()
     conn.close()
     return jsonify({'message': 'City updated'})
@@ -131,6 +134,7 @@ def add_city():
     payload = request.get_json()
     city_name = payload.get('city_name', '').strip()
     country = payload.get('country', '').strip()
+    state = payload.get('state', '').strip()
     date_visited = payload.get('date_visited', '').strip()
     notes = payload.get('notes', '').strip()
     
@@ -140,9 +144,9 @@ def add_city():
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
     added_date = datetime.now().strftime('%Y-%m-%d')
-    c.execute('''INSERT INTO cities (city_name, country, date_visited, notes, added_date)
-                VALUES (?, ?, ?, ?, ?)''',
-              (city_name, country, date_visited, notes, added_date))
+    c.execute('''INSERT INTO cities (city_name, country, state, date_visited, notes, added_date)
+                VALUES (?, ?, ?, ?, ?, ?)''',
+              (city_name, country, state, date_visited, notes, added_date))
     conn.commit()
     city_id = c.lastrowid
     conn.close()
@@ -152,7 +156,7 @@ def add_city():
 def list_cities():
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
-    c.execute('''SELECT id, city_name, country, date_visited, notes, added_date 
+    c.execute('''SELECT id, city_name, country, state, date_visited, notes, added_date 
                 FROM cities ORDER BY date_visited DESC, added_date DESC''')
     rows = c.fetchall()
     conn.close()
@@ -162,9 +166,10 @@ def list_cities():
             'id': row[0],
             'city_name': row[1],
             'country': row[2],
-            'date_visited': row[3],
-            'notes': row[4],
-            'added_date': row[5]
+            'state': row[3],
+            'date_visited': row[4],
+            'notes': row[5],
+            'added_date': row[6]
         })
     return jsonify(cities)
 
