@@ -336,6 +336,40 @@ body.theme-sunset .progress-fill{background:linear-gradient(90deg,#f59e0b,#fb923
 body.theme-sunset input[type="range"]{background:linear-gradient(90deg,#fca5a5,#fb923c);}
 body.theme-sunset input[type="range"]::-webkit-slider-thumb{background:#f97316;}
 body.theme-sunset input[type="range"]::-moz-range-thumb{background:#f97316;}
+/* Plain Black & White Theme */
+body.theme-plain{
+--bg-gradient-start:#ffffff;
+--bg-gradient-end:#f5f5f5;
+--card-bg:rgba(255,255,255,0.98);
+--pastel-pink:#e5e5e5;
+--pastel-blue:#d9d9d9;
+--pastel-lavender:#cccccc;
+--pastel-mint:#e0e0e0;
+--pastel-peach:#f0f0f0;
+--pastel-yellow:#f5f5f5;
+--accent-1:#000000;
+--accent-2:#1a1a1a;
+--accent-3:#333333;
+--text-primary:#000000;
+--text-secondary:#1a1a1a;
+}
+body.theme-plain{background:linear-gradient(135deg,#ffffff 0%,#f5f5f5 100%);color:#000000;}
+body.theme-plain .card{background:#ffffff !important;border:2px solid #cccccc;}
+body.theme-plain .card-title{color:#000000 !important;}
+body.theme-plain .activity-item{background:#f5f5f5 !important;border:2px solid #cccccc;color:#000000;}
+body.theme-plain .activity-item:nth-child(2n){background:#eeeeee !important;border-color:#bbbbbb;}
+body.theme-plain .activity-item:nth-child(3n){background:#e5e5e5 !important;border-color:#aaaaaa;}
+body.theme-plain .rating-row{background:#f5f5f5;border:2px solid #cccccc;color:#000000;}
+body.theme-plain .mood-btn{background:#f5f5f5;border:2px solid #cccccc;color:#000000;}
+body.theme-plain .mood-btn.selected{background:#000000;color:#ffffff;}
+body.theme-plain .progress-fill{background:linear-gradient(90deg,#333333,#000000);}
+body.theme-plain input[type="range"]{background:linear-gradient(90deg,#dddddd,#999999);}
+body.theme-plain input[type="range"]::-webkit-slider-thumb{background:#000000;}
+body.theme-plain input[type="range"]::-moz-range-thumb{background:#000000;}
+body.theme-plain input,body.theme-plain textarea,body.theme-plain select{background:#ffffff;color:#000000;border:2px solid #cccccc !important;}
+body.theme-plain button{color:#000000;}
+body.theme-plain .btn{background:#e5e5e5 !important;color:#000000 !important;border:2px solid #999999 !important;}
+body.theme-plain .btn:hover{background:#cccccc !important;}
 /* Loading Spinner Animation */
 @keyframes spin{
 0%{transform:rotate(0deg);}
@@ -514,6 +548,8 @@ input[type="range"]{max-width:100%;}
 /* Activity input mobile - ensure full width */
 #newActivityInput{width:100% !important;min-width:0 !important;flex:1 !important;}
 .card-activities > div:first-of-type{width:100%;}
+/* Compact insights grid - mobile responsive */
+#compactInsights{grid-template-columns:repeat(auto-fit,minmax(120px,1fr)) !important;}
 /* Navigation bar mobile stacking */
 .content-wrapper > div:first-child > div:first-child{
 flex-direction:column !important;
@@ -557,6 +593,9 @@ height:24px !important;
 .category-name{font-size:0.8rem;}
 .category-amount{font-size:0.9rem;margin-top:2px;}
 #categoryDetails{padding:16px !important;}
+/* Compact insights - stack on very small screens */
+#compactInsights{grid-template-columns:1fr !important;gap:6px !important;}
+#compactInsights > div{padding:8px !important;font-size:0.8rem !important;}
 /* Mobile input improvements */
 input[type="text"],input[type="number"],textarea{font-size:16px !important;padding:12px !important;min-height:44px;}
 .tracker-item{padding:10px;font-size:0.875rem;}
@@ -1105,6 +1144,7 @@ flex:1;
 <button onclick="setTheme('ocean')" class="theme-btn" style="width:36px;height:36px;border-radius:8px;border:2px solid transparent;cursor:pointer;background:linear-gradient(135deg,#e0f2fe,#bae6fd);transition:all 0.2s;font-size:1.1rem;" title="Ocean">🌊</button>
 <button onclick="setTheme('forest')" class="theme-btn" style="width:36px;height:36px;border-radius:8px;border:2px solid transparent;cursor:pointer;background:linear-gradient(135deg,#ecfdf5,#d1fae5);transition:all 0.2s;font-size:1.1rem;" title="Forest">🌲</button>
 <button onclick="setTheme('sunset')" class="theme-btn" style="width:36px;height:36px;border-radius:8px;border:2px solid transparent;cursor:pointer;background:linear-gradient(135deg,#fef3c7,#fed7aa);transition:all 0.2s;font-size:1.1rem;" title="Sunset">🌅</button>
+<button onclick="setTheme('plain')" class="theme-btn" style="width:36px;height:36px;border-radius:8px;border:2px solid #000000;cursor:pointer;background:#ffffff;transition:all 0.2s;font-size:1.1rem;" title="Plain B&W">🔲</button>
 </div>
 <!-- Right: Action Buttons -->
 <div style="display:flex;gap:6px;">
@@ -1727,7 +1767,17 @@ No memories logged yet today. Start capturing moments!
 </div>
 </div>
 
-<!-- Mood & Energy Trends -->
+<!-- Compact Insights Summary -->
+<div class="card" style="background:linear-gradient(135deg,#f3e8ff 0%,#ede9fe 100%);border:2px solid #c4b5fd;padding:16px;margin-bottom:20px;">
+<h3 style="color:#7c3aed;font-weight:700;margin:0 0 12px 0;font-size:0.95rem;">✨ Key Insights</h3>
+<div id="compactInsights" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;font-size:0.85rem;">
+<div style="background:white;padding:10px;border-radius:6px;border-left:3px solid #ec4899;"><span style="font-weight:600;color:#ec4899;">Mood Trend:</span> <span style="color:#6b7280;" id="moodTrendInsight">-</span></div>
+<div style="background:white;padding:10px;border-radius:6px;border-left:3px solid #eab308;"><span style="font-weight:600;color:#eab308;">Energy Trend:</span> <span style="color:#6b7280;" id="energyTrendInsight">-</span></div>
+<div style="background:white;padding:10px;border-radius:6px;border-left:3px solid #10b981;"><span style="font-weight:600;color:#10b981;">Best Habit:</span> <span style="color:#6b7280;" id="bestHabitInsight">-</span></div>
+<div style="background:white;padding:10px;border-radius:6px;border-left:3px solid #0284c7;"><span style="font-weight:600;color:#0284c7;">Productivity:</span> <span style="color:#6b7280;" id="productivityInsight">-</span></div>
+</div>
+</div>
+
 <div class="card" style="background:linear-gradient(135deg,var(--pastel-pink) 0%,rgba(255,214,231,0.7) 100%);">
 <h2 class="card-title" style="color:#ec4899;">💭 Mood & Energy Insights</h2>
 <div id="moodEnergyInsights"></div>
@@ -3939,6 +3989,9 @@ document.getElementById('weekLost').textContent=lostItems;
 
 // Update notes display
 displayAllNotes(moodData,dates);
+
+// Calculate and display compact insights
+updateCompactInsights(dates);
 }
 
 // Calculate monthly stats
@@ -4034,6 +4087,74 @@ breakdown.appendChild(weekDiv);
 }
 // Update notes display
 displayAllNotes(moodData,dates);
+
+// Calculate and display compact insights
+updateCompactInsights(dates);
+}
+
+// Calculate compact insights
+function updateCompactInsights(dates){
+const container=document.getElementById('compactInsights');
+const moodData=JSON.parse(localStorage.getItem('dailyMoodEnergy')||'{}');
+const completionHistory=JSON.parse(localStorage.getItem('activityCompletions')||'{}');
+const activities=JSON.parse(localStorage.getItem('activities')||'[]');
+
+// Mood trend
+let moodArr=[];
+dates.forEach(d=>{if(moodData[d]&&moodData[d].mood){moodArr.push(parseInt(moodData[d].mood));}});
+let moodTrend='Steady';
+if(moodArr.length>=2){
+const recent=moodArr.slice(-3).reduce((a,b)=>a+b,0)/Math.min(3,moodArr.length);
+const older=moodArr.slice(0,Math.max(1,moodArr.length-3)).reduce((a,b)=>a+b,0)/Math.max(1,moodArr.length-3);
+if(recent>older+5){moodTrend='📈 Improving';}
+else if(recent<older-5){moodTrend='📉 Declining';}
+else{moodTrend='😌 Stable';}
+}
+document.getElementById('moodTrendInsight').textContent=moodTrend;
+
+// Energy trend
+let energyArr=[];
+dates.forEach(d=>{if(moodData[d]&&moodData[d].energy){energyArr.push(parseInt(moodData[d].energy));}});
+let energyTrend='Steady';
+if(energyArr.length>=2){
+const recent=energyArr.slice(-3).reduce((a,b)=>a+b,0)/Math.min(3,energyArr.length);
+const older=energyArr.slice(0,Math.max(1,energyArr.length-3)).reduce((a,b)=>a+b,0)/Math.max(1,energyArr.length-3);
+if(recent>older+5){energyTrend='⚡ Boosting';}
+else if(recent<older-5){energyTrend='🪫 Draining';}
+else{energyTrend='⚖️ Balanced';}
+}
+document.getElementById('energyTrendInsight').textContent=energyTrend;
+
+// Best habit
+let bestHabitText='None tracked';
+const completionCounts={};
+dates.forEach(date=>{
+if(completionHistory[date]){
+completionHistory[date].forEach(id=>{
+completionCounts[id]=(completionCounts[id]||0)+1;
+});
+}
+});
+if(Object.keys(completionCounts).length>0){
+const topId=Object.keys(completionCounts).reduce((a,b)=>completionCounts[a]>completionCounts[b]?a:b);
+const topActivity=activities.find(a=>a.id===topId);
+if(topActivity){
+bestHabitText=topActivity.text.substring(0,20)+(topActivity.text.length>20?'...':'');
+}
+}
+document.getElementById('bestHabitInsight').textContent=bestHabitText;
+
+// Productivity
+let completedCount=0;
+dates.forEach(date=>{if(completionHistory[date]){completedCount+=completionHistory[date].length;}});
+const totalDays=dates.length;
+const avgPerDay=totalDays>0?(completedCount/totalDays).toFixed(1):0;
+let productivityText='Low';
+if(avgPerDay>=3){productivityText='🚀 Excellent';}
+else if(avgPerDay>=2){productivityText='💪 Strong';}
+else if(avgPerDay>=1){productivityText='👍 Steady';}
+else{productivityText='⚠️ Light';}
+document.getElementById('productivityInsight').textContent=productivityText;
 }
 
 // Display current streaks
@@ -4250,7 +4371,7 @@ container.innerHTML=`
 // Theme Selector
 function setTheme(theme){
 // Remove all theme classes
-document.body.classList.remove('theme-ocean','theme-forest','theme-sunset');
+document.body.classList.remove('theme-ocean','theme-forest','theme-sunset','theme-plain');
 // Add new theme class if not default
 if(theme!=='default'){
 document.body.classList.add('theme-'+theme);
@@ -4262,10 +4383,10 @@ document.querySelectorAll('.theme-btn').forEach(btn=>{
 btn.style.borderColor='transparent';
 btn.style.transform='scale(1)';
 });
-const btnMap={'default':0,'ocean':1,'forest':2,'sunset':3};
+const btnMap={'default':0,'ocean':1,'forest':2,'sunset':3,'plain':4};
 const activeBtn=document.querySelectorAll('.theme-btn')[btnMap[theme]];
 if(activeBtn){
-activeBtn.style.borderColor='#ec4899';
+activeBtn.style.borderColor='#000000';
 activeBtn.style.transform='scale(1.1)';
 }
 }
@@ -4290,6 +4411,7 @@ const allData={
 dailyMoodEnergy:JSON.parse(localStorage.getItem('dailyMoodEnergy')||'{}'),
 activities:JSON.parse(localStorage.getItem('activities')||'[]'),
 activityCompletions:JSON.parse(localStorage.getItem('activityCompletions')||'{}'),
+activityLog:JSON.parse(localStorage.getItem('activityLog')||'{}'),
 photoAlbum:JSON.parse(localStorage.getItem('photoAlbum')||'[]'),
 timeTracker:JSON.parse(localStorage.getItem('timeTracker')||'{}'),
 dailyRatings:JSON.parse(localStorage.getItem('dailyRatings')||'{}'),
@@ -4299,7 +4421,18 @@ sleepData:JSON.parse(localStorage.getItem('sleepData')||'{}'),
 painData:JSON.parse(localStorage.getItem('painData')||'{}'),
 clarityData:JSON.parse(localStorage.getItem('clarityData')||'{}'),
 waterIntakeNew:JSON.parse(localStorage.getItem('waterIntakeNew')||'{}'),
-sleepData:JSON.parse(localStorage.getItem('sleepData')||'{}'),
+daysCried:JSON.parse(localStorage.getItem('daysCried')||'{}'),
+itemsLost:JSON.parse(localStorage.getItem('itemsLost')||'{}'),
+dailySpending:JSON.parse(localStorage.getItem('dailySpending')||'{}'),
+creditCards:JSON.parse(localStorage.getItem('creditCards')||'[]'),
+travels:JSON.parse(localStorage.getItem('travels')||'[]'),
+customCards:JSON.parse(localStorage.getItem('customCards')||'[]'),
+dailyMemories:JSON.parse(localStorage.getItem('dailyMemories')||'{}'),
+headerPhotos:JSON.parse(localStorage.getItem('headerPhotos')||'[]'),
+currentHeaderPhoto:localStorage.getItem('currentHeaderPhoto')||'',
+categoryData:JSON.parse(localStorage.getItem('categoryData')||'{}'),
+selectedTheme:localStorage.getItem('selectedTheme')||'default',
+darkMode:localStorage.getItem('darkMode')||'false',
 exportDate:new Date().toISOString()
 };
 const dataStr=JSON.stringify(allData,null,2);
@@ -4311,7 +4444,7 @@ a.download=`learn-thyself-backup-${new Date().toISOString().split('T')[0]}.json`
 a.click();
 URL.revokeObjectURL(url);
 toggleSettingsMenu();
-alert('✅ Data exported successfully!');
+alert('✅ Data exported successfully!\n\n📊 Data included:\n• Mood & Energy tracking\n• Activities & completions\n• Time tracking\n• Ratings & Spending\n• Health data (Sleep, Pain, Clarity, Water)\n• Memories, Travels & Photos\n• All custom settings');
 }
 
 // Import Data
@@ -4326,6 +4459,7 @@ if(confirm('⚠️ This will replace all your current data. Are you sure?')){
 localStorage.setItem('dailyMoodEnergy',JSON.stringify(data.dailyMoodEnergy||{}));
 localStorage.setItem('activities',JSON.stringify(data.activities||[]));
 localStorage.setItem('activityCompletions',JSON.stringify(data.activityCompletions||{}));
+localStorage.setItem('activityLog',JSON.stringify(data.activityLog||{}));
 localStorage.setItem('photoAlbum',JSON.stringify(data.photoAlbum||[]));
 localStorage.setItem('timeTracker',JSON.stringify(data.timeTracker||{}));
 localStorage.setItem('dailyRatings',JSON.stringify(data.dailyRatings||{}));
@@ -4335,7 +4469,19 @@ localStorage.setItem('sleepData',JSON.stringify(data.sleepData||{}));
 localStorage.setItem('painData',JSON.stringify(data.painData||{}));
 localStorage.setItem('clarityData',JSON.stringify(data.clarityData||{}));
 localStorage.setItem('waterIntakeNew',JSON.stringify(data.waterIntakeNew||{}));
-alert('✅ Data imported successfully! Reloading page...');
+localStorage.setItem('daysCried',JSON.stringify(data.daysCried||{}));
+localStorage.setItem('itemsLost',JSON.stringify(data.itemsLost||{}));
+localStorage.setItem('dailySpending',JSON.stringify(data.dailySpending||{}));
+localStorage.setItem('creditCards',JSON.stringify(data.creditCards||[]));
+localStorage.setItem('travels',JSON.stringify(data.travels||[]));
+localStorage.setItem('customCards',JSON.stringify(data.customCards||[]));
+localStorage.setItem('dailyMemories',JSON.stringify(data.dailyMemories||{}));
+localStorage.setItem('headerPhotos',JSON.stringify(data.headerPhotos||[]));
+localStorage.setItem('currentHeaderPhoto',data.currentHeaderPhoto||'');
+localStorage.setItem('categoryData',JSON.stringify(data.categoryData||{}));
+localStorage.setItem('selectedTheme',data.selectedTheme||'default');
+localStorage.setItem('darkMode',data.darkMode||'false');
+alert('✅ Data imported successfully!\n\n📊 Restored:\n• '+Object.keys(data).length+' data categories\n• All history, settings, and personalization\n\nReloading page...');
 location.reload();
 }
 }catch(err){
