@@ -1394,6 +1394,33 @@ Water
 </div>
 
 </div>
+
+<!-- Food & Workout Container -->
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:20px;">
+
+<!-- Food Tracker -->
+<div class="card" style="background:linear-gradient(135deg,#fed7aa 0%,rgba(254,215,170,0.7) 100%);padding:16px;">
+<h2 class="card-title" style="color:#ea580c;font-size:0.95rem;margin-bottom:12px;">🍽️ Food</h2>
+<div style="margin-bottom:12px;">
+<label style="display:block;font-weight:600;color:#6b7280;margin-bottom:8px;font-size:0.8rem;">What did you eat today?</label>
+<textarea id="foodInput" rows="3" placeholder="Breakfast, lunch, dinner, snacks..." style="width:100%;padding:8px;font-size:0.875rem;border:2px solid rgba(234,88,12,0.2);border-radius:6px;resize:vertical;"></textarea>
+</div>
+<button id="saveFoodBtn" class="btn" style="width:100%;padding:8px;font-size:0.8rem;background:linear-gradient(135deg,#fb923c,#ea580c);color:white;border:none;">Log Food</button>
+<div id="foodStatus" style="display:none;color:#ea580c;font-weight:600;margin-top:6px;text-align:center;font-size:0.75rem;"></div>
+</div>
+
+<!-- Workout Tracker -->
+<div class="card" style="background:linear-gradient(135deg,#fca5a5 0%,rgba(252,165,165,0.7) 100%);padding:16px;">
+<h2 class="card-title" style="color:#dc2626;font-size:0.95rem;margin-bottom:12px;">💪 Workout</h2>
+<div style="margin-bottom:12px;">
+<label style="display:block;font-weight:600;color:#6b7280;margin-bottom:8px;font-size:0.8rem;">What workout did you do?</label>
+<textarea id="workoutInput" rows="3" placeholder="Type, duration, intensity..." style="width:100%;padding:8px;font-size:0.875rem;border:2px solid rgba(220,38,38,0.2);border-radius:6px;resize:vertical;"></textarea>
+</div>
+<button id="saveWorkoutBtn" class="btn" style="width:100%;padding:8px;font-size:0.8rem;background:linear-gradient(135deg,#f87171,#dc2626);color:white;border:none;">Log Workout</button>
+<div id="workoutStatus" style="display:none;color:#dc2626;font-weight:600;margin-top:6px;text-align:center;font-size:0.75rem;"></div>
+</div>
+
+</div>
 </div>
 
 <!-- Custom Cards Category -->
@@ -1660,6 +1687,18 @@ No memories logged yet today. Start capturing moments!
 </div>
 </div>
 
+<!-- Dreams Section -->
+<div class="card" style="background:linear-gradient(135deg,#cffafe 0%,rgba(207,250,254,0.7) 100%);">
+<h2 class="card-title" style="color:#0891b2;"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="display:inline-block;vertical-align:middle;margin-right:8px;"><path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2m0 2c-4.418 0-8 3.582-8 8s3.582 8 8 8 8-3.582 8-8-3.582-8-8-8z"/></svg>Dreams</h2>
+<p style="color:#6b7280;font-size:0.875rem;margin-bottom:16px;">Keep tabs of your dreams and what they might mean. Record moments of inspiration and reflection.</p>
+<div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
+<textarea id="dreamInput" rows="3" placeholder="What did you dream about? Any insights or feelings?" style="flex:1;min-width:200px;padding:12px;border:2px solid #cffafe;border-radius:8px;font-size:0.875rem;resize:vertical;"></textarea>
+</div>
+<button id="saveDreamBtn" class="btn" style="width:100%;background:linear-gradient(135deg,#06b6d4,#0891b2);color:white;padding:8px;">Log Dream</button>
+<div id="dreamStatus" style="display:none;color:#0891b2;font-weight:600;margin-top:6px;text-align:center;font-size:0.75rem;"></div>
+<div id="dreamList" style="display:flex;flex-direction:column;gap:10px;margin-top:16px;"></div>
+</div>
+
 <!-- Moon Phase Tracker -->
 <div class="card" style="background:linear-gradient(135deg,#e0c3fc 0%,#c3b1e1 100%);">
 <h2 class="card-title" style="color:#6b21a8;"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="display:inline-block;vertical-align:middle;margin-right:8px;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>Moon Phase</h2>
@@ -1793,6 +1832,36 @@ No memories logged yet today. Start capturing moments!
 <div class="card" style="background:linear-gradient(135deg,#e0e7ff 0%,rgba(224,231,255,0.7) 100%);">
 <h2 class="card-title" style="color:#4f46e5;">🏥 Health Tracker History</h2>
 <div id="healthTrackerHistory"></div>
+</div>
+
+<!-- Food Log History -->
+<div class="card" style="background:linear-gradient(135deg,#fed7aa 0%,rgba(254,215,170,0.7) 100%);">
+<h2 class="card-title" style="color:#ea580c;">🍽️ Food Log History</h2>
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+<span style="font-size:0.85rem;color:#6b7280;">Today's meals and nutrition</span>
+<button onclick="toggleCollapse(this)" class="btn btn-sm" style="background:#ea580c;color:white;padding:4px 12px;font-size:0.75rem;">Show</button>
+</div>
+<div id="foodLogHistoryContainer" style="display:none;max-height:300px;overflow-y:auto;"></div>
+</div>
+
+<!-- Workout Log History -->
+<div class="card" style="background:linear-gradient(135deg,#fca5a5 0%,rgba(252,165,165,0.7) 100%);">
+<h2 class="card-title" style="color:#dc2626;">💪 Workout Log History</h2>
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+<span style="font-size:0.85rem;color:#6b7280;">Today's workouts and exercises</span>
+<button onclick="toggleCollapse(this)" class="btn btn-sm" style="background:#dc2626;color:white;padding:4px 12px;font-size:0.75rem;">Show</button>
+</div>
+<div id="workoutLogHistoryContainer" style="display:none;max-height:300px;overflow-y:auto;"></div>
+</div>
+
+<!-- Dreams Log History -->
+<div class="card" style="background:linear-gradient(135deg,#cffafe 0%,rgba(207,250,254,0.7) 100%);">
+<h2 class="card-title" style="color:#0891b2;">💭 Dreams Log History</h2>
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+<span style="font-size:0.85rem;color:#6b7280;">Your dreams and insights</span>
+<button onclick="toggleCollapse(this)" class="btn btn-sm" style="background:#0891b2;color:white;padding:4px 12px;font-size:0.75rem;">Show</button>
+</div>
+<div id="dreamLogHistoryContainer" style="display:none;max-height:300px;overflow-y:auto;"></div>
 </div>
 
 <!-- All Notes -->
@@ -3204,6 +3273,121 @@ input.addEventListener('keypress',(e)=>{if(e.key==='Enter')addMemory();});
 render();
 })();
 
+// Food Tracker Handler
+(function(){
+const input=document.getElementById('foodInput');
+const saveBtn=document.getElementById('saveFoodBtn');
+const status=document.getElementById('foodStatus');
+const storageKey='foodLog';
+
+function getFoodLog(){return JSON.parse(localStorage.getItem(storageKey)||'{}');}
+function saveFoodLog(data){localStorage.setItem(storageKey,JSON.stringify(data));}
+
+function showStatus(msg){
+status.textContent=msg;
+status.style.display='block';
+setTimeout(()=>{status.style.display='none';},2000);
+}
+
+saveBtn.addEventListener('click',()=>{
+const text=input.value.trim();
+if(!text){showStatus('Please enter what you ate');return;}
+const today=getTodayString();
+const log=getFoodLog();
+if(!log[today])log[today]=[];
+log[today].push({text,time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),createdAt:new Date().toISOString()});
+saveFoodLog(log);
+input.value='';
+showStatus('✓ Food logged!');
+});
+input.addEventListener('keypress',(e)=>{if(e.key==='Enter'){saveBtn.click();}});
+})();
+
+// Workout Tracker Handler
+(function(){
+const input=document.getElementById('workoutInput');
+const saveBtn=document.getElementById('saveWorkoutBtn');
+const status=document.getElementById('workoutStatus');
+const storageKey='workoutLog';
+
+function getWorkoutLog(){return JSON.parse(localStorage.getItem(storageKey)||'{}');}
+function saveWorkoutLog(data){localStorage.setItem(storageKey,JSON.stringify(data));}
+
+function showStatus(msg){
+status.textContent=msg;
+status.style.display='block';
+setTimeout(()=>{status.style.display='none';},2000);
+}
+
+saveBtn.addEventListener('click',()=>{
+const text=input.value.trim();
+if(!text){showStatus('Please enter your workout details');return;}
+const today=getTodayString();
+const log=getWorkoutLog();
+if(!log[today])log[today]=[];
+log[today].push({text,time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),createdAt:new Date().toISOString()});
+saveWorkoutLog(log);
+input.value='';
+showStatus('✓ Workout logged!');
+});
+input.addEventListener('keypress',(e)=>{if(e.key==='Enter'){saveBtn.click();}});
+})();
+
+// Dreams Handler
+(function(){
+const input=document.getElementById('dreamInput');
+const saveBtn=document.getElementById('saveDreamBtn');
+const status=document.getElementById('dreamStatus');
+const listContainer=document.getElementById('dreamList');
+const storageKey='dreamLog';
+
+function getDreamLog(){return JSON.parse(localStorage.getItem(storageKey)||'{}');}
+function saveDreamLog(data){localStorage.setItem(storageKey,JSON.stringify(data));}
+
+function showStatus(msg){
+status.textContent=msg;
+status.style.display='block';
+setTimeout(()=>{status.style.display='none';},2000);
+}
+
+function render(){
+const today=getTodayString();
+const log=getDreamLog();
+const todayDreams=log[today]||[];
+listContainer.innerHTML='';
+todayDreams.forEach((dream,idx)=>{
+const div=document.createElement('div');
+div.style.cssText='display:flex;align-items:center;gap:12px;padding:12px;background:white;border-radius:8px;border:1px solid #cffafe;';
+div.innerHTML=`<span style="font-size:1.25rem;">💭</span>
+<span style="flex:1;color:#374151;font-size:0.875rem;">${escapeHtml(dream.text)}</span>
+<span style="font-size:0.75rem;color:#9ca3af;">${dream.time}</span>
+<button data-delete="${idx}" style="background:none;border:none;cursor:pointer;color:#ef4444;font-size:1rem;padding:4px;">×</button>`;
+div.querySelector('[data-delete]').addEventListener('click',()=>{
+const log=getDreamLog();
+log[today].splice(idx,1);
+saveDreamLog(log);
+render();
+});
+listContainer.appendChild(div);
+});
+}
+
+saveBtn.addEventListener('click',()=>{
+const text=input.value.trim();
+if(!text){showStatus('Please enter your dream');return;}
+const today=getTodayString();
+const log=getDreamLog();
+if(!log[today])log[today]=[];
+log[today].push({text,time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),createdAt:new Date().toISOString()});
+saveDreamLog(log);
+input.value='';
+showStatus('✓ Dream logged!');
+render();
+});
+input.addEventListener('keypress',(e)=>{if(e.key==='Enter'){saveBtn.click();}});
+render();
+})();
+
 // Collapsible List Handler
 function setupCollapsibleList(listId,btnId){
 const list=document.getElementById(listId);
@@ -4421,6 +4605,9 @@ sleepData:JSON.parse(localStorage.getItem('sleepData')||'{}'),
 painData:JSON.parse(localStorage.getItem('painData')||'{}'),
 clarityData:JSON.parse(localStorage.getItem('clarityData')||'{}'),
 waterIntakeNew:JSON.parse(localStorage.getItem('waterIntakeNew')||'{}'),
+foodLog:JSON.parse(localStorage.getItem('foodLog')||'{}'),
+workoutLog:JSON.parse(localStorage.getItem('workoutLog')||'{}'),
+dreamLog:JSON.parse(localStorage.getItem('dreamLog')||'{}'),
 daysCried:JSON.parse(localStorage.getItem('daysCried')||'{}'),
 itemsLost:JSON.parse(localStorage.getItem('itemsLost')||'{}'),
 dailySpending:JSON.parse(localStorage.getItem('dailySpending')||'{}'),
@@ -4444,7 +4631,7 @@ a.download=`learn-thyself-backup-${new Date().toISOString().split('T')[0]}.json`
 a.click();
 URL.revokeObjectURL(url);
 toggleSettingsMenu();
-alert('✅ Data exported successfully!\n\n📊 Data included:\n• Mood & Energy tracking\n• Activities & completions\n• Time tracking\n• Ratings & Spending\n• Health data (Sleep, Pain, Clarity, Water)\n• Memories, Travels & Photos\n• All custom settings');
+alert('✅ Data exported successfully!\n\n📊 Data included (29 categories):\n• Mood & Energy tracking\n• Activities & completions\n• Time tracking\n• Ratings & Spending\n• Health data (Sleep, Pain, Clarity, Water, Food, Workout)\n• Dreams & Memories\n• Travels & Photos\n• All custom settings');
 }
 
 // Import Data
@@ -4469,6 +4656,9 @@ localStorage.setItem('sleepData',JSON.stringify(data.sleepData||{}));
 localStorage.setItem('painData',JSON.stringify(data.painData||{}));
 localStorage.setItem('clarityData',JSON.stringify(data.clarityData||{}));
 localStorage.setItem('waterIntakeNew',JSON.stringify(data.waterIntakeNew||{}));
+localStorage.setItem('foodLog',JSON.stringify(data.foodLog||{}));
+localStorage.setItem('workoutLog',JSON.stringify(data.workoutLog||{}));
+localStorage.setItem('dreamLog',JSON.stringify(data.dreamLog||{}));
 localStorage.setItem('daysCried',JSON.stringify(data.daysCried||{}));
 localStorage.setItem('itemsLost',JSON.stringify(data.itemsLost||{}));
 localStorage.setItem('dailySpending',JSON.stringify(data.dailySpending||{}));
@@ -5430,11 +5620,72 @@ window.addEventListener('beforeunload', function() {
   }
 });
 
-// Initialize travels on page load
-document.addEventListener('DOMContentLoaded', () => {
-  if (document.getElementById('travelsView')) {
-    setupTravelsEventListeners();
-  }
+// Render Food, Workout, Dreams history on page load
+function renderNewLogsHistory(){
+const today=getTodayString();
+
+// Food Log
+const foodLog=JSON.parse(localStorage.getItem('foodLog')||'{}');
+const foodContainer=document.getElementById('foodLogHistoryContainer');
+if(foodLog[today] && foodLog[today].length>0){
+foodContainer.innerHTML='';
+foodLog[today].forEach(entry=>{
+const div=document.createElement('div');
+div.style.cssText='padding:10px;background:white;border-radius:6px;border-left:3px solid #ea580c;margin-bottom:8px;';
+div.innerHTML=`<div style="display:flex;justify-content:space-between;"><span style="color:#374151;font-size:0.9rem;">${escapeHtml(entry.text)}</span><span style="color:#9ca3af;font-size:0.75rem;">${entry.time}</span></div>`;
+foodContainer.appendChild(div);
+});
+}else{
+foodContainer.innerHTML='<div style="padding:12px;text-align:center;color:#9ca3af;font-size:0.85rem;">No food logged today yet</div>';
+}
+
+// Workout Log
+const workoutLog=JSON.parse(localStorage.getItem('workoutLog')||'{}');
+const workoutContainer=document.getElementById('workoutLogHistoryContainer');
+if(workoutLog[today] && workoutLog[today].length>0){
+workoutContainer.innerHTML='';
+workoutLog[today].forEach(entry=>{
+const div=document.createElement('div');
+div.style.cssText='padding:10px;background:white;border-radius:6px;border-left:3px solid #dc2626;margin-bottom:8px;';
+div.innerHTML=`<div style="display:flex;justify-content:space-between;"><span style="color:#374151;font-size:0.9rem;">${escapeHtml(entry.text)}</span><span style="color:#9ca3af;font-size:0.75rem;">${entry.time}</span></div>`;
+workoutContainer.appendChild(div);
+});
+}else{
+workoutContainer.innerHTML='<div style="padding:12px;text-align:center;color:#9ca3af;font-size:0.85rem;">No workouts logged today yet</div>';
+}
+
+// Dreams Log
+const dreamLog=JSON.parse(localStorage.getItem('dreamLog')||'{}');
+const dreamContainer=document.getElementById('dreamLogHistoryContainer');
+if(dreamLog[today] && dreamLog[today].length>0){
+dreamContainer.innerHTML='';
+dreamLog[today].forEach(entry=>{
+const div=document.createElement('div');
+div.style.cssText='padding:10px;background:white;border-radius:6px;border-left:3px solid #0891b2;margin-bottom:8px;';
+div.innerHTML=`<div style="display:flex;justify-content:space-between;"><span style="color:#374151;font-size:0.9rem;">${escapeHtml(entry.text)}</span><span style="color:#9ca3af;font-size:0.75rem;">${entry.time}</span></div>`;
+dreamContainer.appendChild(div);
+});
+}else{
+dreamContainer.innerHTML='<div style="padding:12px;text-align:center;color:#9ca3af;font-size:0.85rem;">No dreams logged today yet</div>';
+}
+}
+
+// Toggle collapse/expand
+function toggleCollapse(btn){
+const container=btn.parentElement.nextElementSibling;
+if(container.style.display==='none'){
+container.style.display='block';
+btn.textContent='Hide';
+renderNewLogsHistory();
+}else{
+container.style.display='none';
+btn.textContent='Show';
+}
+}
+
+// Initialize logs history on page load
+document.addEventListener('DOMContentLoaded',()=>{
+renderNewLogsHistory();
 });
 
 </script>
