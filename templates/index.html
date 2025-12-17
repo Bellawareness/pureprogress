@@ -127,7 +127,7 @@
     }
   });
   
-  // Check if account needs data migration
+  // Check if account needs data migration - simplified onboarding
   async function checkAndMigrateData(user) {
     if (!window.firebaseDatabase) return;
     
@@ -140,58 +140,48 @@
       .some(key => localStorage.getItem(key) && localStorage.getItem(key) !== '[]' && localStorage.getItem(key) !== '{}');
     
     if (!snapshot.exists() && hasLocalData) {
-      // New account with existing local data - offer migration
-      const migrate = confirm(
-        '📤 Upload Existing Data?\n\n' +
-        'You have existing habit data on this device.\n\n' +
-        'Would you like to upload it to your new account?\n\n' +
-        '✅ YES - Upload all your data to the cloud\n' +
-        '❌ NO - Start fresh (local data stays on this device only)'
-      );
+      // New account with existing local data - automatically upload without dialog
+      console.log('🔄 Auto-uploading local data to cloud...');
+      let migrated = 0;
       
-      if (migrate) {
-        console.log('🔄 Migrating local data to cloud...');
-        let migrated = 0;
-        
-        const STORAGE_KEYS = [
-          'dailyMoodEnergy', 'activities', 'dailyRatings', 'activityCompletions',
-          'dailyTodo', 'getItDone', 'dailySpending', 'daysCried', 'itemsLost',
-          'waterIntake', 'timeTracked', 'photos', 'selectedTheme', 'activityLog',
-          'headerPhotos', 'currentHeaderPhoto'
-        ];
-        
-        for (const key of STORAGE_KEYS) {
-          const value = localStorage.getItem(key);
-          if (value) {
-            try {
-              const data = JSON.parse(value);
-              const dataRef = window.firebaseRef(window.firebaseDatabase, `users/${user.uid}/${key}`);
-              await window.firebaseSet(dataRef, data);
-              migrated++;
-              console.log(`✓ Migrated ${key}`);
-            } catch(e) {
-              const dataRef = window.firebaseRef(window.firebaseDatabase, `users/${user.uid}/${key}`);
-              await window.firebaseSet(dataRef, value);
-              migrated++;
-              console.log(`✓ Migrated ${key}`);
-            }
+      const STORAGE_KEYS = [
+        'dailyMoodEnergy', 'activities', 'dailyRatings', 'activityCompletions',
+        'dailyTodo', 'getItDone', 'dailySpending', 'daysCried', 'itemsLost',
+        'waterIntake', 'timeTracked', 'photos', 'selectedTheme', 'activityLog',
+        'headerPhotos', 'currentHeaderPhoto', 'foodLog', 'workoutLog', 'dreamLog'
+      ];
+      
+      for (const key of STORAGE_KEYS) {
+        const value = localStorage.getItem(key);
+        if (value) {
+          try {
+            const data = JSON.parse(value);
+            const dataRef = window.firebaseRef(window.firebaseDatabase, `users/${user.uid}/${key}`);
+            await window.firebaseSet(dataRef, data);
+            migrated++;
+            console.log(`✓ Synced ${key}`);
+          } catch(e) {
+            const dataRef = window.firebaseRef(window.firebaseDatabase, `users/${user.uid}/${key}`);
+            await window.firebaseSet(dataRef, value);
+            migrated++;
+            console.log(`✓ Synced ${key}`);
           }
         }
-        
-        console.log(`✅ Migration complete! Uploaded ${migrated} items`);
-        alert(`✅ Success!\n\nUploaded ${migrated} items to your account.\n\nYour data is now synced across all devices!`);
-      } else {
-        console.log('⏭️ User chose not to migrate data');
       }
-    } else if (snapshot.exists() && !hasLocalData) {
-      // Account has cloud data, but device is empty - download it
+      
+      console.log(`✅ Auto-sync complete! Uploaded ${migrated} items`);
+    } else if (!snapshot.exists() && !hasLocalData) {
+      // Brand new user - show simple welcome message (no dialog)
+      console.log('👋 Welcome new user! Ready to start tracking.');
+    } else if (snapshot.exists()) {
+      // Account has cloud data - download it automatically
       console.log('⬇️ Downloading data from cloud...');
       
       const STORAGE_KEYS = [
         'dailyMoodEnergy', 'activities', 'dailyRatings', 'activityCompletions',
         'dailyTodo', 'getItDone', 'dailySpending', 'daysCried', 'itemsLost',
         'waterIntake', 'timeTracked', 'photos', 'selectedTheme', 'activityLog',
-        'headerPhotos', 'currentHeaderPhoto'
+        'headerPhotos', 'currentHeaderPhoto', 'foodLog', 'workoutLog', 'dreamLog'
       ];
       
       let downloaded = 0;
@@ -207,14 +197,13 @@
       
       console.log(`✅ Downloaded ${downloaded} items from cloud`);
       
-      // Only show welcome message if this is a new login (not already shown in this session)
+      // Only refresh if this is a new login and data was downloaded
       const hasShownWelcome = sessionStorage.getItem('welcomeShown');
       if (!hasShownWelcome && downloaded > 0) {
         sessionStorage.setItem('welcomeShown', 'true');
         setTimeout(() => {
-          alert(`✅ Welcome back!\n\nDownloaded ${downloaded} items from your account.\n\nPage will now refresh to show your data.`);
           location.reload();
-        }, 500);
+        }, 300);
       }
     }
   }
@@ -416,6 +405,54 @@ body.dark-mode .tab-btn:hover{color:#fbbf24;}
 body.dark-mode input[type="checkbox"]{accent-color:#fbbf24;}
 body.dark-mode li{color:#f9fafb;}
 body.dark-mode div[style*="color:#6b7280"]{color:#e5e7eb !important;}
+/* Enhanced dark mode contrast for all text elements */
+body.dark-mode p{color:#f9fafb !important;}
+body.dark-mode span{color:#e5e7eb;}
+body.dark-mode h1,body.dark-mode h2,body.dark-mode h3,body.dark-mode h4{color:#f9fafb !important;}
+body.dark-mode .card{color:#f9fafb;}
+body.dark-mode .card p{color:#d1d5db !important;}
+body.dark-mode .card span{color:#e5e7eb;}
+body.dark-mode .card div{color:#e5e7eb;}
+body.dark-mode select{background:#1e1b29;color:#f9fafb;border-color:#a78bfa;}
+body.dark-mode input[type="number"],body.dark-mode input[type="date"]{background:#1e1b29;color:#f9fafb;border-color:#a78bfa;}
+body.dark-mode .tracker-item{background:rgba(75,60,100,0.7);color:#f9fafb;}
+body.dark-mode .tracker-item span{color:#f9fafb !important;}
+body.dark-mode [style*="color:#374151"]{color:#f9fafb !important;}
+body.dark-mode [style*="color:#78350f"]{color:#fcd34d !important;}
+body.dark-mode [style*="color:#92400e"]{color:#fbbf24 !important;}
+body.dark-mode [style*="color:#9ca3af"]{color:#d1d5db !important;}
+/* Additional dark mode contrast fixes */
+body.dark-mode .category-tab{background:rgba(75,60,100,0.8) !important;color:#f9fafb !important;border-color:#a78bfa !important;}
+body.dark-mode .category-tab.active{background:linear-gradient(135deg,#7c3aed,#6d28d9) !important;color:#fde047 !important;}
+body.dark-mode .category-content .card{background:rgba(45,40,60,0.95) !important;}
+body.dark-mode [style*="background:linear-gradient"]{background:rgba(55,45,75,0.9) !important;}
+body.dark-mode [style*="background-color"]{background-color:rgba(55,45,75,0.9) !important;}
+body.dark-mode .card h3{color:#fde047 !important;}
+body.dark-mode .card h4{color:#fcd34d !important;}
+body.dark-mode [style*="color:#ea580c"]{color:#fb923c !important;}
+body.dark-mode [style*="color:#dc2626"]{color:#f87171 !important;}
+body.dark-mode [style*="color:#0891b2"]{color:#22d3ee !important;}
+body.dark-mode [style*="color:#4f46e5"]{color:#a5b4fc !important;}
+body.dark-mode [style*="color:#ec4899"]{color:#f9a8d4 !important;}
+body.dark-mode [style*="color:#eab308"]{color:#fde047 !important;}
+body.dark-mode [style*="color:#7c3aed"]{color:#c4b5fd !important;}
+body.dark-mode [style*="color:#0284c7"]{color:#38bdf8 !important;}
+body.dark-mode [style*="color:#1e40af"]{color:#93c5fd !important;}
+body.dark-mode [style*="color:#be185d"]{color:#f9a8d4 !important;}
+body.dark-mode [style*="color:#0369a1"]{color:#38bdf8 !important;}
+body.dark-mode [style*="color:#1e3a8a"]{color:#93c5fd !important;}
+body.dark-mode [style*="color:#831843"]{color:#fbcfe8 !important;}
+body.dark-mode [style*="color:#164e63"]{color:#67e8f9 !important;}
+body.dark-mode [style*="color:#6b21a8"]{color:#d8b4fe !important;}
+body.dark-mode [style*="color:#d97706"]{color:#fbbf24 !important;}
+body.dark-mode [style*="color:#10b981"]{color:#6ee7b7 !important;}
+body.dark-mode .btn-sm{color:#1e1929 !important;}
+body.dark-mode .history-stat{background:rgba(75,60,100,0.95) !important;border:1px solid #a78bfa !important;}
+body.dark-mode #compactInsights div{background:rgba(45,40,60,0.95) !important;color:#e5e7eb !important;}
+body.dark-mode #compactInsights span{color:#e5e7eb !important;}
+body.dark-mode #foodLogHistoryContainer,body.dark-mode #workoutLogHistoryContainer,body.dark-mode #dreamLogHistoryContainer{background:rgba(30,27,41,0.9) !important;color:#f9fafb !important;}
+body.dark-mode #allNotes{background:rgba(30,27,41,0.7) !important;color:#f9fafb !important;}
+body.dark-mode #healthTrackerHistory,body.dark-mode #currentStreaks,body.dark-mode #moodEnergyInsights,body.dark-mode #ratingsOverview{color:#f9fafb !important;}
 body{font-family:Inter,system-ui,-apple-system,Arial,sans-serif;margin:0;min-height:100vh;background:linear-gradient(135deg,var(--bg-gradient-start) 0%,var(--bg-gradient-end) 100%);transition:background 0.5s ease,color 0.3s ease;}
 .card{background:var(--card-bg);border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,0.08);backdrop-filter:blur(10px);transition:all 0.3s ease;color:var(--text-primary);}
 .card:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,0,0,0.12);}
@@ -1125,6 +1162,7 @@ flex:1;
 <button onclick="document.getElementById('headerPhotoInput').click()" style="position:absolute;bottom:16px;right:16px;background:rgba(255,255,255,0.9);border:2px solid #ff9aa2;color:#ff758f;padding:8px 16px;border-radius:20px;font-size:0.85rem;font-weight:600;cursor:pointer;backdrop-filter:blur(10px);transition:all 0.3s;box-shadow:0 4px 12px rgba(0,0,0,0.15);" onmouseover="this.style.background='#ff9aa2';this.style.color='white'" onmouseout="this.style.background='rgba(255,255,255,0.9)';this.style.color='#ff758f'">
 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="display:inline-block;vertical-align:middle;margin-right:6px;"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>Change Header Photo
 </button>
+<div style="position:absolute;bottom:52px;right:16px;background:rgba(255,255,255,0.95);color:#dc2626;padding:4px 10px;border-radius:12px;font-size:0.7rem;font-weight:600;backdrop-filter:blur(10px);box-shadow:0 2px 8px rgba(0,0,0,0.1);">⚠️ Small images only (under 500KB)</div>
 <input type="file" id="headerPhotoInput" accept="image/*" style="display:none;" onchange="uploadHeaderPhoto(event)">
 </div>
 </div>
@@ -1492,6 +1530,9 @@ Water
 
 </div>
 
+<!-- Get It Done & Pending Projects - Side by Side -->
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));gap:20px;margin-bottom:20px;">
+
 <div class="card card-done">
 <h2 class="card-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:inline-block;vertical-align:middle;margin-right:8px;"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>Get It Done</h2>
 <div style="display:flex;gap:12px;margin-bottom:24px;">
@@ -1514,6 +1555,9 @@ Water
 </div>
 <div id="projectsContainer" style="display:flex;flex-direction:column;gap:16px;max-height:500px;overflow-y:auto;"></div>
 </div>
+
+</div>
+<!-- End Get It Done & Pending Projects Grid -->
 
 </div>
 <!-- End Habits & Activities Category -->
@@ -1643,6 +1687,9 @@ Water
 </div>
 </div>
 
+<!-- Daily Ratings & Daily Something to Remember - Side by Side (middle row) -->
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px;margin-bottom:20px;">
+
 <!-- Daily Ratings -->
 <div class="card card-ratings">
 <h2 class="card-title">Daily Ratings</h2>
@@ -1687,6 +1734,12 @@ No memories logged yet today. Start capturing moments!
 </div>
 </div>
 
+</div>
+<!-- End Daily Ratings & Something to Remember Grid -->
+
+<!-- Dreams & Moon Phase - Side by Side (bottom row) -->
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px;margin-bottom:20px;">
+
 <!-- Dreams Section -->
 <div class="card" style="background:linear-gradient(135deg,#cffafe 0%,rgba(207,250,254,0.7) 100%);">
 <h2 class="card-title" style="color:#0891b2;"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="display:inline-block;vertical-align:middle;margin-right:8px;"><path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2m0 2c-4.418 0-8 3.582-8 8s3.582 8 8 8 8-3.582 8-8-3.582-8-8-8z"/></svg>Dreams</h2>
@@ -1715,7 +1768,61 @@ No memories logged yet today. Start capturing moments!
 </div>
 
 </div>
+<!-- End Dreams & Moon Phase Grid -->
+
+</div>
 <!-- End Reflections & Insights Category -->
+
+<!-- Travel Category -->
+<div id="travelCategory" class="category-content" style="display:none;">
+
+<!-- Travel Stats -->
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:16px;">
+<div class="card" style="background:linear-gradient(135deg,#dbeafe,#bfdbfe);padding:14px;text-align:center;">
+<div style="font-size:2rem;font-weight:800;color:#1e40af;" id="totalCitiesCount">0</div>
+<div style="color:#1e3a8a;font-weight:600;font-size:0.85rem;margin-top:4px;">Cities Visited</div>
+</div>
+<div class="card" style="background:linear-gradient(135deg,#fce7f3,#fbcfe8);padding:14px;text-align:center;">
+<div style="font-size:2rem;font-weight:800;color:#be185d;" id="totalStatesCount">0</div>
+<div style="color:#831843;font-weight:600;font-size:0.85rem;margin-top:4px;">States Visited</div>
+</div>
+<div class="card" style="background:linear-gradient(135deg,#cffafe,#a5f3fc);padding:14px;text-align:center;">
+<div style="font-size:2rem;font-weight:800;color:#0369a1;" id="totalCountriesCount">0</div>
+<div style="color:#164e63;font-weight:600;font-size:0.85rem;margin-top:4px;">Countries</div>
+</div>
+</div>
+
+<!-- Add Location Form -->
+<div class="card" style="background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border:2px solid #0284c7;padding:14px;margin-bottom:12px;">
+<h3 style="color:#0284c7;font-weight:700;margin:0 0 10px 0;font-size:0.95rem;">✈️ Add a Location</h3>
+<div style="display:flex;gap:8px;flex-wrap:wrap;">
+<input type="text" id="locationInput" placeholder="City..." style="flex:1;min-width:100px;padding:10px;border:2px solid #7dd3fc;border-radius:8px;font-size:0.9rem;"/>
+<input type="text" id="stateInput" placeholder="State..." style="flex:1;min-width:100px;padding:10px;border:2px solid #7dd3fc;border-radius:8px;font-size:0.9rem;"/>
+<input type="text" id="countryInput" placeholder="Country..." style="flex:1;min-width:100px;padding:10px;border:2px solid #7dd3fc;border-radius:8px;font-size:0.9rem;"/>
+</div>
+<div style="margin-top:10px;">
+<textarea id="locationNotesInput" rows="2" placeholder="Notes about this location..." style="width:100%;padding:10px;border:2px solid #7dd3fc;border-radius:8px;font-size:0.85rem;resize:vertical;"></textarea>
+</div>
+<div style="margin-top:10px;display:flex;align-items:center;gap:12px;">
+<button id="addLocationBtn" class="btn" style="background:linear-gradient(135deg,#0284c7,#0369a1);color:white;border:none;padding:10px 18px;font-weight:600;border-radius:8px;font-size:0.85rem;">Add Location</button>
+<span id="addLocationStatus" style="color:#0284c7;font-weight:600;font-size:0.85rem;"></span>
+</div>
+</div>
+
+<!-- Locations List -->
+<div class="card" style="background:linear-gradient(135deg,rgba(240,249,255,0.95),rgba(224,242,254,0.95));border:2px solid #bfdbfe;padding:14px;">
+<h3 style="color:#1e40af;font-weight:700;margin:0 0 10px 0;font-size:0.9rem;">
+📍 Your Locations <span id="citiesCountLabel" style="font-size:0.8rem;color:#6b7280;font-weight:500;"></span>
+</h3>
+<div id="citiesList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(240px,100%),1fr));gap:10px;max-height:400px;overflow-y:auto;">
+<div style="grid-column:1/-1;text-align:center;padding:24px;color:#6b7280;font-size:0.9rem;">
+<p>No locations added yet. Add your first location above!</p>
+</div>
+</div>
+</div>
+
+</div>
+<!-- End Travel Category -->
 
 <!-- Daily Quote at Bottom -->
 <div style="margin-top:40px;padding:24px;background:linear-gradient(135deg,#fef3c7,#fde68a);border-radius:16px;border:2px solid #fbbf24;box-shadow:0 4px 16px rgba(251,191,36,0.25);text-align:center;">
@@ -1728,201 +1835,161 @@ No memories logged yet today. Start capturing moments!
 <!-- History View -->
 <div id="historyView" class="view-section">
 
-<div class="card" style="background:linear-gradient(135deg,#fef3c7 0%,rgba(254,243,199,0.7) 100%);">
-<h2 class="card-title" style="color:#d97706;">📊 Your Progress History</h2>
-<div style="display:flex;gap:16px;margin-bottom:32px;">
-<button class="btn btn-sm" onclick="showWeekly()" id="weeklyBtn" style="background:linear-gradient(135deg,#ff9aa2,#ff758f);">Weekly</button>
-<button class="btn btn-sm" onclick="showMonthly()" id="monthlyBtn">Monthly</button>
+<div class="card" style="background:linear-gradient(135deg,#fef3c7 0%,rgba(254,243,199,0.7) 100%);padding:14px;margin-bottom:12px;">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+<h3 style="color:#d97706;font-weight:700;font-size:0.95rem;margin:0;">📊 Progress History</h3>
+<div style="display:flex;gap:8px;">
+<button class="btn btn-sm" onclick="showWeekly()" id="weeklyBtn" style="background:linear-gradient(135deg,#ff9aa2,#ff758f);padding:4px 12px;font-size:0.75rem;">Weekly</button>
+<button class="btn btn-sm" onclick="showMonthly()" id="monthlyBtn" style="padding:4px 12px;font-size:0.75rem;">Monthly</button>
+</div>
 </div>
 
 <!-- Weekly View -->
 <div id="weeklyStats">
-<h3 style="font-size:1.25rem;font-weight:600;color:#92400e;margin-bottom:24px;">This Week's Summary</h3>
-<div class="grid-desktop" style="margin-bottom:32px;">
-<div class="history-stat">
-<div class="history-stat-value" id="weekActivitiesCompleted">0</div>
-<div class="history-stat-label">Activities Completed</div>
+<div class="grid-desktop" style="gap:8px;">
+<div class="history-stat" style="padding:8px;">
+<div class="history-stat-value" id="weekActivitiesCompleted" style="font-size:1.25rem;">0</div>
+<div class="history-stat-label" style="font-size:0.65rem;">Activities</div>
 </div>
-<div class="history-stat">
-<div class="history-stat-value" id="weekAvgMood">-</div>
-<div class="history-stat-label">Average Mood</div>
+<div class="history-stat" style="padding:8px;">
+<div class="history-stat-value" id="weekAvgMood" style="font-size:1.25rem;">-</div>
+<div class="history-stat-label" style="font-size:0.65rem;">Avg Mood</div>
 </div>
-<div class="history-stat">
-<div class="history-stat-value" id="weekAvgEnergy">-</div>
-<div class="history-stat-label">Average Energy</div>
+<div class="history-stat" style="padding:8px;">
+<div class="history-stat-value" id="weekAvgEnergy" style="font-size:1.25rem;">-</div>
+<div class="history-stat-label" style="font-size:0.65rem;">Avg Energy</div>
 </div>
-<div class="history-stat">
-<div class="history-stat-value" id="weekTimeTracked">0h</div>
-<div class="history-stat-label">Time Tracked</div>
+<div class="history-stat" style="padding:8px;">
+<div class="history-stat-value" id="weekTimeTracked" style="font-size:1.25rem;">0h</div>
+<div class="history-stat-label" style="font-size:0.65rem;">Time</div>
 </div>
-<div class="history-stat">
-<div class="history-stat-value" id="weekSpending">$0</div>
-<div class="history-stat-label">Total Spending</div>
+<div class="history-stat" style="padding:8px;">
+<div class="history-stat-value" id="weekSpending" style="font-size:1.25rem;">$0</div>
+<div class="history-stat-label" style="font-size:0.65rem;">Spent</div>
 </div>
-<div class="history-stat">
-<div class="history-stat-value" id="weekCried">0</div>
-<div class="history-stat-label">Days Cried</div>
+<div class="history-stat" style="padding:8px;">
+<div class="history-stat-value" id="weekCried" style="font-size:1.25rem;">0</div>
+<div class="history-stat-label" style="font-size:0.65rem;">Cried</div>
 </div>
-<div class="history-stat">
-<div class="history-stat-value" id="weekLost">0</div>
-<div class="history-stat-label">Items Lost</div>
+<div class="history-stat" style="padding:8px;">
+<div class="history-stat-value" id="weekLost" style="font-size:1.25rem;">0</div>
+<div class="history-stat-label" style="font-size:0.65rem;">Lost</div>
 </div>
 </div>
 </div>
 
 <!-- Monthly View -->
 <div id="monthlyStats" style="display:none;">
-<h3 style="font-size:1.25rem;font-weight:600;color:#92400e;margin-bottom:24px;">This Month's Summary</h3>
-<div class="grid-desktop" style="margin-bottom:32px;">
-<div class="history-stat">
-<div class="history-stat-value" id="monthActivitiesCompleted">0</div>
-<div class="history-stat-label">Activities Completed</div>
+<div class="grid-desktop" style="gap:8px;">
+<div class="history-stat" style="padding:8px;">
+<div class="history-stat-value" id="monthActivitiesCompleted" style="font-size:1.25rem;">0</div>
+<div class="history-stat-label" style="font-size:0.65rem;">Activities</div>
 </div>
-<div class="history-stat">
-<div class="history-stat-value" id="monthAvgMood">-</div>
-<div class="history-stat-label">Average Mood</div>
+<div class="history-stat" style="padding:8px;">
+<div class="history-stat-value" id="monthAvgMood" style="font-size:1.25rem;">-</div>
+<div class="history-stat-label" style="font-size:0.65rem;">Avg Mood</div>
 </div>
-<div class="history-stat">
-<div class="history-stat-value" id="monthAvgEnergy">-</div>
-<div class="history-stat-label">Average Energy</div>
+<div class="history-stat" style="padding:8px;">
+<div class="history-stat-value" id="monthAvgEnergy" style="font-size:1.25rem;">-</div>
+<div class="history-stat-label" style="font-size:0.65rem;">Avg Energy</div>
 </div>
-<div class="history-stat">
-<div class="history-stat-value" id="monthTimeTracked">0h</div>
-<div class="history-stat-label">Time Tracked</div>
+<div class="history-stat" style="padding:8px;">
+<div class="history-stat-value" id="monthTimeTracked" style="font-size:1.25rem;">0h</div>
+<div class="history-stat-label" style="font-size:0.65rem;">Time</div>
 </div>
-<div class="history-stat">
-<div class="history-stat-value" id="monthSpending">$0</div>
-<div class="history-stat-label">Total Spending</div>
+<div class="history-stat" style="padding:8px;">
+<div class="history-stat-value" id="monthSpending" style="font-size:1.25rem;">$0</div>
+<div class="history-stat-label" style="font-size:0.65rem;">Spent</div>
 </div>
-<div class="history-stat">
-<div class="history-stat-value" id="monthCried">0</div>
-<div class="history-stat-label">Days Cried</div>
+<div class="history-stat" style="padding:8px;">
+<div class="history-stat-value" id="monthCried" style="font-size:1.25rem;">0</div>
+<div class="history-stat-label" style="font-size:0.65rem;">Cried</div>
 </div>
-<div class="history-stat">
-<div class="history-stat-value" id="monthLost">0</div>
-<div class="history-stat-label">Items Lost</div>
+<div class="history-stat" style="padding:8px;">
+<div class="history-stat-value" id="monthLost" style="font-size:1.25rem;">0</div>
+<div class="history-stat-label" style="font-size:0.65rem;">Lost</div>
 </div>
 </div>
 </div>
 </div>
 
 <!-- Compact Insights Summary -->
-<div class="card" style="background:linear-gradient(135deg,#f3e8ff 0%,#ede9fe 100%);border:2px solid #c4b5fd;padding:16px;margin-bottom:20px;">
-<h3 style="color:#7c3aed;font-weight:700;margin:0 0 12px 0;font-size:0.95rem;">✨ Key Insights</h3>
-<div id="compactInsights" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;font-size:0.85rem;">
-<div style="background:white;padding:10px;border-radius:6px;border-left:3px solid #ec4899;"><span style="font-weight:600;color:#ec4899;">Mood Trend:</span> <span style="color:#6b7280;" id="moodTrendInsight">-</span></div>
-<div style="background:white;padding:10px;border-radius:6px;border-left:3px solid #eab308;"><span style="font-weight:600;color:#eab308;">Energy Trend:</span> <span style="color:#6b7280;" id="energyTrendInsight">-</span></div>
-<div style="background:white;padding:10px;border-radius:6px;border-left:3px solid #10b981;"><span style="font-weight:600;color:#10b981;">Best Habit:</span> <span style="color:#6b7280;" id="bestHabitInsight">-</span></div>
-<div style="background:white;padding:10px;border-radius:6px;border-left:3px solid #0284c7;"><span style="font-weight:600;color:#0284c7;">Productivity:</span> <span style="color:#6b7280;" id="productivityInsight">-</span></div>
+<div class="card" style="background:linear-gradient(135deg,#f3e8ff 0%,#ede9fe 100%);border:2px solid #c4b5fd;padding:10px;margin-bottom:12px;">
+<h4 style="color:#7c3aed;font-weight:700;margin:0 0 8px 0;font-size:0.85rem;">✨ Key Insights</h4>
+<div id="compactInsights" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:6px;font-size:0.75rem;">
+<div style="background:white;padding:6px 8px;border-radius:4px;border-left:3px solid #ec4899;"><span style="font-weight:600;color:#ec4899;">Mood:</span> <span style="color:#6b7280;" id="moodTrendInsight">-</span></div>
+<div style="background:white;padding:6px 8px;border-radius:4px;border-left:3px solid #eab308;"><span style="font-weight:600;color:#eab308;">Energy:</span> <span style="color:#6b7280;" id="energyTrendInsight">-</span></div>
+<div style="background:white;padding:6px 8px;border-radius:4px;border-left:3px solid #10b981;"><span style="font-weight:600;color:#10b981;">Best:</span> <span style="color:#6b7280;" id="bestHabitInsight">-</span></div>
+<div style="background:white;padding:6px 8px;border-radius:4px;border-left:3px solid #0284c7;"><span style="font-weight:600;color:#0284c7;">Prod:</span> <span style="color:#6b7280;" id="productivityInsight">-</span></div>
 </div>
 </div>
 
-<div class="card" style="background:linear-gradient(135deg,var(--pastel-pink) 0%,rgba(255,214,231,0.7) 100%);">
-<h2 class="card-title" style="color:#ec4899;">💭 Mood & Energy Insights</h2>
-<div id="moodEnergyInsights"></div>
+<div class="card" style="background:linear-gradient(135deg,var(--pastel-pink) 0%,rgba(255,214,231,0.7) 100%);padding:12px;margin-bottom:12px;">
+<h3 style="color:#ec4899;font-weight:700;font-size:0.9rem;margin:0 0 8px 0;">💭 Mood & Energy Insights</h3>
+<div id="moodEnergyInsights" style="font-size:0.85rem;"></div>
 </div>
 
 <!-- Current Streaks -->
-<div class="card" style="background:linear-gradient(135deg,#ff9a56 0%,rgba(255,173,86,0.7) 100%);">
-<h2 class="card-title" style="color:#ea580c;">🔥 Current Streaks</h2>
-<div id="currentStreaks"></div>
+<div class="card" style="background:linear-gradient(135deg,#ff9a56 0%,rgba(255,173,86,0.7) 100%);padding:12px;margin-bottom:12px;">
+<h3 style="color:#ea580c;font-weight:700;font-size:0.9rem;margin:0 0 8px 0;">🔥 Current Streaks</h3>
+<div id="currentStreaks" style="font-size:0.85rem;"></div>
 </div>
 
 <!-- Health Tracker History -->
-<div class="card" style="background:linear-gradient(135deg,#e0e7ff 0%,rgba(224,231,255,0.7) 100%);">
-<h2 class="card-title" style="color:#4f46e5;">🏥 Health Tracker History</h2>
-<div id="healthTrackerHistory"></div>
+<div class="card" style="background:linear-gradient(135deg,#e0e7ff 0%,rgba(224,231,255,0.7) 100%);padding:12px;margin-bottom:12px;">
+<h3 style="color:#4f46e5;font-weight:700;font-size:0.9rem;margin:0 0 8px 0;">🏥 Health Tracker History</h3>
+<div id="healthTrackerHistory" style="font-size:0.85rem;"></div>
 </div>
 
+<!-- Food, Workout & Dreams History - Compact Side by Side -->
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:12px;">
+
 <!-- Food Log History -->
-<div class="card" style="background:linear-gradient(135deg,#fed7aa 0%,rgba(254,215,170,0.7) 100%);">
-<h2 class="card-title" style="color:#ea580c;">🍽️ Food Log History</h2>
-<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-<span style="font-size:0.85rem;color:#6b7280;">Today's meals and nutrition</span>
-<button onclick="toggleCollapse(this)" class="btn btn-sm" style="background:#ea580c;color:white;padding:4px 12px;font-size:0.75rem;">Show</button>
+<div class="card" style="background:linear-gradient(135deg,#fed7aa 0%,rgba(254,215,170,0.7) 100%);padding:10px;">
+<h4 style="color:#ea580c;font-size:0.85rem;font-weight:700;margin:0 0 6px 0;">🍽️ Food</h4>
+<div style="display:flex;align-items:center;justify-content:space-between;">
+<span style="font-size:0.7rem;color:#6b7280;">Last 7 days</span>
+<button onclick="toggleHistorySection('foodLogHistoryContainer', this)" class="btn btn-sm" style="background:#ea580c;color:white;padding:2px 8px;font-size:0.65rem;">Show</button>
 </div>
-<div id="foodLogHistoryContainer" style="display:none;max-height:300px;overflow-y:auto;"></div>
+<div id="foodLogHistoryContainer" style="display:none;max-height:150px;overflow-y:auto;margin-top:6px;font-size:0.8rem;"></div>
 </div>
 
 <!-- Workout Log History -->
-<div class="card" style="background:linear-gradient(135deg,#fca5a5 0%,rgba(252,165,165,0.7) 100%);">
-<h2 class="card-title" style="color:#dc2626;">💪 Workout Log History</h2>
-<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-<span style="font-size:0.85rem;color:#6b7280;">Today's workouts and exercises</span>
-<button onclick="toggleCollapse(this)" class="btn btn-sm" style="background:#dc2626;color:white;padding:4px 12px;font-size:0.75rem;">Show</button>
+<div class="card" style="background:linear-gradient(135deg,#fca5a5 0%,rgba(252,165,165,0.7) 100%);padding:10px;">
+<h4 style="color:#dc2626;font-size:0.85rem;font-weight:700;margin:0 0 6px 0;">💪 Workout</h4>
+<div style="display:flex;align-items:center;justify-content:space-between;">
+<span style="font-size:0.7rem;color:#6b7280;">Last 7 days</span>
+<button onclick="toggleHistorySection('workoutLogHistoryContainer', this)" class="btn btn-sm" style="background:#dc2626;color:white;padding:2px 8px;font-size:0.65rem;">Show</button>
 </div>
-<div id="workoutLogHistoryContainer" style="display:none;max-height:300px;overflow-y:auto;"></div>
+<div id="workoutLogHistoryContainer" style="display:none;max-height:150px;overflow-y:auto;margin-top:6px;font-size:0.8rem;"></div>
 </div>
 
 <!-- Dreams Log History -->
-<div class="card" style="background:linear-gradient(135deg,#cffafe 0%,rgba(207,250,254,0.7) 100%);">
-<h2 class="card-title" style="color:#0891b2;">💭 Dreams Log History</h2>
-<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-<span style="font-size:0.85rem;color:#6b7280;">Your dreams and insights</span>
-<button onclick="toggleCollapse(this)" class="btn btn-sm" style="background:#0891b2;color:white;padding:4px 12px;font-size:0.75rem;">Show</button>
+<div class="card" style="background:linear-gradient(135deg,#cffafe 0%,rgba(207,250,254,0.7) 100%);padding:10px;">
+<h4 style="color:#0891b2;font-size:0.85rem;font-weight:700;margin:0 0 6px 0;">💭 Dreams</h4>
+<div style="display:flex;align-items:center;justify-content:space-between;">
+<span style="font-size:0.7rem;color:#6b7280;">Last 7 days</span>
+<button onclick="toggleHistorySection('dreamLogHistoryContainer', this)" class="btn btn-sm" style="background:#0891b2;color:white;padding:2px 8px;font-size:0.65rem;">Show</button>
 </div>
-<div id="dreamLogHistoryContainer" style="display:none;max-height:300px;overflow-y:auto;"></div>
+<div id="dreamLogHistoryContainer" style="display:none;max-height:150px;overflow-y:auto;margin-top:6px;font-size:0.8rem;"></div>
 </div>
 
+</div>
+<!-- End Food/Workout/Dreams Grid -->
+
 <!-- All Notes -->
-<div class="card" style="background:linear-gradient(135deg,#fce7f3 0%,rgba(252,231,243,0.7) 100%);">
-<h2 class="card-title" style="color:#ec4899;">📝 All Your Notes</h2>
-<div id="allNotes" style="max-height:400px;overflow-y:auto;padding:8px;border-radius:8px;background:rgba(255,255,255,0.5);"></div>
+<div class="card" style="background:linear-gradient(135deg,#fce7f3 0%,rgba(252,231,243,0.7) 100%);padding:12px;margin-bottom:12px;">
+<h3 style="color:#ec4899;font-weight:700;font-size:0.9rem;margin:0 0 8px 0;">📝 All Your Notes</h3>
+<div id="allNotes" style="max-height:250px;overflow-y:auto;padding:6px;border-radius:6px;background:rgba(255,255,255,0.5);font-size:0.85rem;"></div>
 </div>
 
 <!-- Ratings Overview -->
-<div class="card" style="background:linear-gradient(135deg,var(--pastel-yellow) 0%,rgba(255,249,214,0.7) 100%);">
-<h2 class="card-title" style="color:#eab308;">⭐ Life Ratings Overview</h2>
-<div id="ratingsOverview"></div>
+<div class="card" style="background:linear-gradient(135deg,var(--pastel-yellow) 0%,rgba(255,249,214,0.7) 100%);padding:12px;margin-bottom:12px;">
+<h3 style="color:#eab308;font-weight:700;font-size:0.9rem;margin:0 0 8px 0;">⭐ Life Ratings Overview</h3>
+<div id="ratingsOverview" style="font-size:0.85rem;"></div>
 </div>
 </div>
 
-<!-- Travel Category -->
-<div id="travelCategory" class="category-content" style="display:none;">
-
-<!-- Travel Stats -->
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px;">
-<div class="card" style="background:linear-gradient(135deg,#dbeafe,#bfdbfe);padding:20px;text-align:center;">
-<div style="font-size:2.5rem;font-weight:800;color:#1e40af;" id="totalCitiesCount">0</div>
-<div style="color:#1e3a8a;font-weight:600;margin-top:8px;">Cities Visited</div>
-</div>
-<div class="card" style="background:linear-gradient(135deg,#fce7f3,#fbcfe8);padding:20px;text-align:center;">
-<div style="font-size:2.5rem;font-weight:800;color:#be185d;" id="totalStatesCount">0</div>
-<div style="color:#831843;font-weight:600;margin-top:8px;">States Visited</div>
-</div>
-<div class="card" style="background:linear-gradient(135deg,#cffafe,#a5f3fc);padding:20px;text-align:center;">
-<div style="font-size:2.5rem;font-weight:800;color:#0369a1;" id="totalCountriesCount">0</div>
-<div style="color:#164e63;font-weight:600;margin-top:8px;">Countries</div>
-</div>
-</div>
-
-<!-- Add Location Form -->
-<div class="card" style="background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border:2px solid #0284c7;padding:20px;margin-bottom:12px;">
-<h2 class="card-title" style="color:#0284c7;font-size:1.1rem;">✈️ Add a Location</h2>
-<div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
-<input type="text" id="locationInput" placeholder="City..." style="flex:1;min-width:120px;padding:14px;border:2px solid #7dd3fc;border-radius:8px;font-size:1rem;transition:all 0.3s ease;box-shadow:0 2px 4px rgba(2,132,199,0.05);" onfocus="this.style.boxShadow='0 0 0 3px rgba(2,132,199,0.1)';this.style.borderColor='#0284c7'" onblur="this.style.boxShadow='0 2px 4px rgba(2,132,199,0.05)';this.style.borderColor='#7dd3fc'"/>
-<input type="text" id="stateInput" placeholder="State..." style="flex:1;min-width:120px;padding:14px;border:2px solid #7dd3fc;border-radius:8px;font-size:1rem;transition:all 0.3s ease;box-shadow:0 2px 4px rgba(2,132,199,0.05);" onfocus="this.style.boxShadow='0 0 0 3px rgba(2,132,199,0.1)';this.style.borderColor='#0284c7'" onblur="this.style.boxShadow='0 2px 4px rgba(2,132,199,0.05)';this.style.borderColor='#7dd3fc'"/>
-<input type="text" id="countryInput" placeholder="Country..." style="flex:1;min-width:120px;padding:14px;border:2px solid #7dd3fc;border-radius:8px;font-size:1rem;transition:all 0.3s ease;box-shadow:0 2px 4px rgba(2,132,199,0.05);" onfocus="this.style.boxShadow='0 0 0 3px rgba(2,132,199,0.1)';this.style.borderColor='#0284c7'" onblur="this.style.boxShadow='0 2px 4px rgba(2,132,199,0.05)';this.style.borderColor='#7dd3fc'"/>
-<button id="addLocationBtn" class="btn" style="background:linear-gradient(135deg,#0284c7,#0369a1);color:white;border:none;padding:14px 24px;font-weight:600;border-radius:8px;white-space:nowrap;transition:all 0.2s ease;box-shadow:0 4px 12px rgba(2,132,199,0.2);" onmouseenter="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(2,132,199,0.3)'" onmouseleave="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 12px rgba(2,132,199,0.2)'">Add</button>
-</div>
-<span id="addLocationStatus" style="display:inline-block;margin-top:12px;color:#0284c7;font-weight:600;font-size:0.95rem;animation:fadeInScale 0.3s ease;"></span>
-</div>
-
-<!-- Locations List - Long list support -->
-<div class="card" style="background:linear-gradient(135deg,rgba(240,249,255,0.95),rgba(224,242,254,0.95));border:2px solid #bfdbfe;padding:16px;margin-bottom:12px;">
-<h3 style="color:#1e40af;font-weight:700;margin:0 0 12px 0;font-size:1rem;display:flex;align-items:center;justify-content:space-between;">
-<span>📍 Your Locations <span id="citiesCountLabel" style="font-size:0.85rem;color:#6b7280;font-weight:500;"></span></span>
-</h3>
-<div id="citiesList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:12px;max-height:600px;overflow-y:auto;padding-right:8px;">
-<div style="grid-column:1/-1;text-align:center;padding:32px 12px;color:#6b7280;font-size:0.95rem;">
-<p>No locations added yet. Add your first location above!</p>
-</div>
-</div>
-</div>
-
-</div>
-
-</div>
 <script>
 function escapeHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');}
 function getTodayString(){
@@ -1950,7 +2017,8 @@ const STORAGE_KEYS = [
   'dailyTodo', 'getItDone', 'dailySpending', 'daysCried', 'itemsLost',
   'waterIntake', 'timeTracker', 'photos', 'photoAlbum', 'selectedTheme', 'pendingProjects', 
   'dailyMemories', 'creditCards', 'activityLog', 'categoryData', 'sleepData', 
-  'painData', 'clarityData', 'waterIntakeNew', 'customCards'
+  'painData', 'clarityData', 'waterIntakeNew', 'customCards',
+  'foodLog', 'workoutLog', 'dreamLog', 'travelLocations'
 ];
 
 // Save data to Firebase
@@ -3281,7 +3349,7 @@ const status=document.getElementById('foodStatus');
 const storageKey='foodLog';
 
 function getFoodLog(){return JSON.parse(localStorage.getItem(storageKey)||'{}');}
-function saveFoodLog(data){localStorage.setItem(storageKey,JSON.stringify(data));}
+function saveFoodLog(data){localStorage.setItem(storageKey,JSON.stringify(data));saveToFirebase(storageKey,data);}
 
 function showStatus(msg){
 status.textContent=msg;
@@ -3289,6 +3357,7 @@ status.style.display='block';
 setTimeout(()=>{status.style.display='none';},2000);
 }
 
+if(saveBtn){
 saveBtn.addEventListener('click',()=>{
 const text=input.value.trim();
 if(!text){showStatus('Please enter what you ate');return;}
@@ -3300,7 +3369,10 @@ saveFoodLog(log);
 input.value='';
 showStatus('✓ Food logged!');
 });
-input.addEventListener('keypress',(e)=>{if(e.key==='Enter'){saveBtn.click();}});
+}
+if(input){
+input.addEventListener('keypress',(e)=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();saveBtn.click();}});
+}
 })();
 
 // Workout Tracker Handler
@@ -3311,7 +3383,7 @@ const status=document.getElementById('workoutStatus');
 const storageKey='workoutLog';
 
 function getWorkoutLog(){return JSON.parse(localStorage.getItem(storageKey)||'{}');}
-function saveWorkoutLog(data){localStorage.setItem(storageKey,JSON.stringify(data));}
+function saveWorkoutLog(data){localStorage.setItem(storageKey,JSON.stringify(data));saveToFirebase(storageKey,data);}
 
 function showStatus(msg){
 status.textContent=msg;
@@ -3319,6 +3391,7 @@ status.style.display='block';
 setTimeout(()=>{status.style.display='none';},2000);
 }
 
+if(saveBtn){
 saveBtn.addEventListener('click',()=>{
 const text=input.value.trim();
 if(!text){showStatus('Please enter your workout details');return;}
@@ -3330,7 +3403,10 @@ saveWorkoutLog(log);
 input.value='';
 showStatus('✓ Workout logged!');
 });
-input.addEventListener('keypress',(e)=>{if(e.key==='Enter'){saveBtn.click();}});
+}
+if(input){
+input.addEventListener('keypress',(e)=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();saveBtn.click();}});
+}
 })();
 
 // Dreams Handler
@@ -3342,7 +3418,7 @@ const listContainer=document.getElementById('dreamList');
 const storageKey='dreamLog';
 
 function getDreamLog(){return JSON.parse(localStorage.getItem(storageKey)||'{}');}
-function saveDreamLog(data){localStorage.setItem(storageKey,JSON.stringify(data));}
+function saveDreamLog(data){localStorage.setItem(storageKey,JSON.stringify(data));saveToFirebase(storageKey,data);}
 
 function showStatus(msg){
 status.textContent=msg;
@@ -3351,6 +3427,7 @@ setTimeout(()=>{status.style.display='none';},2000);
 }
 
 function render(){
+if(!listContainer)return;
 const today=getTodayString();
 const log=getDreamLog();
 const todayDreams=log[today]||[];
@@ -3372,6 +3449,7 @@ listContainer.appendChild(div);
 });
 }
 
+if(saveBtn){
 saveBtn.addEventListener('click',()=>{
 const text=input.value.trim();
 if(!text){showStatus('Please enter your dream');return;}
@@ -3384,9 +3462,73 @@ input.value='';
 showStatus('✓ Dream logged!');
 render();
 });
-input.addEventListener('keypress',(e)=>{if(e.key==='Enter'){saveBtn.click();}});
+}
+if(input){
+input.addEventListener('keypress',(e)=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();saveBtn.click();}});
+}
 render();
 })();
+
+// Toggle History Section function
+function toggleHistorySection(containerId, btn) {
+const container = document.getElementById(containerId);
+if (!container) return;
+if (container.style.display === 'none') {
+container.style.display = 'block';
+btn.textContent = 'Hide';
+// Populate the history
+populateHistorySection(containerId);
+} else {
+container.style.display = 'none';
+btn.textContent = 'Show';
+}
+}
+
+// Populate history sections with last 7 days of data
+function populateHistorySection(containerId) {
+const container = document.getElementById(containerId);
+if (!container) return;
+
+let storageKey = '';
+let emoji = '';
+if (containerId === 'foodLogHistoryContainer') {
+storageKey = 'foodLog';
+emoji = '🍽️';
+} else if (containerId === 'workoutLogHistoryContainer') {
+storageKey = 'workoutLog';
+emoji = '💪';
+} else if (containerId === 'dreamLogHistoryContainer') {
+storageKey = 'dreamLog';
+emoji = '💭';
+}
+
+const log = JSON.parse(localStorage.getItem(storageKey) || '{}');
+const dates = [];
+for (let i = 0; i < 7; i++) {
+const d = new Date();
+d.setDate(d.getDate() - i);
+d.setHours(12, 0, 0, 0);
+dates.push(d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'));
+}
+
+let html = '';
+dates.forEach(date => {
+const entries = log[date] || [];
+if (entries.length > 0) {
+const displayDate = new Date(date + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+html += `<div style="margin-bottom:12px;padding:10px;background:rgba(255,255,255,0.7);border-radius:8px;">
+<div style="font-weight:600;color:#374151;margin-bottom:8px;font-size:0.85rem;">${displayDate}</div>`;
+entries.forEach(entry => {
+html += `<div style="padding:6px 0;border-bottom:1px solid rgba(0,0,0,0.05);font-size:0.85rem;color:#6b7280;">
+${emoji} ${escapeHtml(entry.text)} <span style="color:#9ca3af;font-size:0.75rem;">${entry.time || ''}</span>
+</div>`;
+});
+html += `</div>`;
+}
+});
+
+container.innerHTML = html || '<p style="color:#9ca3af;text-align:center;padding:20px;">No entries in the last 7 days</p>';
+}
 
 // Collapsible List Handler
 function setupCollapsibleList(listId,btnId){
@@ -4605,9 +4747,6 @@ sleepData:JSON.parse(localStorage.getItem('sleepData')||'{}'),
 painData:JSON.parse(localStorage.getItem('painData')||'{}'),
 clarityData:JSON.parse(localStorage.getItem('clarityData')||'{}'),
 waterIntakeNew:JSON.parse(localStorage.getItem('waterIntakeNew')||'{}'),
-foodLog:JSON.parse(localStorage.getItem('foodLog')||'{}'),
-workoutLog:JSON.parse(localStorage.getItem('workoutLog')||'{}'),
-dreamLog:JSON.parse(localStorage.getItem('dreamLog')||'{}'),
 daysCried:JSON.parse(localStorage.getItem('daysCried')||'{}'),
 itemsLost:JSON.parse(localStorage.getItem('itemsLost')||'{}'),
 dailySpending:JSON.parse(localStorage.getItem('dailySpending')||'{}'),
@@ -4631,7 +4770,7 @@ a.download=`learn-thyself-backup-${new Date().toISOString().split('T')[0]}.json`
 a.click();
 URL.revokeObjectURL(url);
 toggleSettingsMenu();
-alert('✅ Data exported successfully!\n\n📊 Data included (29 categories):\n• Mood & Energy tracking\n• Activities & completions\n• Time tracking\n• Ratings & Spending\n• Health data (Sleep, Pain, Clarity, Water, Food, Workout)\n• Dreams & Memories\n• Travels & Photos\n• All custom settings');
+alert('✅ Data exported successfully!\n\n📊 Data included:\n• Mood & Energy tracking\n• Activities & completions\n• Time tracking\n• Ratings & Spending\n• Health data (Sleep, Pain, Clarity, Water)\n• Memories, Travels & Photos\n• All custom settings');
 }
 
 // Import Data
@@ -4656,9 +4795,6 @@ localStorage.setItem('sleepData',JSON.stringify(data.sleepData||{}));
 localStorage.setItem('painData',JSON.stringify(data.painData||{}));
 localStorage.setItem('clarityData',JSON.stringify(data.clarityData||{}));
 localStorage.setItem('waterIntakeNew',JSON.stringify(data.waterIntakeNew||{}));
-localStorage.setItem('foodLog',JSON.stringify(data.foodLog||{}));
-localStorage.setItem('workoutLog',JSON.stringify(data.workoutLog||{}));
-localStorage.setItem('dreamLog',JSON.stringify(data.dreamLog||{}));
 localStorage.setItem('daysCried',JSON.stringify(data.daysCried||{}));
 localStorage.setItem('itemsLost',JSON.stringify(data.itemsLost||{}));
 localStorage.setItem('dailySpending',JSON.stringify(data.dailySpending||{}));
@@ -4986,6 +5122,7 @@ function addLocation() {
   const location = document.getElementById('locationInput').value.trim();
   const state = document.getElementById('stateInput').value.trim();
   const country = document.getElementById('countryInput').value.trim();
+  const notes = document.getElementById('locationNotesInput') ? document.getElementById('locationNotesInput').value.trim() : '';
   const statusSpan = document.getElementById('addLocationStatus');
 
   if (!location) {
@@ -5000,18 +5137,20 @@ function addLocation() {
     // Get existing cities
     const cities = JSON.parse(localStorage.getItem('travels') || '[]');
     
-    // Create new city object
+    // Create new city object with notes
     const newCity = {
       id: Date.now(), // Use timestamp as unique ID
       city_name: location,
       state: state || 'Unknown',
       country: country || 'Unknown',
+      notes: notes || '',
       added_date: new Date().toISOString().split('T')[0]
     };
     
     // Add to array and save
     cities.push(newCity);
     localStorage.setItem('travels', JSON.stringify(cities));
+    saveToFirebase('travels', cities);
 
     statusSpan.textContent = `✅ Added!`;
     setTimeout(() => {
@@ -5019,6 +5158,7 @@ function addLocation() {
         document.getElementById('locationInput').value = '';
         document.getElementById('stateInput').value = '';
         document.getElementById('countryInput').value = '';
+        if (document.getElementById('locationNotesInput')) document.getElementById('locationNotesInput').value = '';
         loadTravels();
     }, 1200);
   } catch (error) {
@@ -5063,6 +5203,7 @@ function displayCities(cities) {
           ${city.state && city.state !== 'Unknown' ? `<p style="color:#164e63;font-size:0.8rem;margin:0;font-weight:500;">${escapeHtml(city.state)}</p>` : ''}
           ${city.country && city.country !== 'Unknown' ? `<p style="color:#164e63;font-size:0.8rem;margin:0;">${escapeHtml(city.country)}</p>` : ''}
         </div>
+        ${city.notes ? `<p style="color:#6b7280;font-size:0.75rem;margin:4px 0 0 0;font-style:italic;word-break:break-word;line-height:1.4;background:rgba(255,255,255,0.5);padding:6px 8px;border-radius:6px;border-left:3px solid #06b6d4;">📝 ${escapeHtml(city.notes)}</p>` : ''}
       </div>
       <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:6px;">
         <p style="color:#67e8f9;font-size:0.7rem;margin:0;flex:1;">Added ${formatAddedDate(city.added_date)}</p>
@@ -5620,72 +5761,11 @@ window.addEventListener('beforeunload', function() {
   }
 });
 
-// Render Food, Workout, Dreams history on page load
-function renderNewLogsHistory(){
-const today=getTodayString();
-
-// Food Log
-const foodLog=JSON.parse(localStorage.getItem('foodLog')||'{}');
-const foodContainer=document.getElementById('foodLogHistoryContainer');
-if(foodLog[today] && foodLog[today].length>0){
-foodContainer.innerHTML='';
-foodLog[today].forEach(entry=>{
-const div=document.createElement('div');
-div.style.cssText='padding:10px;background:white;border-radius:6px;border-left:3px solid #ea580c;margin-bottom:8px;';
-div.innerHTML=`<div style="display:flex;justify-content:space-between;"><span style="color:#374151;font-size:0.9rem;">${escapeHtml(entry.text)}</span><span style="color:#9ca3af;font-size:0.75rem;">${entry.time}</span></div>`;
-foodContainer.appendChild(div);
-});
-}else{
-foodContainer.innerHTML='<div style="padding:12px;text-align:center;color:#9ca3af;font-size:0.85rem;">No food logged today yet</div>';
-}
-
-// Workout Log
-const workoutLog=JSON.parse(localStorage.getItem('workoutLog')||'{}');
-const workoutContainer=document.getElementById('workoutLogHistoryContainer');
-if(workoutLog[today] && workoutLog[today].length>0){
-workoutContainer.innerHTML='';
-workoutLog[today].forEach(entry=>{
-const div=document.createElement('div');
-div.style.cssText='padding:10px;background:white;border-radius:6px;border-left:3px solid #dc2626;margin-bottom:8px;';
-div.innerHTML=`<div style="display:flex;justify-content:space-between;"><span style="color:#374151;font-size:0.9rem;">${escapeHtml(entry.text)}</span><span style="color:#9ca3af;font-size:0.75rem;">${entry.time}</span></div>`;
-workoutContainer.appendChild(div);
-});
-}else{
-workoutContainer.innerHTML='<div style="padding:12px;text-align:center;color:#9ca3af;font-size:0.85rem;">No workouts logged today yet</div>';
-}
-
-// Dreams Log
-const dreamLog=JSON.parse(localStorage.getItem('dreamLog')||'{}');
-const dreamContainer=document.getElementById('dreamLogHistoryContainer');
-if(dreamLog[today] && dreamLog[today].length>0){
-dreamContainer.innerHTML='';
-dreamLog[today].forEach(entry=>{
-const div=document.createElement('div');
-div.style.cssText='padding:10px;background:white;border-radius:6px;border-left:3px solid #0891b2;margin-bottom:8px;';
-div.innerHTML=`<div style="display:flex;justify-content:space-between;"><span style="color:#374151;font-size:0.9rem;">${escapeHtml(entry.text)}</span><span style="color:#9ca3af;font-size:0.75rem;">${entry.time}</span></div>`;
-dreamContainer.appendChild(div);
-});
-}else{
-dreamContainer.innerHTML='<div style="padding:12px;text-align:center;color:#9ca3af;font-size:0.85rem;">No dreams logged today yet</div>';
-}
-}
-
-// Toggle collapse/expand
-function toggleCollapse(btn){
-const container=btn.parentElement.nextElementSibling;
-if(container.style.display==='none'){
-container.style.display='block';
-btn.textContent='Hide';
-renderNewLogsHistory();
-}else{
-container.style.display='none';
-btn.textContent='Show';
-}
-}
-
-// Initialize logs history on page load
-document.addEventListener('DOMContentLoaded',()=>{
-renderNewLogsHistory();
+// Initialize travels on page load
+document.addEventListener('DOMContentLoaded', () => {
+  if (document.getElementById('travelsView')) {
+    setupTravelsEventListeners();
+  }
 });
 
 </script>
