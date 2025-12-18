@@ -147,8 +147,10 @@
       const STORAGE_KEYS = [
         'dailyMoodEnergy', 'activities', 'dailyRatings', 'activityCompletions',
         'dailyTodo', 'getItDone', 'dailySpending', 'daysCried', 'itemsLost',
-        'waterIntake', 'timeTracked', 'photos', 'selectedTheme', 'activityLog',
-        'headerPhotos', 'currentHeaderPhoto', 'foodLog', 'workoutLog', 'dreamLog'
+        'waterIntake', 'waterIntakeNew', 'timeTracked', 'timeTracker', 'photos', 'photoAlbum',
+        'selectedTheme', 'darkMode', 'activityLog', 'headerPhotos', 'currentHeaderPhoto',
+        'foodLog', 'workoutLog', 'dreamLog', 'sleepData', 'painData', 'clarityData',
+        'creditCards', 'travels', 'customCards', 'dailyMemories', 'categoryData', 'allNotes'
       ];
       
       for (const key of STORAGE_KEYS) {
@@ -180,8 +182,10 @@
       const STORAGE_KEYS = [
         'dailyMoodEnergy', 'activities', 'dailyRatings', 'activityCompletions',
         'dailyTodo', 'getItDone', 'dailySpending', 'daysCried', 'itemsLost',
-        'waterIntake', 'timeTracked', 'photos', 'selectedTheme', 'activityLog',
-        'headerPhotos', 'currentHeaderPhoto', 'foodLog', 'workoutLog', 'dreamLog'
+        'waterIntake', 'waterIntakeNew', 'timeTracked', 'timeTracker', 'photos', 'photoAlbum',
+        'selectedTheme', 'darkMode', 'activityLog', 'headerPhotos', 'currentHeaderPhoto',
+        'foodLog', 'workoutLog', 'dreamLog', 'sleepData', 'painData', 'clarityData',
+        'creditCards', 'travels', 'customCards', 'dailyMemories', 'categoryData', 'allNotes'
       ];
       
       let downloaded = 0;
@@ -393,37 +397,44 @@ body.dark-mode .todo-item{background:#1e1b29;color:#f9fafb;border-left-color:#fb
 body.dark-mode .status-badge{background:#065f46;color:#6ee7b7;}
 body.dark-mode .history-stat{background:rgba(75,60,100,0.9);color:#f9fafb;border-color:#a78bfa;}
 body.dark-mode .history-stat-value{color:#fde047;}
-body.dark-mode .history-stat-label{color:#e5e7eb;}
-body.dark-mode .btn{color:#1e1929;}
+body.dark-mode .history-stat-label{color:#ffffff;}
+body.dark-mode .btn{color:#ffffff;background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);}
 body.dark-mode .photo-tile{border:2px solid #a78bfa;}
 body.dark-mode label{color:#f9fafb !important;}
-body.dark-mode #moodLabel,body.dark-mode #energyLabel{color:#e5e7eb !important;}
-body.dark-mode .page-subtitle{color:#f9fafb !important;}
-body.dark-mode .tab-btn{color:#d1d5db;}
+body.dark-mode #moodLabel,body.dark-mode #energyLabel{color:#ffffff !important;}
+body.dark-mode .page-subtitle{color:#ffffff !important;}
+body.dark-mode .tab-btn{color:#ffffff;}
 body.dark-mode .tab-btn.active{color:#fde047;border-bottom-color:#fde047;}
-body.dark-mode .tab-btn:hover{color:#fbbf24;}
+body.dark-mode .tab-btn:hover{color:#fcd34d;}
 body.dark-mode input[type="checkbox"]{accent-color:#fbbf24;}
-body.dark-mode li{color:#f9fafb;}
-body.dark-mode div[style*="color:#6b7280"]{color:#e5e7eb !important;}
+body.dark-mode li{color:#ffffff;}
+body.dark-mode div[style*="color:#6b7280"]{color:#ffffff !important;}
 /* Enhanced dark mode contrast for all text elements */
-body.dark-mode p{color:#f9fafb !important;}
-body.dark-mode span{color:#e5e7eb;}
-body.dark-mode h1,body.dark-mode h2,body.dark-mode h3,body.dark-mode h4{color:#f9fafb !important;}
-body.dark-mode .card{color:#f9fafb;}
-body.dark-mode .card p{color:#d1d5db !important;}
-body.dark-mode .card span{color:#e5e7eb;}
-body.dark-mode .card div{color:#e5e7eb;}
-body.dark-mode select{background:#1e1b29;color:#f9fafb;border-color:#a78bfa;}
-body.dark-mode input[type="number"],body.dark-mode input[type="date"]{background:#1e1b29;color:#f9fafb;border-color:#a78bfa;}
-body.dark-mode .tracker-item{background:rgba(75,60,100,0.7);color:#f9fafb;}
-body.dark-mode .tracker-item span{color:#f9fafb !important;}
-body.dark-mode [style*="color:#374151"]{color:#f9fafb !important;}
-body.dark-mode [style*="color:#78350f"]{color:#fcd34d !important;}
-body.dark-mode [style*="color:#92400e"]{color:#fbbf24 !important;}
-body.dark-mode [style*="color:#9ca3af"]{color:#d1d5db !important;}
+body.dark-mode p{color:#ffffff !important;}
+body.dark-mode span{color:#ffffff;}
+body.dark-mode h1,body.dark-mode h2,body.dark-mode h3,body.dark-mode h4{color:#ffffff !important;}
+body.dark-mode .card{color:#ffffff;}
+body.dark-mode .card p{color:#ffffff !important;}
+body.dark-mode .card span{color:#ffffff;}
+body.dark-mode .card div{color:#ffffff;}
+body.dark-mode select{background:#1e1b29;color:#ffffff;border-color:#a78bfa;}
+body.dark-mode input[type="number"],body.dark-mode input[type="date"]{background:#1e1b29;color:#ffffff;border-color:#a78bfa;}
+body.dark-mode .tracker-item{background:rgba(75,60,100,0.7);color:#ffffff;}
+body.dark-mode .tracker-item span{color:#ffffff !important;}
+body.dark-mode [style*="color:#374151"]{color:#ffffff !important;}
+body.dark-mode [style*="color:#78350f"]{color:#fde047 !important;}
+body.dark-mode [style*="color:#92400e"]{color:#fcd34d !important;}
+body.dark-mode [style*="color:#9ca3af"]{color:#ffffff !important;}
+body.dark-mode [style*="color:#6b7280"]{color:#ffffff !important;}
 /* Additional dark mode contrast fixes */
-body.dark-mode .category-tab{background:rgba(75,60,100,0.8) !important;color:#f9fafb !important;border-color:#a78bfa !important;}
-body.dark-mode .category-tab.active{background:linear-gradient(135deg,#7c3aed,#6d28d9) !important;color:#fde047 !important;}
+body.dark-mode .category-tab{background:linear-gradient(135deg,#2d2640,#1e1b29) !important;color:#ffffff !important;border-color:#a78bfa !important;}
+body.dark-mode .category-tab:hover{background:linear-gradient(135deg,#3d3650,#2e2b39) !important;border-color:#c4b5fd !important;}
+body.dark-mode .category-tab.active{background:linear-gradient(135deg,#7c3aed,#9333ea) !important;color:#ffffff !important;border-color:#c4b5fd !important;box-shadow:0 4px 20px rgba(139,92,246,0.5) !important;}
+body.dark-mode .category-tab svg{stroke:#ffffff !important;filter:drop-shadow(0 2px 4px rgba(139,92,246,0.4)) !important;}
+body.dark-mode .category-tab span{color:#ffffff !important;}
+body.dark-mode .category-tab div{background:transparent !important;}
+/* Category navigation container in dark mode */
+body.dark-mode [style*="background:linear-gradient(135deg,rgba(255,255,255"]{background:linear-gradient(135deg,rgba(30,27,41,0.98),rgba(45,40,60,0.95)) !important;}
 body.dark-mode .category-content .card{background:rgba(45,40,60,0.95) !important;}
 body.dark-mode [style*="background:linear-gradient"]{background:rgba(55,45,75,0.9) !important;}
 body.dark-mode [style*="background-color"]{background-color:rgba(55,45,75,0.9) !important;}
@@ -446,19 +457,142 @@ body.dark-mode [style*="color:#164e63"]{color:#67e8f9 !important;}
 body.dark-mode [style*="color:#6b21a8"]{color:#d8b4fe !important;}
 body.dark-mode [style*="color:#d97706"]{color:#fbbf24 !important;}
 body.dark-mode [style*="color:#10b981"]{color:#6ee7b7 !important;}
-body.dark-mode .btn-sm{color:#1e1929 !important;}
+body.dark-mode .btn-sm{color:#ffffff !important;}
 body.dark-mode .history-stat{background:rgba(75,60,100,0.95) !important;border:1px solid #a78bfa !important;}
-body.dark-mode #compactInsights div{background:rgba(45,40,60,0.95) !important;color:#e5e7eb !important;}
-body.dark-mode #compactInsights span{color:#e5e7eb !important;}
-body.dark-mode #foodLogHistoryContainer,body.dark-mode #workoutLogHistoryContainer,body.dark-mode #dreamLogHistoryContainer{background:rgba(30,27,41,0.9) !important;color:#f9fafb !important;}
-body.dark-mode #allNotes{background:rgba(30,27,41,0.7) !important;color:#f9fafb !important;}
-body.dark-mode #healthTrackerHistory,body.dark-mode #currentStreaks,body.dark-mode #moodEnergyInsights,body.dark-mode #ratingsOverview{color:#f9fafb !important;}
+body.dark-mode .history-stat-value{color:#fde047 !important;}
+body.dark-mode .history-stat-label{color:#ffffff !important;}
+body.dark-mode #compactInsights div{background:rgba(45,40,60,0.95) !important;color:#ffffff !important;}
+body.dark-mode #compactInsights span{color:#ffffff !important;}
+body.dark-mode #foodLogHistoryContainer,body.dark-mode #workoutLogHistoryContainer,body.dark-mode #dreamLogHistoryContainer{background:rgba(30,27,41,0.9) !important;color:#ffffff !important;}
+body.dark-mode #allNotes{background:rgba(30,27,41,0.9) !important;color:#ffffff !important;}
+body.dark-mode #allNotes > div{background:rgba(45,40,60,0.95) !important;border-color:rgba(236,72,153,0.3) !important;}
+body.dark-mode #allNotes [style*="background:white"]{background:rgba(45,40,60,0.95) !important;}
+body.dark-mode #allNotes [style*="color:#374151"]{color:#ffffff !important;}
+body.dark-mode #allNotes [style*="color:#6b7280"]{color:#d1d5db !important;}
+body.dark-mode #allNotes span{color:#d1d5db !important;}
+body.dark-mode #allNotes [style*="color:#ec4899"]{color:#f472b6 !important;}
+body.dark-mode #allNotes [style*="color:#eab308"]{color:#fde047 !important;}
+body.dark-mode #allNotes [style*="color:#4f46e5"]{color:#a78bfa !important;}
+body.dark-mode #healthTrackerHistory,body.dark-mode #currentStreaks,body.dark-mode #moodEnergyInsights,body.dark-mode #ratingsOverview{color:#ffffff !important;}
+/* Make all text visible in dark mode */
+body.dark-mode *{color:inherit;}
+body.dark-mode .rating-row span,body.dark-mode .rating-row{color:#ffffff !important;}
+/* Cards with light backgrounds need dark mode override */
+body.dark-mode .card-done,body.dark-mode .card-todo,body.dark-mode .card-spending,body.dark-mode .card-cried,body.dark-mode .card-lost,body.dark-mode .card-mood,body.dark-mode .card-activities,body.dark-mode .card-photos,body.dark-mode .card-progress,body.dark-mode .card-time,body.dark-mode .card-ratings{background:rgba(45,40,60,0.95) !important;}
+body.dark-mode .card-done .card-title,body.dark-mode .card-todo .card-title,body.dark-mode .card-spending .card-title,body.dark-mode .card-cried .card-title,body.dark-mode .card-lost .card-title{color:#fde047 !important;}
+body.dark-mode .todo-list li,body.dark-mode .todo-item,body.dark-mode #doneList li,body.dark-mode #projectsContainer,body.dark-mode #projectsContainer *{color:#ffffff !important;}
+body.dark-mode #projectsContainer{background:transparent !important;}
+body.dark-mode #projectsContainer > div{background:rgba(75,60,100,0.6) !important;border:1px solid rgba(167,139,250,0.3) !important;border-radius:8px;padding:12px;}
+body.dark-mode #projectsContainer p,body.dark-mode #projectsContainer span,body.dark-mode #projectsContainer label{color:#ffffff !important;}
+/* Override ALL inline gradient backgrounds in dark mode */
+body.dark-mode .card[style*="background:linear-gradient"]{background:rgba(45,40,60,0.95) !important;}
+body.dark-mode .card[style*="background:linear-gradient"] .card-title{color:#fde047 !important;}
+body.dark-mode .card[style*="background:linear-gradient"] p{color:#ffffff !important;}
+body.dark-mode .card[style*="background:linear-gradient"] span{color:#ffffff !important;}
+body.dark-mode #doneList .todo-item{background:rgba(75,60,100,0.6) !important;border-left-color:#a78bfa !important;}
+/* Dark mode for Travel section */
+body.dark-mode #travelCategory .card{background:rgba(45,40,60,0.95) !important;}
+body.dark-mode #travelCategory h3,body.dark-mode #travelCategory h4{color:#67e8f9 !important;}
+body.dark-mode #travelCategory p,body.dark-mode #travelCategory span,body.dark-mode #travelCategory div{color:#ffffff !important;}
+body.dark-mode #travelCategory [style*="background:#cffafe"]{background:rgba(6,182,212,0.2) !important;border-color:rgba(103,232,249,0.4) !important;}
+body.dark-mode #travelCategory [style*="background:linear-gradient"]{background:rgba(45,40,60,0.95) !important;}
+body.dark-mode #citiesList > div{background:rgba(6,182,212,0.15) !important;border-color:rgba(103,232,249,0.4) !important;}
+body.dark-mode #citiesList h4{color:#67e8f9 !important;}
+body.dark-mode #citiesList p{color:#d1d5db !important;}
+/* Dark mode for Dreams section */
+body.dark-mode #dreamList > div{background:rgba(45,40,60,0.9) !important;border-color:rgba(103,232,249,0.3) !important;}
+body.dark-mode #dreamList span{color:#ffffff !important;}
+body.dark-mode #dreamInput{background:rgba(45,40,60,0.9) !important;color:#ffffff !important;border-color:rgba(103,232,249,0.4) !important;}
+/* Dark mode for Memory/Activity Log */
+body.dark-mode #activityLogContainer > div{background:rgba(45,40,60,0.9) !important;border-color:rgba(167,139,250,0.3) !important;}
+body.dark-mode #activityLogContainer span,body.dark-mode #activityLogContainer p{color:#ffffff !important;}
+body.dark-mode #activityLogInput{background:rgba(45,40,60,0.9) !important;color:#ffffff !important;border-color:rgba(167,139,250,0.4) !important;}
+/* Dark mode for Credit Cards */
+body.dark-mode #creditCardsList > div{background:rgba(45,40,60,0.95) !important;}
+body.dark-mode #creditCardsList [style*="background:white"]{background:rgba(45,40,60,0.95) !important;border-color:rgba(103,232,249,0.4) !important;}
+body.dark-mode #creditCardsList [style*="color:#0369a1"]{color:#67e8f9 !important;}
+body.dark-mode #creditCardsList [style*="color:#6b7280"]{color:#d1d5db !important;}
+body.dark-mode #creditCardsList [style*="background:#dbeafe"]{background:rgba(59,130,246,0.2) !important;}
+body.dark-mode #creditCardsList input{background:rgba(45,40,60,0.9) !important;color:#ffffff !important;border-color:rgba(103,232,249,0.4) !important;}
+body.dark-mode .cc-details{border-color:rgba(103,232,249,0.3) !important;}
+/* Dark mode for Login Modal */
+body.dark-mode #loginModal{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%) !important;}
+body.dark-mode #loginModal > div{background:rgba(30,27,41,0.98) !important;}
+body.dark-mode #loginModal p{color:#e5e7eb !important;}
+body.dark-mode #loginModal span{color:#e5e7eb !important;}
+body.dark-mode #loginModal [style*="background:white"]{background:rgba(30,27,41,0.98) !important;}
+body.dark-mode #loginModal [style*="background:linear-gradient(135deg,#f0f4ff"]{background:rgba(45,40,60,0.9) !important;}
+body.dark-mode #loginModal [style*="color:#6b7280"]{color:#d1d5db !important;}
+body.dark-mode #loginModal [style*="color:#4b5563"]{color:#e5e7eb !important;}
+body.dark-mode #loginModal input{background:rgba(45,40,60,0.9) !important;color:#ffffff !important;border-color:rgba(167,139,250,0.4) !important;}
+body.dark-mode #loginModal input::placeholder{color:#9ca3af !important;}
+body.dark-mode #loginModal svg{fill:#a78bfa !important;}
+/* Dark mode for Peruse/Welcome View */
+body.dark-mode #peruseView{background:#1a1a2e !important;}
+body.dark-mode #peruseView > div:first-child{background:rgba(30,27,41,0.98) !important;border-color:rgba(167,139,250,0.3) !important;}
+body.dark-mode #peruseView h2,body.dark-mode #peruseView h3{color:#fde047 !important;}
+body.dark-mode #peruseView p{color:#e5e7eb !important;}
+body.dark-mode #peruseView [style*="background:white"]{background:rgba(45,40,60,0.95) !important;}
+body.dark-mode #peruseView [style*="background:linear-gradient"]{background:rgba(45,40,60,0.95) !important;}
+body.dark-mode #peruseView [style*="color:#374151"]{color:#ffffff !important;}
+body.dark-mode #peruseView [style*="color:#6b7280"]{color:#d1d5db !important;}
+body.dark-mode #peruseView [style*="color:#4f46e5"]{color:#a78bfa !important;}
+/* Dark mode for Custom Cards Modal */
+body.dark-mode #customCardModal .modal-content{background:rgba(30,27,41,0.98) !important;}
+body.dark-mode #customCardModal h3{color:#fde047 !important;}
+body.dark-mode #customCardModal p{color:#e5e7eb !important;}
+body.dark-mode #customCardModal input,body.dark-mode #customCardModal textarea{background:rgba(45,40,60,0.9) !important;color:#ffffff !important;border-color:rgba(167,139,250,0.4) !important;}
+body.dark-mode #customCardModal label{background:rgba(45,40,60,0.8) !important;border-color:rgba(167,139,250,0.4) !important;}
+body.dark-mode #customCardModal label:hover{background:rgba(75,60,100,0.6) !important;border-color:#a78bfa !important;}
+body.dark-mode #customCardModal span{color:#ffffff !important;}
+body.dark-mode #customCardModal [style*="color:#6b7280"]{color:#d1d5db !important;}
+/* Dark mode for Custom Cards Container */
+body.dark-mode #customCardsContainer .custom-card{background:rgba(45,40,60,0.95) !important;}
+body.dark-mode #customCardsContainer .custom-card *{color:#ffffff !important;}
+body.dark-mode #customCardsContainer .custom-card [style*="color:rgba(0,0,0"]{color:#d1d5db !important;}
+body.dark-mode .expand-custom-cards-btn{background:rgba(124,58,237,0.2) !important;color:#c4b5fd !important;}
+/* Dark mode for Memory/Activity Log List */
+body.dark-mode #activityLogList > div{background:rgba(45,40,60,0.9) !important;border-color:rgba(129,140,248,0.3) !important;}
+body.dark-mode #activityLogList span,body.dark-mode #activityLogList p{color:#ffffff !important;}
+body.dark-mode #activityLogEmpty{color:#9ca3af !important;}
+/* Dark mode for Header */
+body.dark-mode .header-hero{background:linear-gradient(135deg,rgba(45,40,60,0.85) 0%,rgba(55,45,75,0.85) 35%,rgba(65,50,85,0.85) 70%,rgba(50,45,70,0.85) 100%) !important;}
+body.dark-mode .header-overlay{opacity:0.15 !important;}
+body.dark-mode .page-title{color:#e9d5ff !important;}
+body.dark-mode .header-hero p{color:#d8b4fe !important;}
+body.dark-mode .header-photo-frame{background:linear-gradient(180deg,rgba(75,60,100,0.6) 0%,rgba(55,45,75,0.4) 100%) !important;border-color:rgba(167,139,250,0.5) !important;}
+body.dark-mode .photo-placeholder{color:rgba(200,180,220,0.7) !important;}
+body.dark-mode .photo-placeholder svg{fill:rgba(200,180,220,0.5) !important;}
+/* Dark mode for Navigation Bar */
+body.dark-mode .content-wrapper > div:first-child{background:rgba(30,27,41,0.95) !important;}
+body.dark-mode .tab-btn{background:rgba(75,60,100,0.6) !important;color:#e9d5ff !important;border:1px solid rgba(167,139,250,0.3) !important;}
+body.dark-mode .tab-btn.active{background:linear-gradient(135deg,#7c3aed,#8b5cf6) !important;color:#ffffff !important;}
+body.dark-mode .theme-btn{border-color:rgba(167,139,250,0.3) !important;}
+body.dark-mode [style*="background:rgba(255,255,255,0.95)"]{background:rgba(30,27,41,0.95) !important;}
+body.dark-mode [style*="background:rgba(255,255,255,0.5)"]{background:rgba(45,40,60,0.8) !important;}
+/* Dark mode for buttons with gradients */
+body.dark-mode [style*="background:linear-gradient(135deg,#6366f1"]{background:linear-gradient(135deg,#7c3aed,#9333ea) !important;}
+body.dark-mode [style*="background:linear-gradient(135deg,#8b5cf6"]{background:linear-gradient(135deg,#9333ea,#a855f7) !important;}
+body.dark-mode [style*="background:linear-gradient(135deg,#ef4444"]{background:linear-gradient(135deg,#dc2626,#ef4444) !important;}
 body{font-family:Inter,system-ui,-apple-system,Arial,sans-serif;margin:0;min-height:100vh;background:linear-gradient(135deg,var(--bg-gradient-start) 0%,var(--bg-gradient-end) 100%);transition:background 0.5s ease,color 0.3s ease;}
 .card{background:var(--card-bg);border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,0.08);backdrop-filter:blur(10px);transition:all 0.3s ease;color:var(--text-primary);}
 .card:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,0,0,0.12);}
 .container{max-width:1400px;margin:0 auto;padding:0;}
-.header-hero{height:360px;border-radius:0 0 20px 20px;position:relative;overflow:hidden;background-image:url('pinkcloud.jpg');background-size:cover;background-position:left top;margin-bottom:32px;transition:all 0.3s ease;}
-.header-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.08);backdrop-filter:blur(2px);}
+.header-hero{height:280px;border-radius:0 0 20px 20px;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--pastel-lavender) 0%,var(--pastel-pink) 50%,var(--pastel-blue) 100%);margin-bottom:16px;transition:all 0.5s ease;display:flex;align-items:center;justify-content:space-between;padding:0 40px;}
+.header-overlay{position:absolute;inset:0;pointer-events:none;}
+/* SVG icons - static, transparent, same color */
+.header-overlay::before{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 24 24' fill='rgba(139,92,246,0.08)'%3E%3Cpath d='M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z'/%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='45' height='45' viewBox='0 0 24 24' fill='rgba(139,92,246,0.08)'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z'/%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='55' height='55' viewBox='0 0 24 24' fill='rgba(139,92,246,0.08)'%3E%3Cpath d='M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z'/%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='38' height='38' viewBox='0 0 24 24' fill='rgba(139,92,246,0.08)'%3E%3Cpath d='M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z'/%3E%3C/svg%3E");background-position:5% 25%,92% 15%,48% 80%,70% 45%;background-repeat:no-repeat;}
+.header-overlay::after{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='35' height='35' viewBox='0 0 24 24' fill='rgba(139,92,246,0.08)'%3E%3Cpath d='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z'/%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24' fill='rgba(139,92,246,0.08)'%3E%3Cpath d='M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z'/%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 24 24' fill='rgba(139,92,246,0.08)'%3E%3Cpath d='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z'/%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 24 24' fill='rgba(139,92,246,0.08)'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z'/%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24' fill='rgba(139,92,246,0.08)'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");background-position:15% 70%,75% 35%,30% 15%,88% 75%,60% 50%,42% 30%;background-repeat:no-repeat;}
+/* Arched photo frame */
+.header-photo-frame{width:180px;height:220px;border-radius:90px 90px 20px 20px;background:linear-gradient(180deg,rgba(255,255,255,0.6) 0%,rgba(255,255,255,0.3) 100%);border:4px solid rgba(255,255,255,0.8);box-shadow:0 8px 32px rgba(0,0,0,0.15);overflow:hidden;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.3s ease;flex-shrink:0;position:relative;}
+.header-photo-frame:hover{transform:scale(1.02);box-shadow:0 12px 40px rgba(0,0,0,0.2);}
+.header-photo-frame img{width:100%;height:100%;object-fit:cover;}
+.header-photo-frame .photo-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:rgba(100,80,120,0.6);font-size:0.75rem;text-align:center;padding:12px;}
+.header-photo-frame .photo-placeholder svg{opacity:0.5;}
+/* Mobile responsive header - tagline below image */
+@media(max-width:640px){.header-hero{flex-direction:column-reverse;height:auto;min-height:320px;padding:24px 20px;gap:16px;}.header-hero .header-content{text-align:center;padding-bottom:0;}.header-photo-frame{width:140px;height:170px;border-radius:70px 70px 16px 16px;margin-top:8px;}}
+/* Animated notebook lines */
+.notebook-lines{position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 30px,rgba(255,255,255,0.03) 30px,rgba(255,255,255,0.03) 31px);pointer-events:none;}
 .header-content{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;height:100%;text-align:center;padding:0 1rem;}
 .page-title{font-family:'Pacifico',cursive;font-size:clamp(2rem,6vw,3.5rem);color:#fff;text-shadow:0 4px 12px rgba(0,0,0,0.3);margin:0;}
 .page-subtitle{color:rgba(255,255,255,0.95);margin-top:8px;font-size:1.125rem;}
@@ -499,23 +633,53 @@ body{font-family:Inter,system-ui,-apple-system,Arial,sans-serif;margin:0;min-hei
 .tracker-item:hover{background:rgba(255,255,255,0.95);transform:translateX(4px);box-shadow:0 4px 12px rgba(0,0,0,0.1);border-color:rgba(255,154,162,0.3);}
 .delete-tracker-btn{background:rgba(239,68,68,0.9);color:white;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:18px;font-weight:bold;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
 .delete-tracker-btn:hover{background:#dc2626;transform:scale(1.1);}
-@media(min-width:1024px){.header-hero{height:460px;}}
+@media(min-width:1024px){.header-hero{height:320px;padding:0 60px;}.header-photo-frame{width:220px;height:260px;border-radius:110px 110px 24px 24px;}}
+/* Subtle pulse animation for cards */
+@keyframes subtlePulse{0%,100%{box-shadow:0 8px 32px rgba(255,182,193,0.15);}50%{box-shadow:0 10px 36px rgba(255,182,193,0.22);}}
+@keyframes subtleFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-3px);}}
+@keyframes shimmer{0%{background-position:-200% 0;}100%{background-position:200% 0;}}
+.card{animation:subtlePulse 8s ease-in-out infinite;}
+.card:nth-child(2n){animation-delay:-2s;}
+.card:nth-child(3n){animation-delay:-4s;}
+/* Subtle hover glow for buttons */
+.tab-btn,.mood-btn,.theme-btn{position:relative;overflow:hidden;}
+.tab-btn::after,.mood-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);transform:translateX(-100%);transition:transform 0.6s ease;}
+.tab-btn:hover::after,.mood-btn:hover::after{transform:translateX(100%);}
+/* Gentle breathing animation for photo frame */
+.header-photo-frame{animation:breathe 6s ease-in-out infinite;}
+@keyframes breathe{0%,100%{transform:scale(1);box-shadow:0 8px 32px rgba(0,0,0,0.15);}50%{transform:scale(1.01);box-shadow:0 10px 36px rgba(0,0,0,0.18);}}
+/* Subtle title shimmer */
+.page-title{background:linear-gradient(90deg,#7c3aed 0%,#9333ea 25%,#7c3aed 50%,#6d28d9 75%,#7c3aed 100%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;animation:titleShimmer 8s linear infinite;}
+@keyframes titleShimmer{0%{background-position:0% center;}100%{background-position:200% center;}}
 .mood-btn{width:56px;height:56px;border-radius:16px;border:2px solid transparent;background:var(--pastel-lavender);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.75rem;transition:all 0.3s ease;}
 .mood-btn:hover{transform:scale(1.1);box-shadow:0 8px 24px rgba(167,139,250,0.3);}
 .mood-btn.selected{background:linear-gradient(135deg,#fbbf24 0%,#f59e0b 100%);border-color:#f59e0b;box-shadow:0 8px 24px rgba(245,158,11,0.4);transform:scale(1.15);}
-.activity-item{background:var(--pastel-mint);border-radius:16px;padding:20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;transition:all 0.3s ease;}
+.activity-item{background:var(--pastel-mint);border-radius:16px;padding:20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;transition:all 0.4s cubic-bezier(0.4, 0, 0.2, 1);animation:fadeSlideIn 0.5s ease backwards;}
+.activity-item:nth-child(1){animation-delay:0.05s;}
+.activity-item:nth-child(2){background:var(--pastel-blue);animation-delay:0.1s;}
+.activity-item:nth-child(3){background:var(--pastel-peach);animation-delay:0.15s;}
+.activity-item:nth-child(4){animation-delay:0.2s;}
+.activity-item:nth-child(5){animation-delay:0.25s;}
 .activity-item:nth-child(2n){background:var(--pastel-blue);}
 .activity-item:nth-child(3n){background:var(--pastel-peach);}
-.activity-item:hover{transform:translateX(8px);box-shadow:0 4px 16px rgba(0,0,0,0.08);}
-.rating-row{background:var(--pastel-yellow);border-radius:12px;padding:16px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
-input[type="range"]{width:100%;max-width:240px;height:8px;border-radius:8px;outline:none;background:linear-gradient(90deg,#ffb3c1 0%,#ff9aa2 100%);}
-input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;background:#ff758f;border-radius:50%;cursor:pointer;box-shadow:0 2px 8px rgba(255,117,143,0.3);}
+.activity-item:hover{transform:translateX(8px) scale(1.01);box-shadow:0 6px 20px rgba(0,0,0,0.1);}
+@keyframes fadeSlideIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.rating-row{background:var(--pastel-yellow);border-radius:12px;padding:16px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;transition:all 0.3s ease;animation:fadeSlideIn 0.4s ease backwards;}
+.rating-row:hover{transform:scale(1.01);box-shadow:0 4px 16px rgba(0,0,0,0.08);}
+input[type="range"]{width:100%;max-width:240px;height:8px;border-radius:8px;outline:none;background:linear-gradient(90deg,#ffb3c1 0%,#ff9aa2 100%);transition:all 0.3s ease;}
+input[type="range"]:hover{transform:scaleY(1.2);}
+input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;background:#ff758f;border-radius:50%;cursor:pointer;box-shadow:0 2px 8px rgba(255,117,143,0.3);transition:all 0.3s ease;}
+input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);box-shadow:0 4px 12px rgba(255,117,143,0.5);}
 input[type="range"]::-moz-range-thumb{width:24px;height:24px;background:#ff758f;border-radius:50%;cursor:pointer;box-shadow:0 2px 8px rgba(255,117,143,0.3);}
 .progress-bar{width:100%;height:24px;background:rgba(255,154,162,0.2);border-radius:12px;overflow:hidden;position:relative;}
-.progress-fill{height:100%;background:linear-gradient(90deg,#ffb3c1 0%,#ff9aa2 100%);border-radius:12px;transition:width 0.5s ease;box-shadow:0 2px 8px rgba(255,154,162,0.3);}
+.progress-fill{height:100%;background:linear-gradient(90deg,#ffb3c1 0%,#ff9aa2 50%,#ffb3c1 100%);background-size:200% 100%;border-radius:12px;transition:width 0.8s cubic-bezier(0.4, 0, 0.2, 1);box-shadow:0 2px 8px rgba(255,154,162,0.3);animation:progressShimmer 3s linear infinite;}
+@keyframes progressShimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
 .todo-list{list-style:none;padding:0;margin:0;}
-.todo-item{background:white;border-radius:12px;padding:16px 20px;margin-bottom:12px;border-left:4px solid var(--pastel-lavender);transition:all 0.3s ease;}
-.todo-item:hover{transform:translateX(8px);border-left-color:#ff9aa2;box-shadow:0 4px 12px rgba(255,154,162,0.15);}
+.todo-item{background:white;border-radius:12px;padding:16px 20px;margin-bottom:12px;border-left:4px solid var(--pastel-lavender);transition:all 0.4s cubic-bezier(0.4, 0, 0.2, 1);animation:fadeSlideIn 0.4s ease backwards;}
+.todo-item:nth-child(1){animation-delay:0.05s;}
+.todo-item:nth-child(2){animation-delay:0.1s;}
+.todo-item:nth-child(3){animation-delay:0.15s;}
+.todo-item:hover{transform:translateX(8px) scale(1.01);border-left-color:#ff9aa2;box-shadow:0 6px 16px rgba(255,154,162,0.2);}
 .collapsible-list{max-height:none;overflow:hidden;transition:max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);}
 .collapsible-list.collapsed{max-height:600px;}
 .collapsible-list .todo-item{opacity:1;transform:translateY(0);transition:opacity 0.3s ease, transform 0.3s ease;}
@@ -523,11 +687,16 @@ input[type="range"]::-moz-range-thumb{width:24px;height:24px;background:#ff758f;
 .collapsible-list.collapsed .activity-item:nth-child(n+7){opacity:0.3;pointer-events:none;}
 .expand-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.2);}
 .photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px;margin-top:24px;}
-.photo-tile{aspect-ratio:1;border-radius:16px;background-size:cover;background-position:center;background-color:var(--pastel-pink);cursor:pointer;transition:transform 0.3s ease;box-shadow:0 4px 12px rgba(0,0,0,0.08);}
+.photo-tile{aspect-ratio:1;border-radius:16px;background-size:cover;background-position:center;background-color:var(--pastel-pink);cursor:pointer;transition:all 0.4s cubic-bezier(0.4, 0, 0.2, 1);box-shadow:0 4px 12px rgba(0,0,0,0.08);animation:fadeSlideIn 0.5s ease backwards;}
+.photo-tile:nth-child(1){animation-delay:0.05s;}
+.photo-tile:nth-child(2){animation-delay:0.1s;}
+.photo-tile:nth-child(3){animation-delay:0.15s;}
+.photo-tile:nth-child(4){animation-delay:0.2s;}
+.photo-tile:hover{transform:scale(1.05) rotate(1deg);box-shadow:0 12px 32px rgba(0,0,0,0.15);}
 .photo-tile:hover{transform:scale(1.05);box-shadow:0 8px 24px rgba(0,0,0,0.15);}
-.btn{background:linear-gradient(135deg,#ffd6e7 0%,#ffb3c1 100%);color:#c9184a;padding:12px 24px;border-radius:12px;border:none;cursor:pointer;font-weight:600;font-size:1rem;transition:all 0.3s ease;box-shadow:0 4px 12px rgba(255,154,162,0.4);}
-.btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,154,162,0.5);}
-.btn-sm{padding:8px 16px;font-size:0.875rem;}
+.btn{background:linear-gradient(135deg,#6366f1 0%,#8b5cf6 100%);color:#ffffff;padding:10px 20px;border-radius:10px;border:none;cursor:pointer;font-weight:600;font-size:0.9rem;transition:all 0.3s ease;box-shadow:0 4px 12px rgba(99,102,241,0.3);}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(99,102,241,0.4);background:linear-gradient(135deg,#4f46e5 0%,#7c3aed 100%);}
+.btn-sm{padding:6px 14px;font-size:0.8rem;border-radius:8px;}
 input[type="text"],textarea{width:100%;padding:12px 16px;border-radius:12px;border:2px solid rgba(255,154,162,0.2);background:white;font-size:1rem;transition:all 0.3s ease;}
 input[type="text"]:focus,textarea:focus{outline:none;border-color:#ff9aa2;box-shadow:0 0 0 4px rgba(255,154,162,0.1);}
 .grid-desktop{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:32px;}
@@ -570,7 +739,8 @@ input[type="checkbox"]{width:24px;height:24px;cursor:pointer;accent-color:#ff9aa
 .card{padding:20px;margin-bottom:24px;}
 .card-title{font-size:1.25rem;margin-bottom:16px;}
 .page-title{font-size:2rem;}
-.header-hero{height:280px;margin-bottom:24px;}
+.header-hero{height:auto;min-height:200px;padding:24px 20px;flex-direction:column;gap:16px;}
+.header-photo-frame{width:120px;height:150px;border-radius:60px 60px 16px 16px;border-width:3px;}
 .grid-desktop{grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;}
 .mood-btn{width:48px;height:48px;font-size:1.5rem;}
 .photo-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;}
@@ -618,7 +788,8 @@ height:24px !important;
 .card{padding:16px;margin-bottom:20px;}
 .card-title{font-size:1.125rem;}
 .page-title{font-size:1.75rem;}
-.header-hero{height:240px;}
+.header-hero{min-height:180px;padding:20px 16px;}
+.header-photo-frame{width:100px;height:130px;border-radius:50px 50px 14px 14px;}
 .mood-btn{width:44px;height:44px;font-size:1.25rem;}
 .photo-grid{grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;}
 .btn{padding:10px 20px;font-size:0.875rem;}
@@ -1153,16 +1324,21 @@ flex:1;
 <div class="container">
 <div class="header-hero" id="headerHero">
 <div class="header-overlay"></div>
-<div class="header-content">
-<div>
-<h1 class="page-title"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="display:inline-block;vertical-align:middle;"><path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2zm0 14l-1 3-3 1 3 1 1 3 1-3 3-1-3-1-1-3z"/></svg> Learn Thyself <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="display:inline-block;vertical-align:middle;"><path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2zm0 14l-1 3-3 1 3 1 1 3 1-3 3-1-3-1-1-3z"/></svg></h1>
-<p class="page-subtitle">Organize my time. Understand my mind.</p>
+<div class="header-content" style="flex:1;text-align:left;z-index:2;display:flex;flex-direction:column;justify-content:center;">
+<h1 class="page-title" style="text-shadow:0 2px 12px rgba(0,0,0,0.15);display:flex;align-items:center;gap:12px;color:#7c3aed;font-size:clamp(1.8rem,5vw,2.5rem);">Learn Thyself</h1>
+<p style="color:#8b5cf6;font-style:italic;margin-top:8px;font-size:1.05rem;font-weight:500;">Organize my time. Understand my mind.</p>
 </div>
-<!-- Photo Upload Button -->
-<button onclick="document.getElementById('headerPhotoInput').click()" style="position:absolute;bottom:16px;right:16px;background:rgba(255,255,255,0.9);border:2px solid #ff9aa2;color:#ff758f;padding:8px 16px;border-radius:20px;font-size:0.85rem;font-weight:600;cursor:pointer;backdrop-filter:blur(10px);transition:all 0.3s;box-shadow:0 4px 12px rgba(0,0,0,0.15);" onmouseover="this.style.background='#ff9aa2';this.style.color='white'" onmouseout="this.style.background='rgba(255,255,255,0.9)';this.style.color='#ff758f'">
-<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="display:inline-block;vertical-align:middle;margin-right:6px;"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>Change Header Photo
-</button>
-<div style="position:absolute;bottom:52px;right:16px;background:rgba(255,255,255,0.95);color:#dc2626;padding:4px 10px;border-radius:12px;font-size:0.7rem;font-weight:600;backdrop-filter:blur(10px);box-shadow:0 2px 8px rgba(0,0,0,0.1);">⚠️ Small images only (under 500KB)</div>
+<!-- Arched Photo Frame -->
+<div style="position:relative;flex-shrink:0;">
+<div class="header-photo-frame" onclick="document.getElementById('headerPhotoInput').click()" id="headerPhotoFrame">
+<div class="photo-placeholder" id="photoPlaceholder">
+<svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+<span>Add Your<br>Photo</span>
+</div>
+<img id="headerPhotoImg" src="" alt="" style="display:none;">
+</div>
+<div style="position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.5);color:rgba(255,255,255,0.8);padding:3px 10px;border-radius:6px;font-size:0.65rem;backdrop-filter:blur(10px);white-space:nowrap;">Max 500KB</div>
+</div>
 <input type="file" id="headerPhotoInput" accept="image/*" style="display:none;" onchange="uploadHeaderPhoto(event)">
 </div>
 </div>
@@ -1639,7 +1815,6 @@ Water
 <div style="padding:16px;background:rgba(255,255,255,0.6);border-radius:8px;border:2px dashed #0369a1;">
 <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center;">
 <input type="text" id="newCardName" placeholder="Card Name (e.g., Chase Sapphire)" style="flex:1;min-width:200px;padding:10px;border:1px solid #0369a1;border-radius:6px;font-size:0.9rem;"/>
-<input type="text" id="newCardLast4" placeholder="Last 4 digits" style="width:100px;padding:10px;border:1px solid #0369a1;border-radius:6px;font-size:0.9rem;"/>
 <input type="number" id="newCardAPR" placeholder="APR %" step="0.1" min="0" max="100" style="width:100px;padding:10px;border:1px solid #0369a1;border-radius:6px;font-size:0.9rem;"/>
 </div>
 <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
@@ -2015,10 +2190,11 @@ return d.toLocaleDateString('en-US', options || {weekday:'short',month:'short',d
 const STORAGE_KEYS = [
   'dailyMoodEnergy', 'activities', 'dailyRatings', 'activityCompletions',
   'dailyTodo', 'getItDone', 'dailySpending', 'daysCried', 'itemsLost',
-  'waterIntake', 'timeTracker', 'photos', 'photoAlbum', 'selectedTheme', 'pendingProjects', 
-  'dailyMemories', 'creditCards', 'activityLog', 'categoryData', 'sleepData', 
-  'painData', 'clarityData', 'waterIntakeNew', 'customCards',
-  'foodLog', 'workoutLog', 'dreamLog', 'travelLocations'
+  'waterIntake', 'waterIntakeNew', 'timeTracker', 'timeTracked', 'photos', 'photoAlbum',
+  'selectedTheme', 'darkMode', 'pendingProjects', 'dailyMemories', 'creditCards',
+  'activityLog', 'categoryData', 'categorySpending', 'sleepData', 'painData', 'painDataDetailed', 'clarityData',
+  'customCards', 'foodLog', 'workoutLog', 'dreamLog', 'travelLocations', 'travels',
+  'headerPhotos', 'currentHeaderPhoto', 'allNotes'
 ];
 
 // Save data to Firebase
@@ -2954,11 +3130,7 @@ return;
 }
     
 localStorage.setItem('dailyMoodEnergy',JSON.stringify(store));
-    
-// Also sync to Firebase if user is logged in
-if (window.currentUser && typeof migrateDataToCloud === 'function') {
-migrateDataToCloud();
-}
+saveToFirebase('dailyMoodEnergy',store);
 
 status.textContent='✓ Saved';
 status.style.display='inline-block';
@@ -2999,6 +3171,7 @@ timestamp:new Date().toISOString()
 const store=JSON.parse(localStorage.getItem('dailyMoodEnergy')||'{}');
 store[data.date]=data;
 localStorage.setItem('dailyMoodEnergy',JSON.stringify(store));
+saveToFirebase('dailyMoodEnergy',store);
     
 console.log('🔄 Auto-saved mood/energy data');
 } catch (error) {
@@ -3032,7 +3205,7 @@ d.setDate(d.getDate()-1);
 return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 }
 function checkAndResetDaily(){const today=getTodayString();const yesterday=getYesterday();activities.forEach(item=>{if(!item.lastCompletedDate){item.lastCompletedDate=null;item.streak=0;item.checked=false;}else if(item.lastCompletedDate!==today){if(item.lastCompletedDate===yesterday&&item.checked){item.checked=false;}else if(item.lastCompletedDate!==yesterday){item.streak=0;item.checked=false;}else{item.checked=false;}}});save();}
-checkAndResetDaily();function save(){localStorage.setItem('activities',JSON.stringify(activities));updateProgress();}
+checkAndResetDaily();function save(){localStorage.setItem('activities',JSON.stringify(activities));saveToFirebase('activities',activities);updateProgress();}
 function render(){container.innerHTML='';
 if(activities.length===0){
 container.innerHTML='<div style="text-align:center;padding:40px 20px;color:#9ca3af;"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto 16px;opacity:0.3;"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><div style="font-size:1.125rem;font-weight:600;margin-bottom:8px;">No activities yet</div><div style="font-size:0.875rem;">Add your first activity above to start tracking!</div></div>';
@@ -3109,6 +3282,8 @@ attemptedAt:new Date().toISOString()
 // Save everything
 localStorage.setItem('activityCompletions',JSON.stringify(completionHistory));
 localStorage.setItem('activityLog',JSON.stringify(activityLog));
+saveToFirebase('activityCompletions',completionHistory);
+saveToFirebase('activityLog',activityLog);
 save();render();});const delBtn=div.querySelector('button');delBtn.addEventListener('click',()=>{
 const activityLog=JSON.parse(localStorage.getItem('activityLog')||'{}');
 let totalDays=0;
@@ -3125,8 +3300,8 @@ save();
 render();
 }
 });container.appendChild(div);});updateProgress();}
-addBtn.addEventListener('click',()=>{const text=input.value.trim();if(!text)return;activities.unshift({id:uid(),text,checked:false,streak:0,lastCompletedDate:null});input.value='';save();render();});render();})();(function(){const sliders=['relationship','health','money','learning','fun'];sliders.forEach(name=>{const slider=document.getElementById(name+'Slider');const value=document.getElementById(name+'Value');slider.addEventListener('input',()=>{value.textContent=slider.value;const ratings=JSON.parse(localStorage.getItem('dailyRatings')||'{}');ratings[getTodayString()]=ratings[getTodayString()]||{};ratings[getTodayString()][name]=slider.value;localStorage.setItem('dailyRatings',JSON.stringify(ratings));});const ratings=JSON.parse(localStorage.getItem('dailyRatings')||'{}');const today=getTodayString();if(ratings[today]&&ratings[today][name]){slider.value=ratings[today][name];value.textContent=ratings[today][name];}});})();function updateProgress(){const activities=JSON.parse(localStorage.getItem('activities')||'[]');const total=activities.length;const completed=activities.filter(a=>a.checked).length;const pct=total>0?Math.round((completed/total)*100):0;document.getElementById('progressFill').style.width=pct+'%';document.getElementById('progressStats').textContent=completed+' of '+total+' activities completed';}
-function createListHandler(inputId,btnId,listId,storageKey){const input=document.getElementById(inputId);const btn=document.getElementById(btnId);const list=document.getElementById(listId);let items=JSON.parse(localStorage.getItem(storageKey)||'[]');function save(){localStorage.setItem(storageKey,JSON.stringify(items));}
+addBtn.addEventListener('click',()=>{const text=input.value.trim();if(!text)return;activities.unshift({id:uid(),text,checked:false,streak:0,lastCompletedDate:null});input.value='';save();render();});render();})();(function(){const sliders=['relationship','health','money','learning','fun'];sliders.forEach(name=>{const slider=document.getElementById(name+'Slider');const value=document.getElementById(name+'Value');slider.addEventListener('input',()=>{value.textContent=slider.value;const ratings=JSON.parse(localStorage.getItem('dailyRatings')||'{}');ratings[getTodayString()]=ratings[getTodayString()]||{};ratings[getTodayString()][name]=slider.value;localStorage.setItem('dailyRatings',JSON.stringify(ratings));saveToFirebase('dailyRatings',ratings);});const ratings=JSON.parse(localStorage.getItem('dailyRatings')||'{}');const today=getTodayString();if(ratings[today]&&ratings[today][name]){slider.value=ratings[today][name];value.textContent=ratings[today][name];}});})();function updateProgress(){const activities=JSON.parse(localStorage.getItem('activities')||'[]');const total=activities.length;const completed=activities.filter(a=>a.checked).length;const pct=total>0?Math.round((completed/total)*100):0;document.getElementById('progressFill').style.width=pct+'%';document.getElementById('progressStats').textContent=completed+' of '+total+' activities completed';}
+function createListHandler(inputId,btnId,listId,storageKey){const input=document.getElementById(inputId);const btn=document.getElementById(btnId);const list=document.getElementById(listId);let items=JSON.parse(localStorage.getItem(storageKey)||'[]');function save(){localStorage.setItem(storageKey,JSON.stringify(items));saveToFirebase(storageKey,items);}
 function render(){list.innerHTML='';items.forEach((text,idx)=>{const li=document.createElement('li');li.className='todo-item';li.style.display='flex';li.style.justifyContent='space-between';li.style.alignItems='center';li.style.gap='12px';const textSpan=document.createElement('span');textSpan.textContent=text;textSpan.style.flex='1';textSpan.style.cursor='pointer';const btnGroup=document.createElement('div');btnGroup.style.display='flex';btnGroup.style.gap='8px';const editBtn=document.createElement('button');editBtn.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';editBtn.style.background='none';editBtn.style.border='none';editBtn.style.cursor='pointer';editBtn.style.padding='4px';editBtn.style.color='#6b7280';editBtn.title='Edit';editBtn.addEventListener('click',()=>{const newText=prompt('Edit task:',text);if(newText&&newText.trim()&&newText.trim()!==text){items[idx]=newText.trim();save();render();}});const delBtn=document.createElement('button');delBtn.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>';delBtn.style.background='none';delBtn.style.border='none';delBtn.style.cursor='pointer';delBtn.style.padding='4px';delBtn.style.color='#ef4444';delBtn.title='Delete';delBtn.addEventListener('click',()=>{if(confirm(`Delete "${text}"?`)){items.splice(idx,1);save();render();}});btnGroup.appendChild(editBtn);btnGroup.appendChild(delBtn);li.appendChild(textSpan);li.appendChild(btnGroup);list.appendChild(li);});}
 btn.addEventListener('click',()=>{const text=input.value.trim();if(!text)return;items.unshift(text);input.value='';save();render();});render();}
 createListHandler('newTodoInput','addTodoBtn','todoList','dailyTodo');createListHandler('newDoneInput','addDoneBtn','doneList','getItDone');
@@ -3141,7 +3316,7 @@ const storageKey='pendingProjects';
 let projects=JSON.parse(localStorage.getItem(storageKey)||'[]');
 
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8);}
-function save(){localStorage.setItem(storageKey,JSON.stringify(projects));}
+function save(){localStorage.setItem(storageKey,JSON.stringify(projects));saveToFirebase(storageKey,projects);}
 
 function calculateProgress(project){
 const totalTasks=project.tasks.length;
@@ -3294,7 +3469,7 @@ const emptyMsg=document.getElementById('activityLogEmpty');
 const storageKey='dailyMemories';
 
 function getMemories(){return JSON.parse(localStorage.getItem(storageKey)||'{}');}
-function saveMemories(data){localStorage.setItem(storageKey,JSON.stringify(data));}
+function saveMemories(data){localStorage.setItem(storageKey,JSON.stringify(data));saveToFirebase(storageKey,data);}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8);}
 
 function render(){
@@ -3573,7 +3748,6 @@ setupCollapsibleList('activitiesContainer','activitiesExpandBtn');
 const container=document.getElementById('creditCardsList');
 const addBtn=document.getElementById('addCreditCardBtn');
 const nameInput=document.getElementById('newCardName');
-const last4Input=document.getElementById('newCardLast4');
 const aprInput=document.getElementById('newCardAPR');
 const balanceInput=document.getElementById('newCardBalance');
 const minPaymentInput=document.getElementById('newCardMinPayment');
@@ -3581,7 +3755,7 @@ const minPaymentInput=document.getElementById('newCardMinPayment');
 let cards=JSON.parse(localStorage.getItem('creditCards')||'[]');
 
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8);}
-function save(){localStorage.setItem('creditCards',JSON.stringify(cards));updateSummary();render();}
+function save(){localStorage.setItem('creditCards',JSON.stringify(cards));saveToFirebase('creditCards',cards);updateSummary();render();}
 
 function calculateMonthlyInterest(balance,apr){return(balance*(apr/100))/12;}
 function getUtilization(balance,limit){return limit>0?(balance/limit*100).toFixed(1):0;}
@@ -3614,7 +3788,6 @@ cardDiv.innerHTML=`
 <div class="cc-header" style="display:flex;justify-content:space-between;align-items:center;gap:12px;cursor:pointer;user-select:none;">
 <div style="flex:1;">
 <div style="font-weight:600;color:#0369a1;font-size:1rem;">${escapeHtml(card.name)}</div>
-<div style="font-size:0.8rem;color:#6b7280;margin-top:4px;">•••• ${escapeHtml(card.last4)}</div>
 </div>
 <div style="text-align:right;">
 <div style="font-size:1.25rem;font-weight:700;color:#0369a1;">$${parseFloat(card.balance||0).toFixed(2)}</div>
@@ -3705,15 +3878,14 @@ updateSummary();
 
 addBtn.addEventListener('click',()=>{
 const name=nameInput.value.trim();
-const last4=last4Input.value.trim();
 const apr=parseFloat(aprInput.value);
 const balance=parseFloat(balanceInput.value);
 const minPayment=parseFloat(minPaymentInput.value);
 
-if(!name||!last4||isNaN(apr)||isNaN(balance)||isNaN(minPayment))return;
+if(!name||isNaN(apr)||isNaN(balance)||isNaN(minPayment))return;
 
-cards.unshift({id:uid(),name,last4,apr,balance,minPayment,createdAt:new Date().toISOString()});
-nameInput.value='';last4Input.value='';aprInput.value='';balanceInput.value='';minPaymentInput.value='';
+cards.unshift({id:uid(),name,apr,balance,minPayment,createdAt:new Date().toISOString()});
+nameInput.value='';aprInput.value='';balanceInput.value='';minPaymentInput.value='';
 save();
 });
 
@@ -3746,7 +3918,7 @@ let allCategoryData=JSON.parse(localStorage.getItem(storageKey)||'{}');
 if(!allCategoryData[today])allCategoryData[today]={};
 let selectedCategory=null;
 
-function save(){localStorage.setItem(storageKey,JSON.stringify(allCategoryData));}
+function save(){localStorage.setItem(storageKey,JSON.stringify(allCategoryData));saveToFirebase(storageKey,allCategoryData);}
 
 function getCategoryTotal(catId){
 const items=allCategoryData[today][catId]||[];
@@ -3867,6 +4039,7 @@ category: selectedCategory,
 timestamp: new Date().toISOString()
 });
 localStorage.setItem('dailySpending',JSON.stringify(dailySpendingData));
+saveToFirebase('dailySpending',dailySpendingData);
 
 save();
 categoryItemInput.value='';
@@ -3963,6 +4136,7 @@ needsSync=true;
 
 if(needsSync){
 localStorage.setItem('dailySpending',JSON.stringify(dailySpendingData));
+saveToFirebase('dailySpending',dailySpendingData);
 console.log('✅ Spending data synchronized between storage systems');
 }
 }
@@ -3987,7 +4161,7 @@ function getMonthKey(){
 const now=new Date();
 return now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
 }
-function save(){localStorage.setItem(storageKey,JSON.stringify(allDays));}
+function save(){localStorage.setItem(storageKey,JSON.stringify(allDays));saveToFirebase(storageKey,allDays);}
 function render(){
 const monthKey=getMonthKey();
 const monthData=allDays[monthKey]||[];
@@ -4054,7 +4228,7 @@ function getMonthKey(){
 const now=new Date();
 return now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
 }
-function save(){localStorage.setItem(storageKey,JSON.stringify(allItems));}
+function save(){localStorage.setItem(storageKey,JSON.stringify(allItems));saveToFirebase(storageKey,allItems);}
 function render(){
 const monthKey=getMonthKey();
 const monthData=allItems[monthKey]||[];
@@ -4110,7 +4284,7 @@ render();
 
 (function(){const timerActivityInput=document.getElementById('timerActivityInput');const toggleTimerBtn=document.getElementById('toggleTimerBtn');const timerDisplay=document.getElementById('timerDisplay');const listEl=document.getElementById('timeTrackerList');const totalEl=document.getElementById('totalTime');let timerState={running:false,startTime:null,elapsed:0,activity:''};let timerInterval=null;function updateTimerDisplay(){const totalSeconds=Math.floor(timerState.elapsed/1000);const hours=Math.floor(totalSeconds/3600);const minutes=Math.floor((totalSeconds%3600)/60);const seconds=totalSeconds%60;timerDisplay.textContent=String(hours).padStart(2,'0')+':'+String(minutes).padStart(2,'0')+':'+String(seconds).padStart(2,'0');}
 toggleTimerBtn.addEventListener('click',()=>{if(!timerState.running){const activity=timerActivityInput.value.trim();if(!activity){alert('Please enter an activity name');return;}
-timerState.running=true;timerState.activity=activity;timerState.startTime=Date.now()-timerState.elapsed;timerActivityInput.disabled=true;toggleTimerBtn.textContent='Stop';toggleTimerBtn.style.background='linear-gradient(135deg,#fecaca 0%,#fca5a5 100%)';timerDisplay.style.display='block';timerInterval=setInterval(()=>{timerState.elapsed=Date.now()-timerState.startTime;updateTimerDisplay();},100);}else{clearInterval(timerInterval);const hours=(timerState.elapsed/(1000*60*60)).toFixed(2);const today=getTodayString();let timeData=JSON.parse(localStorage.getItem('timeTracker')||'{}');if(!timeData[today])timeData[today]=[];timeData[today].push({activity:timerState.activity,hours:hours});localStorage.setItem('timeTracker',JSON.stringify(timeData));timerState.running=false;timerState.elapsed=0;timerState.activity='';timerActivityInput.value='';timerActivityInput.disabled=false;toggleTimerBtn.textContent='Start';toggleTimerBtn.style.background='';timerDisplay.style.display='none';timerDisplay.textContent='00:00:00';render();}});const today=getTodayString();let timeData=JSON.parse(localStorage.getItem('timeTracker')||'{}');if(!timeData[today])timeData[today]=[];function save(){localStorage.setItem('timeTracker',JSON.stringify(timeData));}
+timerState.running=true;timerState.activity=activity;timerState.startTime=Date.now()-timerState.elapsed;timerActivityInput.disabled=true;toggleTimerBtn.textContent='Stop';toggleTimerBtn.style.background='linear-gradient(135deg,#fecaca 0%,#fca5a5 100%)';timerDisplay.style.display='block';timerInterval=setInterval(()=>{timerState.elapsed=Date.now()-timerState.startTime;updateTimerDisplay();},100);}else{clearInterval(timerInterval);const hours=(timerState.elapsed/(1000*60*60)).toFixed(2);const today=getTodayString();let timeData=JSON.parse(localStorage.getItem('timeTracker')||'{}');if(!timeData[today])timeData[today]=[];timeData[today].push({activity:timerState.activity,hours:hours});localStorage.setItem('timeTracker',JSON.stringify(timeData));saveToFirebase('timeTracker',timeData);timerState.running=false;timerState.elapsed=0;timerState.activity='';timerActivityInput.value='';timerActivityInput.disabled=false;toggleTimerBtn.textContent='Start';toggleTimerBtn.style.background='';timerDisplay.style.display='none';timerDisplay.textContent='00:00:00';render();}});const today=getTodayString();let timeData=JSON.parse(localStorage.getItem('timeTracker')||'{}');if(!timeData[today])timeData[today]=[];function save(){localStorage.setItem('timeTracker',JSON.stringify(timeData));saveToFirebase('timeTracker',timeData);}
 function updateTotal(){const todayData=timeData[today]||[];const total=todayData.reduce((sum,item)=>sum+parseFloat(item.hours),0);totalEl.textContent='Total: '+total.toFixed(1)+' hours';}
 function render(){timeData=JSON.parse(localStorage.getItem('timeTracker')||'{}');const todayData=timeData[today]||[];listEl.innerHTML='';todayData.forEach((item,idx)=>{const div=document.createElement('div');div.style.background='var(--pastel-blue)';div.style.borderRadius='12px';div.style.padding='16px';div.style.display='flex';div.style.justifyContent='space-between';div.style.alignItems='center';div.style.transition='all 0.3s ease';div.onmouseenter=()=>{div.style.transform='translateX(4px)';div.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)';};div.onmouseleave=()=>{div.style.transform='translateX(0)';div.style.boxShadow='none';};const leftDiv=document.createElement('div');leftDiv.style.flex='1';const activityName=document.createElement('div');activityName.textContent=item.activity;activityName.style.fontWeight='600';activityName.style.color='#374151';activityName.style.fontSize='1rem';const hoursText=document.createElement('div');hoursText.textContent=item.hours+' hours';hoursText.style.color='#6b7280';hoursText.style.fontSize='0.875rem';hoursText.style.marginTop='4px';leftDiv.appendChild(activityName);leftDiv.appendChild(hoursText);const delBtn=document.createElement('button');delBtn.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>';delBtn.style.background='rgba(239,68,68,0.1)';delBtn.style.border='none';delBtn.style.borderRadius='8px';delBtn.style.padding='8px';delBtn.style.cursor='pointer';delBtn.style.color='#ef4444';delBtn.style.transition='all 0.2s ease';delBtn.onmouseenter=()=>{delBtn.style.background='rgba(239,68,68,0.2)';};delBtn.onmouseleave=()=>{delBtn.style.background='rgba(239,68,68,0.1)';};delBtn.addEventListener('click',()=>{timeData[today].splice(idx,1);save();render();updateTotal();});div.appendChild(leftDiv);div.appendChild(delBtn);listEl.appendChild(div);});updateTotal();}
 render();})();
@@ -4745,20 +4919,34 @@ dailyTodo:JSON.parse(localStorage.getItem('dailyTodo')||'[]'),
 getItDone:JSON.parse(localStorage.getItem('getItDone')||'[]'),
 sleepData:JSON.parse(localStorage.getItem('sleepData')||'{}'),
 painData:JSON.parse(localStorage.getItem('painData')||'{}'),
+painDataDetailed:JSON.parse(localStorage.getItem('painDataDetailed')||'{}'),
 clarityData:JSON.parse(localStorage.getItem('clarityData')||'{}'),
 waterIntakeNew:JSON.parse(localStorage.getItem('waterIntakeNew')||'{}'),
+waterIntake:JSON.parse(localStorage.getItem('waterIntake')||'{}'),
 daysCried:JSON.parse(localStorage.getItem('daysCried')||'{}'),
 itemsLost:JSON.parse(localStorage.getItem('itemsLost')||'{}'),
 dailySpending:JSON.parse(localStorage.getItem('dailySpending')||'{}'),
+categorySpending:JSON.parse(localStorage.getItem('categorySpending')||'{}'),
 creditCards:JSON.parse(localStorage.getItem('creditCards')||'[]'),
 travels:JSON.parse(localStorage.getItem('travels')||'[]'),
+travelLocations:JSON.parse(localStorage.getItem('travelLocations')||'[]'),
 customCards:JSON.parse(localStorage.getItem('customCards')||'[]'),
 dailyMemories:JSON.parse(localStorage.getItem('dailyMemories')||'{}'),
 headerPhotos:JSON.parse(localStorage.getItem('headerPhotos')||'[]'),
 currentHeaderPhoto:localStorage.getItem('currentHeaderPhoto')||'',
 categoryData:JSON.parse(localStorage.getItem('categoryData')||'{}'),
+pendingProjects:JSON.parse(localStorage.getItem('pendingProjects')||'[]'),
 selectedTheme:localStorage.getItem('selectedTheme')||'default',
 darkMode:localStorage.getItem('darkMode')||'false',
+// Additional data - Food, Workout, Dreams
+foodLog:JSON.parse(localStorage.getItem('foodLog')||'{}'),
+workoutLog:JSON.parse(localStorage.getItem('workoutLog')||'{}'),
+dreamLog:JSON.parse(localStorage.getItem('dreamLog')||'{}'),
+// Time tracked and photos
+timeTracked:JSON.parse(localStorage.getItem('timeTracked')||'{}'),
+photos:JSON.parse(localStorage.getItem('photos')||'[]'),
+// All notes/memories
+allNotes:JSON.parse(localStorage.getItem('allNotes')||'{}'),
 exportDate:new Date().toISOString()
 };
 const dataStr=JSON.stringify(allData,null,2);
@@ -4770,7 +4958,7 @@ a.download=`learn-thyself-backup-${new Date().toISOString().split('T')[0]}.json`
 a.click();
 URL.revokeObjectURL(url);
 toggleSettingsMenu();
-alert('✅ Data exported successfully!\n\n📊 Data included:\n• Mood & Energy tracking\n• Activities & completions\n• Time tracking\n• Ratings & Spending\n• Health data (Sleep, Pain, Clarity, Water)\n• Memories, Travels & Photos\n• All custom settings');
+alert('✅ Data exported successfully!\n\n📊 Data included:\n• Mood & Energy tracking\n• Activities & completions\n• Time tracking\n• Ratings & Spending\n• Health data (Sleep, Pain, Clarity, Water)\n• Food, Workout & Dream logs\n• Memories, Travels & Photos\n• All custom settings');
 }
 
 // Import Data
@@ -4793,20 +4981,42 @@ localStorage.setItem('dailyTodo',JSON.stringify(data.dailyTodo||[]));
 localStorage.setItem('getItDone',JSON.stringify(data.getItDone||[]));
 localStorage.setItem('sleepData',JSON.stringify(data.sleepData||{}));
 localStorage.setItem('painData',JSON.stringify(data.painData||{}));
+localStorage.setItem('painDataDetailed',JSON.stringify(data.painDataDetailed||{}));
 localStorage.setItem('clarityData',JSON.stringify(data.clarityData||{}));
 localStorage.setItem('waterIntakeNew',JSON.stringify(data.waterIntakeNew||{}));
+localStorage.setItem('waterIntake',JSON.stringify(data.waterIntake||{}));
 localStorage.setItem('daysCried',JSON.stringify(data.daysCried||{}));
 localStorage.setItem('itemsLost',JSON.stringify(data.itemsLost||{}));
 localStorage.setItem('dailySpending',JSON.stringify(data.dailySpending||{}));
+localStorage.setItem('categorySpending',JSON.stringify(data.categorySpending||{}));
 localStorage.setItem('creditCards',JSON.stringify(data.creditCards||[]));
 localStorage.setItem('travels',JSON.stringify(data.travels||[]));
+localStorage.setItem('travelLocations',JSON.stringify(data.travelLocations||[]));
 localStorage.setItem('customCards',JSON.stringify(data.customCards||[]));
 localStorage.setItem('dailyMemories',JSON.stringify(data.dailyMemories||{}));
 localStorage.setItem('headerPhotos',JSON.stringify(data.headerPhotos||[]));
 localStorage.setItem('currentHeaderPhoto',data.currentHeaderPhoto||'');
 localStorage.setItem('categoryData',JSON.stringify(data.categoryData||{}));
+localStorage.setItem('pendingProjects',JSON.stringify(data.pendingProjects||[]));
 localStorage.setItem('selectedTheme',data.selectedTheme||'default');
 localStorage.setItem('darkMode',data.darkMode||'false');
+// Additional data - Food, Workout, Dreams
+localStorage.setItem('foodLog',JSON.stringify(data.foodLog||{}));
+localStorage.setItem('workoutLog',JSON.stringify(data.workoutLog||{}));
+localStorage.setItem('dreamLog',JSON.stringify(data.dreamLog||{}));
+// Time tracked and photos
+localStorage.setItem('timeTracked',JSON.stringify(data.timeTracked||{}));
+localStorage.setItem('photos',JSON.stringify(data.photos||[]));
+// All notes/memories
+localStorage.setItem('allNotes',JSON.stringify(data.allNotes||{}));
+// Sync to Firebase if logged in
+if(window.firebaseUserId){
+const keys=['dailyMoodEnergy','activities','activityCompletions','activityLog','photoAlbum','timeTracker','dailyRatings','dailyTodo','getItDone','sleepData','painData','clarityData','waterIntakeNew','waterIntake','daysCried','itemsLost','dailySpending','creditCards','travels','customCards','dailyMemories','headerPhotos','currentHeaderPhoto','categoryData','selectedTheme','darkMode','foodLog','workoutLog','dreamLog','timeTracked','photos','allNotes'];
+keys.forEach(key=>{
+const val=localStorage.getItem(key);
+if(val){try{saveToFirebase(key,JSON.parse(val));}catch(e){saveToFirebase(key,val);}}
+});
+}
 alert('✅ Data imported successfully!\n\n📊 Restored:\n• '+Object.keys(data).length+' data categories\n• All history, settings, and personalization\n\nReloading page...');
 location.reload();
 }
@@ -4834,6 +5044,7 @@ if(hours&&selectedQuality){
 const sleepData=JSON.parse(localStorage.getItem('sleepData')||'{}');
 sleepData[getTodayString()]={hours,quality:selectedQuality};
 localStorage.setItem('sleepData',JSON.stringify(sleepData));
+saveToFirebase('sleepData',sleepData);
 status.textContent='✓ Auto-saved';
 status.style.display='inline-block';
 setTimeout(()=>{status.style.display='none';},1500);
@@ -4864,6 +5075,7 @@ return;
 const sleepData=JSON.parse(localStorage.getItem('sleepData')||'{}');
 sleepData[getTodayString()]={hours,quality:selectedQuality};
 localStorage.setItem('sleepData',JSON.stringify(sleepData));
+saveToFirebase('sleepData',sleepData);
 status.textContent='✓ Sleep saved';
 status.style.display='inline-block';
 setTimeout(()=>{status.style.display='none';},2000);
@@ -4915,6 +5127,7 @@ existing.time=entry.time;
 painData[today].push(entry);
 }
 localStorage.setItem(storageKey,JSON.stringify(painData));
+saveToFirebase('painDataDetailed',painData);
 painLocation.value='';
 renderPainHistory();
 }
@@ -4941,6 +5154,7 @@ const painData=JSON.parse(localStorage.getItem(storageKey)||'{}');
 if(painData[today]){
 painData[today].splice(idx,1);
 localStorage.setItem(storageKey,JSON.stringify(painData));
+saveToFirebase('painDataDetailed',painData);
 renderPainHistory();
 }
 };
@@ -4955,6 +5169,7 @@ painLabel.textContent=`Level ${level}: ${painLabels[level]}`;
 const painData=JSON.parse(localStorage.getItem('painData')||'{}');
 painData[getTodayString()]=level;
 localStorage.setItem('painData',JSON.stringify(painData));
+saveToFirebase('painData',painData);
 });
 });
 
@@ -4995,6 +5210,7 @@ clarityLabel.textContent=`${clarityLabels[level]} (${level}/5)`;
 const clarityData=JSON.parse(localStorage.getItem('clarityData')||'{}');
 clarityData[getTodayString()]=level;
 localStorage.setItem('clarityData',JSON.stringify(clarityData));
+saveToFirebase('clarityData',clarityData);
 });
 });
 // Load today's data
@@ -5043,6 +5259,7 @@ waterLabel.textContent=`${waterCount}/8 glasses`;
 const waterData=JSON.parse(localStorage.getItem('waterIntakeNew')||'{}');
 waterData[getTodayString()]=waterCount;
 localStorage.setItem('waterIntakeNew',JSON.stringify(waterData));
+saveToFirebase('waterIntakeNew',waterData);
 }
 glasses.forEach((glass,idx)=>{
 glass.addEventListener('mouseover',()=>{
@@ -5476,12 +5693,20 @@ uploadedAt:new Date().toISOString()
 localStorage.setItem('headerPhotos',JSON.stringify(photos));
 // Set as current header
 localStorage.setItem('currentHeaderPhoto',photoData);
-// Apply to header
-const headerHero=document.getElementById('headerHero');
-headerHero.style.backgroundImage=`url(${photoData})`;
+// Apply to arched photo frame
+const photoImg=document.getElementById('headerPhotoImg');
+const placeholder=document.getElementById('photoPlaceholder');
+if(photoImg){
+photoImg.src=photoData;
+photoImg.style.display='block';
+if(placeholder)placeholder.style.display='none';
+}
 // Animate change
-headerHero.style.opacity='0';
-setTimeout(()=>{headerHero.style.opacity='1';},100);
+const frame=document.getElementById('headerPhotoFrame');
+if(frame){
+frame.style.opacity='0';
+setTimeout(()=>{frame.style.opacity='1';},100);
+}
 // Show success message
 // Notification disabled
 };
@@ -5492,9 +5717,12 @@ reader.readAsDataURL(file);
 (function(){
 const savedPhoto=localStorage.getItem('currentHeaderPhoto');
 if(savedPhoto){
-const headerHero=document.getElementById('headerHero');
-if(headerHero){
-headerHero.style.backgroundImage=`url(${savedPhoto})`;
+const photoImg=document.getElementById('headerPhotoImg');
+const placeholder=document.getElementById('photoPlaceholder');
+if(photoImg){
+photoImg.src=savedPhoto;
+photoImg.style.display='block';
+if(placeholder)placeholder.style.display='none';
 }
 }
 })();
