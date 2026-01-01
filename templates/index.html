@@ -150,7 +150,8 @@
         'waterIntake', 'waterIntakeNew', 'timeTracked', 'timeTracker', 'photos', 'photoAlbum',
         'selectedTheme', 'darkMode', 'activityLog', 'headerPhotos', 'currentHeaderPhoto',
         'foodLog', 'workoutLog', 'dreamLog', 'sleepData', 'painData', 'clarityData',
-        'creditCards', 'travels', 'customCards', 'dailyMemories', 'categoryData', 'allNotes'
+        'creditCards', 'travels', 'customCards', 'dailyMemories', 'categoryData', 'allNotes',
+        'pendingProjects'
       ];
       
       for (const key of STORAGE_KEYS) {
@@ -185,7 +186,8 @@
         'waterIntake', 'waterIntakeNew', 'timeTracked', 'timeTracker', 'photos', 'photoAlbum',
         'selectedTheme', 'darkMode', 'activityLog', 'headerPhotos', 'currentHeaderPhoto',
         'foodLog', 'workoutLog', 'dreamLog', 'sleepData', 'painData', 'clarityData',
-        'creditCards', 'travels', 'customCards', 'dailyMemories', 'categoryData', 'allNotes'
+        'creditCards', 'travels', 'customCards', 'dailyMemories', 'categoryData', 'allNotes',
+        'pendingProjects'
       ];
       
       let downloaded = 0;
@@ -1337,7 +1339,7 @@ flex:1;
 </div>
 <img id="headerPhotoImg" src="" alt="" style="display:none;">
 </div>
-<div style="position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.5);color:rgba(255,255,255,0.8);padding:3px 10px;border-radius:6px;font-size:0.65rem;backdrop-filter:blur(10px);white-space:nowrap;">Max 500KB</div>
+<div style="position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.5);color:rgba(255,255,255,0.8);padding:3px 10px;border-radius:6px;font-size:0.65rem;backdrop-filter:blur(10px);white-space:nowrap;">Display Only</div>
 </div>
 <input type="file" id="headerPhotoInput" accept="image/*" style="display:none;" onchange="uploadHeaderPhoto(event)">
 </div>
@@ -2748,6 +2750,24 @@ async function autoSyncFromFirebase(user) {
           const localDataStr = localStorage.getItem(key);
           
           let shouldSync = true;
+          let localIsEmpty = false;
+          // Determine if local data is effectively empty/default
+          if (!localDataStr) {
+            localIsEmpty = true;
+          } else {
+            try {
+              const localParsed = JSON.parse(localDataStr);
+              if (Array.isArray(localParsed)) {
+                localIsEmpty = localParsed.length === 0;
+              } else if (typeof localParsed === 'object' && localParsed !== null) {
+                localIsEmpty = Object.keys(localParsed).length === 0;
+              } else {
+                localIsEmpty = localDataStr === '' || localDataStr === '[]' || localDataStr === '{}';
+              }
+            } catch (e) {
+              localIsEmpty = localDataStr === '' || localDataStr === '[]' || localDataStr === '{}';
+            }
+          }
           
           // Smart sync: compare timestamps to use the NEWER version (critical for consistency)
           if (localDataStr) {
@@ -2778,12 +2798,14 @@ async function autoSyncFromFirebase(user) {
                 // Only cloud has timestamp, use cloud
                 shouldSync = true;
               } else {
-                // No timestamps to compare, keep local (safer default)
-                shouldSync = false;
+                // No timestamps to compare
+                // Prefer cloud only if local is effectively empty/default
+                shouldSync = localIsEmpty;
               }
             } catch(e) {
               console.warn(`Could not compare timestamps for ${key}:`, e.message);
-              shouldSync = false; // Keep local if we can't compare
+              // If we cannot compare, prefer cloud only if local is empty
+              shouldSync = localIsEmpty;
             }
           }
           
@@ -4932,8 +4954,6 @@ travels:JSON.parse(localStorage.getItem('travels')||'[]'),
 travelLocations:JSON.parse(localStorage.getItem('travelLocations')||'[]'),
 customCards:JSON.parse(localStorage.getItem('customCards')||'[]'),
 dailyMemories:JSON.parse(localStorage.getItem('dailyMemories')||'{}'),
-headerPhotos:JSON.parse(localStorage.getItem('headerPhotos')||'[]'),
-currentHeaderPhoto:localStorage.getItem('currentHeaderPhoto')||'',
 categoryData:JSON.parse(localStorage.getItem('categoryData')||'{}'),
 pendingProjects:JSON.parse(localStorage.getItem('pendingProjects')||'[]'),
 selectedTheme:localStorage.getItem('selectedTheme')||'default',
@@ -4942,9 +4962,8 @@ darkMode:localStorage.getItem('darkMode')||'false',
 foodLog:JSON.parse(localStorage.getItem('foodLog')||'{}'),
 workoutLog:JSON.parse(localStorage.getItem('workoutLog')||'{}'),
 dreamLog:JSON.parse(localStorage.getItem('dreamLog')||'{}'),
-// Time tracked and photos
+// Time tracked
 timeTracked:JSON.parse(localStorage.getItem('timeTracked')||'{}'),
-photos:JSON.parse(localStorage.getItem('photos')||'[]'),
 // All notes/memories
 allNotes:JSON.parse(localStorage.getItem('allNotes')||'{}'),
 exportDate:new Date().toISOString()
@@ -4958,7 +4977,7 @@ a.download=`learn-thyself-backup-${new Date().toISOString().split('T')[0]}.json`
 a.click();
 URL.revokeObjectURL(url);
 toggleSettingsMenu();
-alert('✅ Data exported successfully!\n\n📊 Data included:\n• Mood & Energy tracking\n• Activities & completions\n• Time tracking\n• Ratings & Spending\n• Health data (Sleep, Pain, Clarity, Water)\n• Food, Workout & Dream logs\n• Memories, Travels & Photos\n• All custom settings');
+alert('✅ Data exported successfully!\n\n📊 Data included:\n• Mood & Energy tracking\n• Activities & completions\n• Time tracking\n• Ratings & Spending\n• Health data (Sleep, Pain, Clarity, Water)\n• Food, Workout & Dream logs\n• Memories, Travels & Notes\n• All custom settings\n\n📸 Note: Photos are stored locally only and not included in backups.');
 }
 
 // Import Data
@@ -4994,8 +5013,6 @@ localStorage.setItem('travels',JSON.stringify(data.travels||[]));
 localStorage.setItem('travelLocations',JSON.stringify(data.travelLocations||[]));
 localStorage.setItem('customCards',JSON.stringify(data.customCards||[]));
 localStorage.setItem('dailyMemories',JSON.stringify(data.dailyMemories||{}));
-localStorage.setItem('headerPhotos',JSON.stringify(data.headerPhotos||[]));
-localStorage.setItem('currentHeaderPhoto',data.currentHeaderPhoto||'');
 localStorage.setItem('categoryData',JSON.stringify(data.categoryData||{}));
 localStorage.setItem('pendingProjects',JSON.stringify(data.pendingProjects||[]));
 localStorage.setItem('selectedTheme',data.selectedTheme||'default');
@@ -5004,14 +5021,13 @@ localStorage.setItem('darkMode',data.darkMode||'false');
 localStorage.setItem('foodLog',JSON.stringify(data.foodLog||{}));
 localStorage.setItem('workoutLog',JSON.stringify(data.workoutLog||{}));
 localStorage.setItem('dreamLog',JSON.stringify(data.dreamLog||{}));
-// Time tracked and photos
+// Time tracked
 localStorage.setItem('timeTracked',JSON.stringify(data.timeTracked||{}));
-localStorage.setItem('photos',JSON.stringify(data.photos||[]));
 // All notes/memories
 localStorage.setItem('allNotes',JSON.stringify(data.allNotes||{}));
 // Sync to Firebase if logged in
 if(window.firebaseUserId){
-const keys=['dailyMoodEnergy','activities','activityCompletions','activityLog','photoAlbum','timeTracker','dailyRatings','dailyTodo','getItDone','sleepData','painData','clarityData','waterIntakeNew','waterIntake','daysCried','itemsLost','dailySpending','creditCards','travels','customCards','dailyMemories','headerPhotos','currentHeaderPhoto','categoryData','selectedTheme','darkMode','foodLog','workoutLog','dreamLog','timeTracked','photos','allNotes'];
+const keys=['dailyMoodEnergy','activities','activityCompletions','activityLog','photoAlbum','timeTracker','dailyRatings','dailyTodo','getItDone','sleepData','painData','clarityData','waterIntakeNew','waterIntake','daysCried','itemsLost','dailySpending','creditCards','travels','customCards','dailyMemories','categoryData','selectedTheme','darkMode','foodLog','workoutLog','dreamLog','timeTracked','allNotes','pendingProjects'];
 keys.forEach(key=>{
 const val=localStorage.getItem(key);
 if(val){try{saveToFirebase(key,JSON.parse(val));}catch(e){saveToFirebase(key,val);}}
@@ -5682,18 +5698,7 @@ if(!file) return;
 const reader=new FileReader();
 reader.onload=function(e){
 const photoData=e.target.result;
-// Get existing photos array
-const photos=JSON.parse(localStorage.getItem('headerPhotos')||'[]');
-// Add new photo
-photos.push({
-url:photoData,
-uploadedAt:new Date().toISOString()
-});
-// Save to localStorage
-localStorage.setItem('headerPhotos',JSON.stringify(photos));
-// Set as current header
-localStorage.setItem('currentHeaderPhoto',photoData);
-// Apply to arched photo frame
+// Display photo temporarily in session only (NOT saved to localStorage)
 const photoImg=document.getElementById('headerPhotoImg');
 const placeholder=document.getElementById('photoPlaceholder');
 if(photoImg){
@@ -5707,25 +5712,12 @@ if(frame){
 frame.style.opacity='0';
 setTimeout(()=>{frame.style.opacity='1';},100);
 }
-// Show success message
-// Notification disabled
 };
 reader.readAsDataURL(file);
 }
 
-// Load saved header photo on page load
-(function(){
-const savedPhoto=localStorage.getItem('currentHeaderPhoto');
-if(savedPhoto){
-const photoImg=document.getElementById('headerPhotoImg');
-const placeholder=document.getElementById('photoPlaceholder');
-if(photoImg){
-photoImg.src=savedPhoto;
-photoImg.style.display='block';
-if(placeholder)placeholder.style.display='none';
-}
-}
-})();
+// Photo frame is display-only, no persistence on page reload
+
 
 // Notification helper - Disabled
 function showNotification(message){
