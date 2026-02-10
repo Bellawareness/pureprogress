@@ -1,7 +1,36 @@
-# 🌍 Travels Tracking Feature
+# 🌍 Travel Tracking - Complete Guide
 
 ## Overview
-A comprehensive travel tracking system has been integrated into your habit tracker to help you keep track of all the cities you've visited, no matter how long ago!
+A comprehensive travel tracking system to help you keep track of all the cities you've visited, no matter how long ago!
+
+## Quick Start
+
+### Add a City You Visited
+1. Click the **🌍 Travels** tab
+2. Fill in the **City Name** (required)
+3. Add the **Country** (optional)
+4. Select **When did you visit?** (month/year)
+5. Write **Notes** about the place
+6. Click **"Add City"**
+
+### Find a City You Remember
+- Use the search box at the top of the "Search & Filter" section
+- Type the city name or country
+- Results show instantly as you type
+
+### Sort Your Travel List
+Choose from the dropdown menu:
+- **Most Recent** - Show newest visits first
+- **Oldest First** - Show your earliest travels first  
+- **Alphabetical (A-Z)** - Cities in A-Z order
+- **By Country** - Group cities by country
+
+### See Your Travel Stats
+At the top of the Travels tab, you'll see:
+- 🌐 **Total Cities Visited** - Count of unique cities
+- 🗺️ **Total Countries** - How many countries you've been to
+
+---
 
 ## What's New
 
