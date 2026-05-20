@@ -2304,6 +2304,12 @@ d.setHours(12,0,0,0);
 return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 }
 
+// Daily Dos - Calendar State (initialized early to avoid reference errors)
+var currentCalendarMonth = new Date().getMonth();
+var currentCalendarYear = new Date().getFullYear();
+var selectedCalendarDate = null;
+var currentTaskDate = getTodayString();
+
 // Parse date string to local date (fixes timezone offset issue)
 function parseLocalDate(dateStr) {
 const [year, month, day] = dateStr.split('-').map(Number);
@@ -4521,12 +4527,6 @@ dates.push(year+'-'+month+'-'+day);
 return dates;
 }
 
-// Daily Dos - Calendar State
-let currentCalendarMonth = new Date().getMonth();
-let currentCalendarYear = new Date().getFullYear();
-let selectedCalendarDate = null;
-let currentTaskDate = getTodayString(); // Track which date's tasks we're viewing
-
 // Daily Dos - Initialize Data
 function initDailyDosData() {
   if (!localStorage.getItem('dailyDosTasks')) {
@@ -4559,68 +4559,81 @@ function loadDailyDosCalendar() {
 }
 
 function renderCalendar() {
-  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'];
+  try {
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'];
 
-  document.getElementById('calendarMonth').textContent =
-    `${monthNames[currentCalendarMonth]} ${currentCalendarYear}`;
+    const calendarMonthEl = document.getElementById('calendarMonth');
+    if (calendarMonthEl) {
+      calendarMonthEl.textContent = `${monthNames[currentCalendarMonth]} ${currentCalendarYear}`;
+    }
 
-  const firstDay = new Date(currentCalendarYear, currentCalendarMonth, 1).getDay();
-  const daysInMonth = new Date(currentCalendarYear, currentCalendarMonth + 1, 0).getDate();
+    const firstDay = new Date(currentCalendarYear, currentCalendarMonth, 1).getDay();
+    const daysInMonth = new Date(currentCalendarYear, currentCalendarMonth + 1, 0).getDate();
 
-  const grid = document.getElementById('calendarGrid');
-  grid.innerHTML = '';
+    const grid = document.getElementById('calendarGrid');
+    if (!grid) {
+      console.error('Calendar grid element not found');
+      return;
+    }
 
-  const today = new Date();
-  const isCurrentMonth = today.getMonth() === currentCalendarMonth &&
-                         today.getFullYear() === currentCalendarYear;
-  const todayDate = today.getDate();
+    grid.innerHTML = '';
 
-  // Empty cells before first day
-  for (let i = 0; i < firstDay; i++) {
-    const emptyCell = document.createElement('div');
-    emptyCell.style.cssText = 'background:transparent;';
-    grid.appendChild(emptyCell);
-  }
+    const today = new Date();
+    const isCurrentMonth = today.getMonth() === currentCalendarMonth &&
+                           today.getFullYear() === currentCalendarYear;
+    const todayDate = today.getDate();
 
-  // Day cells
-  for (let day = 1; day <= daysInMonth; day++) {
-    const dayCell = document.createElement('div');
-    const isToday = isCurrentMonth && day === todayDate;
-    const isSelected = selectedCalendarDate &&
-      selectedCalendarDate.getDate() === day &&
-      selectedCalendarDate.getMonth() === currentCalendarMonth &&
-      selectedCalendarDate.getFullYear() === currentCalendarYear;
+    // Empty cells before first day
+    for (let i = 0; i < firstDay; i++) {
+      const emptyCell = document.createElement('div');
+      emptyCell.style.cssText = 'background:transparent;';
+      grid.appendChild(emptyCell);
+    }
 
-    dayCell.textContent = day;
-    dayCell.style.cssText = `
-      padding:12px;
-      text-align:center;
-      border-radius:8px;
-      cursor:pointer;
-      transition:all 0.2s;
-      font-weight:${isToday ? '700' : '500'};
-      background:${isSelected ? 'linear-gradient(135deg,#ec4899,#d946a6)' :
-                   isToday ? 'rgba(236,72,153,0.2)' : 'rgba(255,255,255,0.5)'};
-      color:${isSelected ? '#fff' : '#be185d'};
-      border:${isToday ? '2px solid #ec4899' : '1px solid rgba(190,24,93,0.2)'};
-    `;
+    // Day cells
+    for (let day = 1; day <= daysInMonth; day++) {
+      const dayCell = document.createElement('div');
+      const isToday = isCurrentMonth && day === todayDate;
+      const isSelected = selectedCalendarDate &&
+        selectedCalendarDate.getDate() === day &&
+        selectedCalendarDate.getMonth() === currentCalendarMonth &&
+        selectedCalendarDate.getFullYear() === currentCalendarYear;
 
-    dayCell.addEventListener('click', () => selectDate(day));
-    dayCell.addEventListener('mouseenter', function() {
-      if (!isSelected) {
-        this.style.background = 'rgba(236,72,153,0.15)';
-        this.style.transform = 'scale(1.05)';
-      }
-    });
-    dayCell.addEventListener('mouseleave', function() {
-      if (!isSelected) {
-        this.style.background = isToday ? 'rgba(236,72,153,0.2)' : 'rgba(255,255,255,0.5)';
-        this.style.transform = 'scale(1)';
-      }
-    });
+      dayCell.textContent = day;
+      dayCell.style.cssText = `
+        padding:12px;
+        text-align:center;
+        border-radius:8px;
+        cursor:pointer;
+        transition:all 0.2s;
+        font-weight:${isToday ? '700' : '500'};
+        background:${isSelected ? 'linear-gradient(135deg,#ec4899,#d946a6)' :
+                     isToday ? 'rgba(236,72,153,0.2)' : 'rgba(255,255,255,0.5)'};
+        color:${isSelected ? '#fff' : '#be185d'};
+        border:${isToday ? '2px solid #ec4899' : '1px solid rgba(190,24,93,0.2)'};
+      `;
 
-    grid.appendChild(dayCell);
+      dayCell.addEventListener('click', () => selectDate(day));
+      dayCell.addEventListener('mouseenter', function() {
+        if (!isSelected) {
+          this.style.background = 'rgba(236,72,153,0.15)';
+          this.style.transform = 'scale(1.05)';
+        }
+      });
+      dayCell.addEventListener('mouseleave', function() {
+        if (!isSelected) {
+          this.style.background = isToday ? 'rgba(236,72,153,0.2)' : 'rgba(255,255,255,0.5)';
+          this.style.transform = 'scale(1)';
+        }
+      });
+
+      grid.appendChild(dayCell);
+    }
+
+    console.log(`Calendar rendered: ${daysInMonth} days`);
+  } catch (error) {
+    console.error('Error rendering calendar:', error);
   }
 }
 
@@ -4629,7 +4642,10 @@ function selectDate(day) {
   currentTaskDate = selectedCalendarDate.toISOString().split('T')[0];
   renderCalendar();
   updateSelectedDate();
-  loadTasks(); // Reload tasks for selected date
+  loadTasks();
+  loadWorkouts();
+  loadFood();
+  loadComingUp();
   updateTaskDateDisplay();
 }
 
