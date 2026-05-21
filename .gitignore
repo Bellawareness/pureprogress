@@ -32,3 +32,5 @@ env/
 
 # Test files
 test_*.html
+
+server.log
