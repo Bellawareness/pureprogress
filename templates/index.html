@@ -1375,31 +1375,7 @@ flex:1;
 </div>
 </div>
 
-<!-- Update tab switching to handle new button styles -->
-<script>
-window.originalSwitchTab = window.switchTab;
-window.switchTab = function(tab) {
-  if (window.originalSwitchTab) window.originalSwitchTab(tab);
-  // Update button styles
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    if ((tab === 'today' && btn.textContent === 'Today') ||
-        (tab === 'dailydos' && btn.textContent === 'Daily Dos') ||
-        (tab === 'history' && btn.textContent === 'History')) {
-      btn.style.background = 'linear-gradient(135deg,#ffd6e7,#ffb3c6)';
-      btn.style.color = '#d63384';
-      btn.style.border = 'none';
-      btn.style.boxShadow = '0 2px 8px rgba(255,107,198,0.3)';
-      btn.classList.add('active');
-    } else {
-      btn.style.background = 'white';
-      btn.style.color = '#9ca3af';
-      btn.style.border = '2px solid #e5e7eb';
-      btn.style.boxShadow = 'none';
-      btn.classList.remove('active');
-    }
-  });
-};
-</script>
+<!-- Tab switching script removed - merged into main switchTab function -->
 
 <!-- Today View -->
 <div id="todayView" class="view-section active">
@@ -4655,11 +4631,21 @@ const btn=document.querySelector(`button[onclick="switchTab('${tab}')"]`);
 if(tab===tabName){
 view.classList.add('active');
 btn.classList.add('active');
+// Update button styles for active tab
+btn.style.background='linear-gradient(135deg,#ffd6e7,#ffb3c6)';
+btn.style.color='#d63384';
+btn.style.border='none';
+btn.style.boxShadow='0 2px 8px rgba(255,107,198,0.3)';
 if(tab==='history')loadHistory();
 if(tab==='dailydos')loadDailyDosCalendar();
 }else{
 view.classList.remove('active');
 btn.classList.remove('active');
+// Update button styles for inactive tabs
+btn.style.background='white';
+btn.style.color='#9ca3af';
+btn.style.border='2px solid #e5e7eb';
+btn.style.boxShadow='none';
 }
 });
 }
