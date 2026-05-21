@@ -269,7 +269,7 @@ body.theme-ocean .activity-item:nth-child(2n){background:#a5f3fc !important;bord
 body.theme-ocean .activity-item:nth-child(3n){background:#7dd3fc !important;border-color:#0284c7;}
 body.theme-ocean .rating-row{background:#cffafe;border:2px solid #22d3ee;}
 body.theme-ocean .mood-btn{background:#bae6fd;border:2px solid #0ea5e9;color:#0c4a6e;}
-body.theme-ocean .mood-btn.selected{background:#0ea5e9;color:white;}
+/* mood-btn.selected styling handled by inline JS */
 body.theme-ocean .progress-fill{background:linear-gradient(90deg,#06b6d4,#0ea5e9);}
 body.theme-ocean input[type="range"]{background:linear-gradient(90deg,#67e8f9,#22d3ee);}
 body.theme-ocean input[type="range"]::-webkit-slider-thumb{background:#0ea5e9;}
@@ -297,7 +297,7 @@ body.theme-forest .activity-item:nth-child(2n){background:#a7f3d0 !important;bor
 body.theme-forest .activity-item:nth-child(3n){background:#6ee7b7 !important;border-color:#059669;}
 body.theme-forest .rating-row{background:#d1fae5;border:2px solid #34d399;}
 body.theme-forest .mood-btn{background:#d1fae5;border:2px solid #10b981;color:#064e3b;}
-body.theme-forest .mood-btn.selected{background:#10b981;color:white;}
+/* mood-btn.selected styling handled by inline JS */
 body.theme-forest .progress-fill{background:linear-gradient(90deg,#059669,#10b981);}
 body.theme-forest input[type="range"]{background:linear-gradient(90deg,#6ee7b7,#34d399);}
 body.theme-forest input[type="range"]::-webkit-slider-thumb{background:#10b981;}
@@ -325,7 +325,7 @@ body.theme-sunset .activity-item:nth-child(2n){background:#fde68a !important;bor
 body.theme-sunset .activity-item:nth-child(3n){background:#fef3c7 !important;border-color:#f59e0b;}
 body.theme-sunset .rating-row{background:#fef3c7;border:2px solid #fbbf24;}
 body.theme-sunset .mood-btn{background:#fed7aa;border:2px solid #fb923c;color:#78350f;}
-body.theme-sunset .mood-btn.selected{background:#f97316;color:white;}
+/* mood-btn.selected styling handled by inline JS */
 body.theme-sunset .progress-fill{background:linear-gradient(90deg,#f59e0b,#fb923c);}
 body.theme-sunset input[type="range"]{background:linear-gradient(90deg,#fca5a5,#fb923c);}
 body.theme-sunset input[type="range"]::-webkit-slider-thumb{background:#f97316;}
@@ -355,7 +355,7 @@ body.theme-plain .activity-item:nth-child(2n){background:#eeeeee !important;bord
 body.theme-plain .activity-item:nth-child(3n){background:#e5e5e5 !important;border-color:#aaaaaa;}
 body.theme-plain .rating-row{background:#f5f5f5;border:2px solid #cccccc;color:#000000;}
 body.theme-plain .mood-btn{background:#f5f5f5;border:2px solid #cccccc;color:#000000;}
-body.theme-plain .mood-btn.selected{background:#000000;color:#ffffff;}
+/* mood-btn.selected styling handled by inline JS */
 body.theme-plain .progress-fill{background:linear-gradient(90deg,#333333,#000000);}
 body.theme-plain input[type="range"]{background:linear-gradient(90deg,#dddddd,#999999);}
 body.theme-plain input[type="range"]::-webkit-slider-thumb{background:#000000;}
@@ -385,7 +385,7 @@ body.dark-mode{
 }
 body.dark-mode .card-title{color:#fde047 !important;}
 body.dark-mode .mood-btn{background:#5b21b6;color:#e9d5ff;border-color:#a78bfa;}
-body.dark-mode .mood-btn.selected{background:linear-gradient(135deg,#fbbf24 0%,#f59e0b 100%);color:#1e1929;}
+/* mood-btn.selected styling handled by inline JS */
 body.dark-mode .activity-item{background:#1e40af;color:#f9fafb;border:1px solid #3b82f6;}
 body.dark-mode .activity-item:nth-child(2n){background:#065f46;border-color:#10b981;}
 body.dark-mode .activity-item:nth-child(3n){background:#92400e;border-color:#f59e0b;}
@@ -639,6 +639,8 @@ body{font-family:Inter,system-ui,-apple-system,Arial,sans-serif;margin:0;min-hei
 @keyframes subtlePulse{0%,100%{box-shadow:0 8px 32px rgba(255,182,193,0.15);}50%{box-shadow:0 10px 36px rgba(255,182,193,0.22);}}
 @keyframes subtleFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-3px);}}
 @keyframes shimmer{0%{background-position:-200% 0;}100%{background-position:200% 0;}}
+@keyframes slideInRight{0%{transform:translateX(100%);opacity:0;}100%{transform:translateX(0);opacity:1;}}
+@keyframes slideOutRight{0%{transform:translateX(0);opacity:1;}100%{transform:translateX(100%);opacity:0;}}
 .card{animation:subtlePulse 8s ease-in-out infinite;}
 .card:nth-child(2n){animation-delay:-2s;}
 .card:nth-child(3n){animation-delay:-4s;}
@@ -654,7 +656,7 @@ body{font-family:Inter,system-ui,-apple-system,Arial,sans-serif;margin:0;min-hei
 @keyframes titleShimmer{0%{background-position:0% center;}100%{background-position:200% center;}}
 .mood-btn{width:56px;height:56px;border-radius:16px;border:2px solid transparent;background:var(--pastel-lavender);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.75rem;transition:all 0.3s ease;}
 .mood-btn:hover{transform:scale(1.1);box-shadow:0 8px 24px rgba(167,139,250,0.3);}
-.mood-btn.selected{background:linear-gradient(135deg,#fbbf24 0%,#f59e0b 100%);border-color:#f59e0b;box-shadow:0 8px 24px rgba(245,158,11,0.4);transform:scale(1.15);}
+/* .mood-btn.selected styling handled by inline JS to avoid theme conflicts */
 .activity-item{background:var(--pastel-mint);border-radius:16px;padding:20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;transition:all 0.4s cubic-bezier(0.4, 0, 0.2, 1);animation:fadeSlideIn 0.5s ease backwards;}
 .activity-item:nth-child(1){animation-delay:0.05s;}
 .activity-item:nth-child(2){background:var(--pastel-blue);animation-delay:0.1s;}
@@ -1472,142 +1474,188 @@ window.switchTab = function(tab) {
 </div>
 </div>
 
-<!-- Health Trackers Grid -->
-<div class="health-tracker-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:12px;margin-bottom:24px;">
-
-<!-- Sleep Tracker -->
-<div class="card" style="background:linear-gradient(135deg,#ddd6fe 0%,rgba(221,214,254,0.7) 100%);padding:16px;">
-<h2 class="card-title" style="color:#7c3aed;font-size:0.95rem;margin-bottom:12px;display:flex;align-items:center;gap:6px;">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
-</svg>
-Sleep
+<!-- Health Trackers - Enhanced UI with More Options -->
+<div style="margin-bottom:24px;">
+<h2 style="font-size:1.3rem;color:#1f2937;margin-bottom:20px;font-weight:800;display:flex;align-items:center;gap:10px;">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+Daily Health Check
 </h2>
-<div style="margin-bottom:10px;">
-<label style="display:block;font-weight:600;color:#6b7280;margin-bottom:6px;font-size:0.8rem;">Hours</label>
-<input type="number" id="sleepHours" min="0" max="24" step="0.5" placeholder="8.0" style="width:100%;padding:6px;font-size:0.875rem;"/>
-</div>
-<div style="margin-bottom:10px;">
-<label style="display:block;font-weight:600;color:#6b7280;margin-bottom:6px;font-size:0.8rem;">Quality</label>
-<div id="sleepQualityButtons" style="display:flex;gap:6px;justify-content:space-between;">
-<button class="mood-btn" data-quality="1" title="Poor" style="width:32px;height:32px;">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/></svg>
-</button>
-<button class="mood-btn" data-quality="2" title="Fair" style="width:32px;height:32px;">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 15h8"/></svg>
-</button>
-<button class="mood-btn" data-quality="3" title="Good" style="width:32px;height:32px;">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg>
-</button>
-<button class="mood-btn" data-quality="4" title="Great" style="width:32px;height:32px;">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 13s1.5 3 4 3 4-3 4-3"/><circle cx="9" cy="9" r="1" fill="currentColor"/><circle cx="15" cy="9" r="1" fill="currentColor"/></svg>
-</button>
-<button class="mood-btn" data-quality="5" title="Excellent" style="width:32px;height:32px;">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-</button>
-</div>
-</div>
-<button id="saveSleepBtn" class="btn" style="width:100%;padding:8px;font-size:0.8rem;">Save</button>
-<div id="sleepStatus" style="display:none;color:#7c3aed;font-weight:600;margin-top:6px;text-align:center;font-size:0.75rem;"></div>
+
+<!-- 2x2 Grid Layout -->
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:20px;">
+
+<!-- Sleep Tracker - Enhanced -->
+<div class="card" style="background:linear-gradient(135deg,#e9d5ff 0%,#f3e8ff 100%);padding:24px;border:3px solid #c084fc;box-shadow:0 4px 16px rgba(192,132,252,0.2);">
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2.5"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+<h3 style="color:#7c3aed;font-size:1.2rem;font-weight:800;margin:0;">Sleep</h3>
 </div>
 
-<!-- Pain Level Tracker -->
-<div class="card" style="background:linear-gradient(135deg,#fecaca 0%,rgba(254,202,202,0.7) 100%);padding:16px;">
-<h2 class="card-title" style="color:#dc2626;font-size:0.95rem;margin-bottom:12px;display:flex;align-items:center;gap:6px;">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-<line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-</svg>
-Pain
-</h2>
-<div style="display:flex;gap:6px;margin-bottom:10px;justify-content:space-between;">
-<button class="mood-btn" data-pain="0" title="No Pain" style="width:38px;height:38px;">
+<!-- Hours Input -->
+<div style="background:white;padding:16px;border-radius:10px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+<label style="display:block;font-weight:700;color:#4b5563;margin-bottom:10px;font-size:0.95rem;">Hours Slept</label>
+<input type="number" id="sleepHours" min="0" max="24" step="0.5" placeholder="7.5" style="width:100%;padding:12px;font-size:1.1rem;border:2px solid #e5e7eb;border-radius:8px;font-weight:600;"/>
+</div>
+
+<!-- Quality Rating -->
+<div style="background:white;padding:16px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+<label style="display:block;font-weight:700;color:#4b5563;margin-bottom:10px;font-size:0.95rem;text-align:center;">Sleep Quality</label>
+<div style="display:flex;gap:8px;justify-content:space-between;">
+<button class="sleep-quality-btn" data-quality="1" title="Poor" style="flex:1;padding:10px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:4px;">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="8" y1="8" x2="16" y2="16"/><line x1="16" y1="8" x2="8" y2="16"/></svg>
+<span style="font-size:0.7rem;font-weight:600;">Poor</span>
+</button>
+<button class="sleep-quality-btn" data-quality="2" title="Fair" style="flex:1;padding:10px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:4px;">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="8" y1="15" x2="16" y2="15"/></svg>
+<span style="font-size:0.7rem;font-weight:600;">Fair</span>
+</button>
+<button class="sleep-quality-btn" data-quality="3" title="Good" style="flex:1;padding:10px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:4px;">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg>
+<span style="font-size:0.7rem;font-weight:600;">Good</span>
+</button>
+<button class="sleep-quality-btn" data-quality="4" title="Great" style="flex:1;padding:10px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:4px;">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 13s1.5 3 4 3 4-3 4-3"/><circle cx="9" cy="9" r="1.5" fill="currentColor"/><circle cx="15" cy="9" r="1.5" fill="currentColor"/></svg>
+<span style="font-size:0.7rem;font-weight:600;">Great</span>
+</button>
+<button class="sleep-quality-btn" data-quality="5" title="Excellent" style="flex:1;padding:10px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:4px;">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+<span style="font-size:0.7rem;font-weight:600;">Excellent</span>
+</button>
+</div>
+</div>
+
+<div id="sleepStatus" style="text-align:center;color:#7c3aed;font-weight:700;min-height:24px;font-size:0.9rem;margin-top:12px;"></div>
+</div>
+
+<!-- Water Tracker - Enhanced -->
+<div class="card" style="background:linear-gradient(135deg,#bfdbfe 0%,#dbeafe 100%);padding:24px;border:3px solid #60a5fa;box-shadow:0 4px 16px rgba(96,165,250,0.2);">
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+<h3 style="color:#2563eb;font-size:1.2rem;font-weight:800;margin:0;">Water Intake</h3>
+</div>
+
+<div style="background:white;padding:16px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+<label style="display:block;font-weight:700;color:#4b5563;margin-bottom:12px;font-size:0.95rem;text-align:center;">Glasses (8oz each)</label>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
+<button class="water-btn" data-count="1" style="padding:12px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:4px;">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+<span style="font-size:0.8rem;font-weight:700;">1</span>
+</button>
+<button class="water-btn" data-count="2" style="padding:12px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:4px;">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+<span style="font-size:0.8rem;font-weight:700;">2</span>
+</button>
+<button class="water-btn" data-count="3" style="padding:12px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:4px;">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+<span style="font-size:0.8rem;font-weight:700;">3</span>
+</button>
+<button class="water-btn" data-count="4" style="padding:12px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:4px;">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+<span style="font-size:0.8rem;font-weight:700;">4</span>
+</button>
+<button class="water-btn" data-count="5" style="padding:12px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:4px;">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+<span style="font-size:0.8rem;font-weight:700;">5</span>
+</button>
+<button class="water-btn" data-count="6" style="padding:12px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:4px;">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+<span style="font-size:0.8rem;font-weight:700;">6</span>
+</button>
+<button class="water-btn" data-count="7" style="padding:12px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:4px;">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+<span style="font-size:0.8rem;font-weight:700;">7</span>
+</button>
+<button class="water-btn" data-count="8" style="padding:12px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:4px;">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+<span style="font-size:0.8rem;font-weight:700;">8</span>
+</button>
+</div>
+</div>
+
+<div id="waterStatus" style="text-align:center;color:#2563eb;font-weight:700;min-height:24px;font-size:0.9rem;margin-top:12px;"></div>
+</div>
+
+<!-- Pain Tracker - Enhanced -->
+<div class="card" style="background:linear-gradient(135deg,#fecaca 0%,#fee2e2 100%);padding:24px;border:3px solid #f87171;box-shadow:0 4px 16px rgba(248,113,113,0.2);">
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+<h3 style="color:#dc2626;font-size:1.2rem;font-weight:800;margin:0;">Pain Level</h3>
+</div>
+
+<div style="background:white;padding:16px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+<label style="display:block;font-weight:700;color:#4b5563;margin-bottom:12px;font-size:0.95rem;text-align:center;">Pain Intensity (0-10)</label>
+<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:14px;">
+<button class="pain-btn" data-level="0" title="No Pain" style="padding:8px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;">
 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+<span style="font-size:0.7rem;font-weight:700;">0</span>
 </button>
-<button class="mood-btn" data-pain="1" title="Mild" style="width:38px;height:38px;">
+<button class="pain-btn" data-level="2" title="Mild" style="padding:8px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;">
 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+<span style="font-size:0.7rem;font-weight:700;">2</span>
 </button>
-<button class="mood-btn" data-pain="2" title="Moderate" style="width:38px;height:38px;">
-<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+<button class="pain-btn" data-level="4" title="Moderate" style="padding:8px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1-1-4-1-4 1-4 1"/><line x1="9" y1="10" x2="9.01" y2="10"/><line x1="15" y1="10" x2="15.01" y2="10"/></svg>
+<span style="font-size:0.7rem;font-weight:700;">4</span>
 </button>
-<button class="mood-btn" data-pain="3" title="Severe" style="width:38px;height:38px;">
+<button class="pain-btn" data-level="6" title="Severe" style="padding:8px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="8" y1="9" x2="10" y2="11"/><line x1="16" y1="9" x2="14" y2="11"/></svg>
+<span style="font-size:0.7rem;font-weight:700;">6</span>
+</button>
+<button class="pain-btn" data-level="8" title="Very Severe" style="padding:8px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;">
 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M16 17s-1.5-3-4-3-4 3-4 3"/><line x1="7" y1="7" x2="10" y2="10"/><line x1="17" y1="7" x2="14" y2="10"/></svg>
+<span style="font-size:0.7rem;font-weight:700;">8</span>
 </button>
-</div>
-<div id="painLabel" style="color:#6b7280;font-size:0.75rem;text-align:center;min-height:20px;margin-bottom:8px;">No pain recorded</div>
-<div style="margin-top:8px;">
-<label style="display:block;font-weight:600;color:#6b7280;margin-bottom:6px;font-size:0.8rem;">What hurts?</label>
-<input type="text" id="painLocation" placeholder="e.g., Lower back, headache..." style="width:100%;padding:6px;font-size:0.875rem;border:2px solid rgba(239,68,68,0.2);border-radius:6px;"/>
-</div>
-<div id="painHistoryList" style="margin-top:12px;max-height:120px;overflow-y:auto;"></div>
+<button class="pain-btn" data-level="10" title="Worst Possible" style="padding:8px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/><path d="M16 18s-2-4-4-4-4 4-4 4"/><line x1="6" y1="6" x2="10" y2="10"/><line x1="18" y1="6" x2="14" y2="10"/></svg>
+<span style="font-size:0.7rem;font-weight:700;">10</span>
+</button>
 </div>
 
-<!-- Mental Clarity Tracker -->
-<div class="card" style="background:linear-gradient(135deg,#e0f2fe 0%,rgba(224,242,254,0.7) 100%);padding:16px;">
-<h2 class="card-title" style="color:#0284c7;font-size:0.95rem;margin-bottom:12px;display:flex;align-items:center;gap:6px;">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-<path d="M21.5 12a9.5 9.5 0 1 1-19 0 9.5 9.5 0 0 1 19 0z"/>
-<path d="M12 3v1m0 16v1m9-9h-1M3 12H2m16.5-6.5l-.7.7M6.2 17.8l-.7.7m12.3 0l-.7-.7M6.2 6.2l-.7-.7"/>
-</svg>
-Clarity
-</h2>
-<div style="display:flex;gap:4px;margin-bottom:10px;justify-content:space-between;">
-<button class="mood-btn" data-clarity="1" title="Foggy" style="width:32px;height:32px;">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="4" y1="8" x2="20" y2="8"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="4" y1="16" x2="20" y2="16"/></svg>
-</button>
-<button class="mood-btn" data-clarity="2" title="Unclear" style="width:32px;height:32px;">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="10" r="3"/><line x1="4" y1="18" x2="20" y2="18" opacity="0.4"/></svg>
-</button>
-<button class="mood-btn" data-clarity="3" title="Clear" style="width:32px;height:32px;">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/></svg>
-</button>
-<button class="mood-btn" data-clarity="4" title="Very Clear" style="width:32px;height:32px;">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="23" y1="12" x2="19" y2="12"/><line x1="5" y1="12" x2="1" y2="12"/><line x1="18.4" y1="5.6" x2="15.5" y2="8.5"/><line x1="8.5" y1="15.5" x2="5.6" y2="18.4"/><line x1="18.4" y1="18.4" x2="15.5" y2="15.5"/><line x1="8.5" y1="8.5" x2="5.6" y2="5.6"/></svg>
-</button>
-<button class="mood-btn" data-clarity="5" title="Crystal Clear" style="width:32px;height:32px;">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,2 15,9 22,9 17,14 19,22 12,17 5,22 7,14 2,9 9,9"/></svg>
-</button>
-</div>
-<div id="clarityLabel" style="color:#6b7280;font-size:0.75rem;text-align:center;min-height:40px;display:flex;align-items:center;justify-content:center;">Not recorded</div>
+<!-- Body Location -->
+<label style="display:block;font-weight:700;color:#4b5563;margin-bottom:8px;font-size:0.85rem;">Where? (optional)</label>
+<input type="text" id="painLocation" placeholder="e.g., Lower back, headache..." style="width:100%;padding:10px;font-size:0.9rem;border:2px solid #e5e7eb;border-radius:8px;"/>
 </div>
 
-<!-- Water Intake Tracker -->
-<div class="card" style="background:linear-gradient(135deg,#dbeafe 0%,rgba(219,234,254,0.7) 100%);padding:16px;">
-<h2 class="card-title" style="color:#2563eb;font-size:0.95rem;margin-bottom:12px;display:flex;align-items:center;gap:6px;">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-<path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
-</svg>
-Water
-</h2>
-<div style="display:flex;gap:4px;margin-bottom:10px;justify-content:space-between;">
-<div class="water-glass" data-glass="0" style="cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:6px;transition:all 0.2s;">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-</div>
-<div class="water-glass" data-glass="1" style="cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:6px;transition:all 0.2s;">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-</div>
-<div class="water-glass" data-glass="2" style="cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:6px;transition:all 0.2s;">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-</div>
-<div class="water-glass" data-glass="3" style="cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:6px;transition:all 0.2s;">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-</div>
-<div class="water-glass" data-glass="4" style="cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:6px;transition:all 0.2s;">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-</div>
-<div class="water-glass" data-glass="5" style="cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:6px;transition:all 0.2s;">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-</div>
-<div class="water-glass" data-glass="6" style="cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:6px;transition:all 0.2s;">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-</div>
-<div class="water-glass" data-glass="7" style="cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:6px;transition:all 0.2s;">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-</div>
-</div>
-<div id="waterLabel" style="color:#6b7280;font-size:0.75rem;text-align:center;min-height:40px;display:flex;align-items:center;justify-content:center;">0/8 glasses</div>
+<div id="painStatus" style="text-align:center;color:#dc2626;font-weight:700;min-height:24px;font-size:0.9rem;margin-top:12px;"></div>
 </div>
 
+<!-- Clarity Tracker - Enhanced -->
+<div class="card" style="background:linear-gradient(135deg,#a5f3fc 0%,#e0f2fe 100%);padding:24px;border:3px solid #22d3ee;box-shadow:0 4px 16px rgba(34,211,238,0.2);">
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.5"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/></svg>
+<h3 style="color:#0284c7;font-size:1.2rem;font-weight:800;margin:0;">Mental Clarity</h3>
+</div>
+
+<div style="background:white;padding:16px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+<label style="display:block;font-weight:700;color:#4b5563;margin-bottom:12px;font-size:0.95rem;text-align:center;">Focus Level (1-5)</label>
+<div style="display:flex;gap:8px;justify-content:space-between;">
+<button class="clarity-btn" data-level="1" title="Very Foggy" style="flex:1;padding:12px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:5px;">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="4" y1="8" x2="20" y2="8"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="4" y1="16" x2="20" y2="16"/></svg>
+<span style="font-size:0.7rem;font-weight:700;">Foggy</span>
+</button>
+<button class="clarity-btn" data-level="2" title="Unclear" style="flex:1;padding:12px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:5px;">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="10" r="3"/><line x1="4" y1="18" x2="20" y2="18" opacity="0.5"/></svg>
+<span style="font-size:0.7rem;font-weight:700;">Unclear</span>
+</button>
+<button class="clarity-btn" data-level="3" title="Clear" style="flex:1;padding:12px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:5px;">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/></svg>
+<span style="font-size:0.7rem;font-weight:700;">Clear</span>
+</button>
+<button class="clarity-btn" data-level="4" title="Very Clear" style="flex:1;padding:12px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:5px;">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="23" y1="12" x2="19" y2="12"/><line x1="5" y1="12" x2="1" y2="12"/><line x1="18.4" y1="5.6" x2="15.5" y2="8.5"/><line x1="8.5" y1="15.5" x2="5.6" y2="18.4"/><line x1="18.4" y1="18.4" x2="15.5" y2="15.5"/><line x1="8.5" y1="8.5" x2="5.6" y2="5.6"/></svg>
+<span style="font-size:0.7rem;font-weight:700;">Sharp</span>
+</button>
+<button class="clarity-btn" data-level="5" title="Crystal Clear" style="flex:1;padding:12px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:5px;">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,2 15,9 22,9 17,14 19,22 12,17 5,22 7,14 2,9 9,9"/></svg>
+<span style="font-size:0.7rem;font-weight:700;">Crystal</span>
+</button>
+</div>
+</div>
+
+<div id="clarityStatus" style="text-align:center;color:#0284c7;font-weight:700;min-height:24px;font-size:0.9rem;margin-top:12px;"></div>
+</div>
+
+</div>
 </div>
 
 <!-- Reflections & Tracking -->
@@ -2320,6 +2368,18 @@ return new Date(year, month - 1, day, 12, 0, 0);
 function formatDateForDisplay(dateStr, options) {
 const d = parseLocalDate(dateStr);
 return d.toLocaleDateString('en-US', options || {weekday:'short',month:'short',day:'numeric',year:'numeric'});
+}
+
+// Global toast notification function
+function showToast(message, duration = 2000) {
+const toast = document.createElement('div');
+toast.textContent = message;
+toast.style.cssText = 'position:fixed;top:20px;right:20px;background:#10b981;color:white;padding:12px 20px;border-radius:8px;font-weight:600;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.15);animation:slideInRight 0.3s ease;';
+document.body.appendChild(toast);
+setTimeout(() => {
+toast.style.animation = 'slideOutRight 0.3s ease';
+setTimeout(() => toast.remove(), 300);
+}, duration);
 }
 
 // Firebase Sync Helper Functions
@@ -3241,8 +3301,41 @@ window.handleLogout = function() {
   }
 };
 
-(function(){const moodBtns=document.querySelectorAll('#moodButtons .mood-btn');const energyBtns=document.querySelectorAll('#energyButtons .mood-btn');const moodLabel=document.getElementById('moodLabel');const energyLabel=document.getElementById('energyLabel');const moodNote=document.getElementById('moodNote');const energyNote=document.getElementById('energyNote');const saveBtn=document.getElementById('saveMoodBtn');const status=document.getElementById('moodStatus');const moodLabels=['','Very Sad','Sad','Neutral','Happy','Very Happy'];function clearSelection(btns){btns.forEach(b=>b.classList.remove('selected'));}
-moodBtns.forEach(btn=>{btn.addEventListener('click',()=>{clearSelection(moodBtns);btn.classList.add('selected');const val=btn.dataset.mood;moodLabel.textContent='Selected: '+moodLabels[val];});});energyBtns.forEach(btn=>{btn.addEventListener('click',()=>{clearSelection(energyBtns);btn.classList.add('selected');const val=btn.dataset.energy;energyLabel.textContent='Selected: Level '+val;});});saveBtn.addEventListener('click',()=>{
+(function(){const moodBtns=document.querySelectorAll('#moodButtons .mood-btn');const energyBtns=document.querySelectorAll('#energyButtons .mood-btn');const moodLabel=document.getElementById('moodLabel');const energyLabel=document.getElementById('energyLabel');const moodNote=document.getElementById('moodNote');const energyNote=document.getElementById('energyNote');const saveBtn=document.getElementById('saveMoodBtn');const status=document.getElementById('moodStatus');const moodLabels=['','Very Sad','Sad','Neutral','Happy','Very Happy'];
+function clearSelection(btns){
+btns.forEach(b=>{
+b.classList.remove('selected');
+b.style.background='';
+b.style.color='';
+b.style.border='';
+b.style.transform='';
+});
+}
+moodBtns.forEach(btn=>{
+btn.addEventListener('click',()=>{
+clearSelection(moodBtns);
+btn.classList.add('selected');
+btn.style.background='#1e293b';
+btn.style.color='#ffffff';
+btn.style.border='3px solid #0ea5e9';
+btn.style.transform='scale(1.1)';
+const val=btn.dataset.mood;
+moodLabel.textContent='Selected: '+moodLabels[val];
+});
+});
+energyBtns.forEach(btn=>{
+btn.addEventListener('click',()=>{
+clearSelection(energyBtns);
+btn.classList.add('selected');
+btn.style.background='#1e293b';
+btn.style.color='#ffffff';
+btn.style.border='3px solid #0ea5e9';
+btn.style.transform='scale(1.1)';
+const val=btn.dataset.energy;
+energyLabel.textContent='Selected: Level '+val;
+});
+});
+saveBtn.addEventListener('click',()=>{
 try {
 const selMood=document.querySelector('#moodButtons .mood-btn.selected');
 const selEnergy=document.querySelector('#energyButtons .mood-btn.selected');
@@ -3286,8 +3379,29 @@ status.style.color='';
 },3000);
 alert('Failed to save mood/energy data. Please try again.');
 }
-});const today=getTodayString();const store=JSON.parse(localStorage.getItem('dailyMoodEnergy')||'{}');const todayData=store[today];if(todayData){if(todayData.mood){const btn=document.querySelector('#moodButtons .mood-btn[data-mood="'+todayData.mood+'"]');if(btn){btn.classList.add('selected');moodLabel.textContent='Selected: '+moodLabels[todayData.mood];}}
-if(todayData.energy){const btn=document.querySelector('#energyButtons .mood-btn[data-energy="'+todayData.energy+'"]');if(btn){btn.classList.add('selected');energyLabel.textContent='Selected: Level '+todayData.energy;}}
+});const today=getTodayString();const store=JSON.parse(localStorage.getItem('dailyMoodEnergy')||'{}');const todayData=store[today];if(todayData){
+if(todayData.mood){
+const btn=document.querySelector('#moodButtons .mood-btn[data-mood="'+todayData.mood+'"]');
+if(btn){
+btn.classList.add('selected');
+btn.style.background='#1e293b';
+btn.style.color='#ffffff';
+btn.style.border='3px solid #0ea5e9';
+btn.style.transform='scale(1.1)';
+moodLabel.textContent='Selected: '+moodLabels[todayData.mood];
+}
+}
+if(todayData.energy){
+const btn=document.querySelector('#energyButtons .mood-btn[data-energy="'+todayData.energy+'"]');
+if(btn){
+btn.classList.add('selected');
+btn.style.background='#1e293b';
+btn.style.color='#ffffff';
+btn.style.border='3px solid #0ea5e9';
+btn.style.transform='scale(1.1)';
+energyLabel.textContent='Selected: Level '+todayData.energy;
+}
+}
 if(todayData.moodNote)moodNote.value=todayData.moodNote;if(todayData.energyNote)energyNote.value=todayData.energyNote;}
 
 // AUTO-SAVE FUNCTIONALITY - Save notes as user types
@@ -3440,7 +3554,9 @@ addBtn.addEventListener('click',()=>{const text=input.value.trim();if(!text)retu
 function createListHandler(inputId,btnId,listId,storageKey){const input=document.getElementById(inputId);const btn=document.getElementById(btnId);const list=document.getElementById(listId);let items=JSON.parse(localStorage.getItem(storageKey)||'[]');function save(){localStorage.setItem(storageKey,JSON.stringify(items));saveToFirebase(storageKey,items);}
 function render(){list.innerHTML='';items.forEach((text,idx)=>{const li=document.createElement('li');li.className='todo-item';li.style.display='flex';li.style.justifyContent='space-between';li.style.alignItems='center';li.style.gap='12px';const textSpan=document.createElement('span');textSpan.textContent=text;textSpan.style.flex='1';textSpan.style.cursor='pointer';const btnGroup=document.createElement('div');btnGroup.style.display='flex';btnGroup.style.gap='8px';const editBtn=document.createElement('button');editBtn.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';editBtn.style.background='none';editBtn.style.border='none';editBtn.style.cursor='pointer';editBtn.style.padding='4px';editBtn.style.color='#6b7280';editBtn.title='Edit';editBtn.addEventListener('click',()=>{const newText=prompt('Edit task:',text);if(newText&&newText.trim()&&newText.trim()!==text){items[idx]=newText.trim();save();render();}});const delBtn=document.createElement('button');delBtn.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>';delBtn.style.background='none';delBtn.style.border='none';delBtn.style.cursor='pointer';delBtn.style.padding='4px';delBtn.style.color='#ef4444';delBtn.title='Delete';delBtn.addEventListener('click',()=>{if(confirm(`Delete "${text}"?`)){items.splice(idx,1);save();render();}});btnGroup.appendChild(editBtn);btnGroup.appendChild(delBtn);li.appendChild(textSpan);li.appendChild(btnGroup);list.appendChild(li);});}
 btn.addEventListener('click',()=>{const text=input.value.trim();if(!text)return;items.unshift(text);input.value='';save();render();});render();}
-createListHandler('newTodoInput','addTodoBtn','todoList','dailyTodo');createListHandler('newDoneInput','addDoneBtn','doneList','getItDone');
+// Removed obsolete createListHandler calls - these elements no longer exist in the HTML
+// createListHandler('newTodoInput','addTodoBtn','todoList','dailyTodo');
+// createListHandler('newDoneInput','addDoneBtn','doneList','getItDone');
 
 // Pending Projects Handler
 (function(){
@@ -3575,21 +3691,32 @@ render();
 
 addProjectBtn.addEventListener('click',()=>{
 const name=projectInput.value.trim();
-if(!name)return;
+if(!name){
+alert('Please enter a project name');
+projectInput.focus();
+return;
+}
 projects.unshift({id:uid(),name,tasks:[],createdAt:new Date().toISOString()});
 projectInput.value='';
 save();
 render();
+// Success feedback
+showToast('✓ Project added!');
 });
 
 projectInput.addEventListener('keypress',(e)=>{
 if(e.key==='Enter'){
 const name=projectInput.value.trim();
-if(!name)return;
+if(!name){
+alert('Please enter a project name');
+projectInput.focus();
+return;
+}
 projects.unshift({id:uid(),name,tasks:[],createdAt:new Date().toISOString()});
 projectInput.value='';
 save();
 render();
+showToast('✓ Project added!');
 }
 });
 
@@ -3637,7 +3764,11 @@ listContainer.appendChild(div);
 
 function addMemory(){
 const text=input.value.trim();
-if(!text)return;
+if(!text){
+alert('Please enter something to remember');
+input.focus();
+return;
+}
 const today=getTodayString();
 const memories=getMemories();
 if(!memories[today])memories[today]=[];
@@ -3645,6 +3776,7 @@ memories[today].push({id:uid(),text,createdAt:new Date().toISOString()});
 saveMemories(memories);
 input.value='';
 render();
+showToast('✓ Memory saved!');
 }
 
 addBtn.addEventListener('click',addMemory);
@@ -3875,8 +4007,7 @@ observer.observe(list,{childList:true});
 updateCollapseState();
 }
 
-setupCollapsibleList('todoList','todoExpandBtn');
-setupCollapsibleList('doneList','doneExpandBtn');
+// Removed obsolete setupCollapsibleList calls for todoList and doneList
 setupCollapsibleList('activitiesContainer','activitiesExpandBtn');
 
 // Credit Card Manager
@@ -3982,12 +4113,14 @@ const newBalance=parseFloat(cardDiv.querySelector('.new-balance').value);
 if(isNaN(newBalance)||newBalance<0)return;
 cards[idx].balance=newBalance;
 save();
+showToast('✓ Balance updated!');
 });
 
 // Pay minimum
 cardDiv.querySelector('.pay-min').addEventListener('click',()=>{
 cards[idx].balance=Math.max(0,cards[idx].balance-cards[idx].minPayment);
 save();
+showToast('✓ Minimum payment made!');
 });
 
 // Pay custom
@@ -3997,6 +4130,7 @@ if(isNaN(amount)||amount<=0)return;
 cards[idx].balance=Math.max(0,cards[idx].balance-amount);
 cardDiv.querySelector('.pay-amount').value='';
 save();
+showToast(`✓ Payment of $${amount.toFixed(2)} made!`);
 });
 
 // Delete card
@@ -4018,11 +4152,31 @@ const apr=parseFloat(aprInput.value);
 const balance=parseFloat(balanceInput.value);
 const minPayment=parseFloat(minPaymentInput.value);
 
-if(!name||isNaN(apr)||isNaN(balance)||isNaN(minPayment))return;
+if(!name){
+alert('Please enter a card name');
+nameInput.focus();
+return;
+}
+if(isNaN(apr)||apr<0){
+alert('Please enter a valid APR percentage');
+aprInput.focus();
+return;
+}
+if(isNaN(balance)||balance<0){
+alert('Please enter a valid balance');
+balanceInput.focus();
+return;
+}
+if(isNaN(minPayment)||minPayment<0){
+alert('Please enter a valid minimum payment');
+minPaymentInput.focus();
+return;
+}
 
 cards.unshift({id:uid(),name,apr,balance,minPayment,createdAt:new Date().toISOString()});
 nameInput.value='';aprInput.value='';balanceInput.value='';minPaymentInput.value='';
 save();
+showToast('✓ Card added!');
 });
 
 render();
@@ -4463,6 +4617,7 @@ const mindfulQuotes=[
 const dailyQuoteEl=document.getElementById('dailyQuote');
 
 function showDailyQuote(){
+if(!dailyQuoteEl) return; // Element doesn't exist, skip quote display
 // Get day of year to ensure same quote all day
 const now=new Date();
 const start=new Date(now.getFullYear(),0,0);
@@ -5942,261 +6097,293 @@ reader.readAsText(file);
 event.target.value='';
 }
 
-// Sleep Tracker
+// ===== ENHANCED HEALTH TRACKERS =====
+
+// Sleep Tracker - Enhanced with Quality
 (function(){
 const hoursInput=document.getElementById('sleepHours');
-const qualityBtns=document.querySelectorAll('#sleepQualityButtons .mood-btn');
-const saveBtn=document.getElementById('saveSleepBtn');
+const qualityBtns=document.querySelectorAll('.sleep-quality-btn');
 const status=document.getElementById('sleepStatus');
 let selectedQuality=null;
 
-function autoSave(){
+function saveSleep(){
 const hours=parseFloat(hoursInput.value);
 if(hours&&selectedQuality){
 const sleepData=JSON.parse(localStorage.getItem('sleepData')||'{}');
 sleepData[getTodayString()]={hours,quality:selectedQuality};
 localStorage.setItem('sleepData',JSON.stringify(sleepData));
 saveToFirebase('sleepData',sleepData);
-status.textContent='✓ Auto-saved';
-status.style.display='inline-block';
-setTimeout(()=>{status.style.display='none';},1500);
+const qualityLabels=['','Poor','Fair','Good','Great','Excellent'];
+status.textContent=`✓ ${hours}h, ${qualityLabels[selectedQuality]} quality`;
+setTimeout(()=>{status.textContent='';},2500);
+}else if(hours){
+status.textContent='Select quality to save';
 }
 }
 
-// Auto-save on hours input change
-hoursInput.addEventListener('input',()=>{
-autoSave();
-});
+hoursInput.addEventListener('change',saveSleep);
+hoursInput.addEventListener('blur',saveSleep);
 
 qualityBtns.forEach(btn=>{
 btn.addEventListener('click',()=>{
-qualityBtns.forEach(b=>b.classList.remove('selected'));
-btn.classList.add('selected');
+qualityBtns.forEach(b=>{
+b.style.background='#e5e7eb';
+b.style.borderColor='#d1d5db';
+const svg=b.querySelector('svg');
+const text=b.querySelector('span');
+if(svg){svg.style.stroke='#6b7280';svg.style.fill='#6b7280';}
+if(text){text.style.color='#374151';}
+});
+btn.style.background='linear-gradient(135deg,#a855f7,#7c3aed)';
+btn.style.borderColor='#6d28d9';
+const svg=btn.querySelector('svg');
+const text=btn.querySelector('span');
+if(svg){svg.style.stroke='white';svg.style.fill='white';}
+if(text){text.style.color='white';}
 selectedQuality=parseInt(btn.dataset.quality);
-autoSave();
+saveSleep();
 });
-});
-
-// Keep manual save button as backup
-saveBtn.addEventListener('click',()=>{
-const hours=parseFloat(hoursInput.value);
-if(!hours||!selectedQuality){
-alert('Please enter hours and select quality');
-return;
-}
-const sleepData=JSON.parse(localStorage.getItem('sleepData')||'{}');
-sleepData[getTodayString()]={hours,quality:selectedQuality};
-localStorage.setItem('sleepData',JSON.stringify(sleepData));
-saveToFirebase('sleepData',sleepData);
-status.textContent='✓ Sleep saved';
-status.style.display='inline-block';
-setTimeout(()=>{status.style.display='none';},2000);
 });
 
 // Load today's data
 const today=getTodayString();
 const sleepData=JSON.parse(localStorage.getItem('sleepData')||'{}');
 if(sleepData[today]){
+if(sleepData[today].hours){
 hoursInput.value=sleepData[today].hours;
-qualityBtns.forEach(btn=>{
-if(parseInt(btn.dataset.quality)===sleepData[today].quality){
-btn.classList.add('selected');
+}
+if(sleepData[today].quality){
 selectedQuality=sleepData[today].quality;
+qualityBtns.forEach(btn=>{
+if(parseInt(btn.dataset.quality)===selectedQuality){
+btn.style.background='linear-gradient(135deg,#a855f7,#7c3aed)';
+btn.style.borderColor='#6d28d9';
+const svg=btn.querySelector('svg');
+const text=btn.querySelector('span');
+if(svg){svg.style.stroke='white';svg.style.fill='white';}
+if(text){text.style.color='white';}
+}
+});
+const qualityLabels=['','Poor','Fair','Good','Great','Excellent'];
+status.textContent=`✓ ${sleepData[today].hours}h, ${qualityLabels[selectedQuality]} quality`;
+}
+}
+})();
+
+// Water Tracker - Enhanced (1-8 glasses)
+(function(){
+const waterBtns=document.querySelectorAll('.water-btn');
+const status=document.getElementById('waterStatus');
+
+function saveWater(count){
+const waterData=JSON.parse(localStorage.getItem('waterIntakeNew')||'{}');
+const today=getTodayString();
+waterData[today]=count;
+localStorage.setItem('waterIntakeNew',JSON.stringify(waterData));
+saveToFirebase('waterIntakeNew',waterData);
+// Also save to old format for backward compatibility
+localStorage.setItem('waterIntake',JSON.stringify(waterData));
+saveToFirebase('waterIntake',waterData);
+if(count===8){
+status.textContent=`✓ Perfect! ${count} glasses 💧`;
+}else if(count>=6){
+status.textContent=`✓ Great! ${count} glasses`;
+}else if(count>=4){
+status.textContent=`✓ Good! ${count} glasses`;
+}else{
+status.textContent=`✓ ${count} glass${count>1?'es':''}`;
+}
+setTimeout(()=>{status.textContent='';},2500);
+}
+
+waterBtns.forEach(btn=>{
+btn.addEventListener('click',()=>{
+waterBtns.forEach(b=>{
+b.style.background='#e5e7eb';
+b.style.borderColor='#d1d5db';
+const svg=b.querySelector('svg');
+const text=b.querySelector('span');
+if(svg){svg.style.stroke='#6b7280';svg.style.fill='none';}
+if(text){text.style.color='#374151';}
+});
+btn.style.background='linear-gradient(135deg,#3b82f6,#2563eb)';
+btn.style.borderColor='#1d4ed8';
+const svg=btn.querySelector('svg');
+const text=btn.querySelector('span');
+const count=parseInt(btn.dataset.count);
+if(svg){
+svg.style.stroke='white';
+if(count===8){svg.style.fill='white';}else{svg.style.fill='none';}
+}
+if(text){text.style.color='white';}
+saveWater(count);
+});
+});
+
+// Load today's data
+const today=getTodayString();
+const waterData=JSON.parse(localStorage.getItem('waterIntakeNew')||'{}');
+if(waterData[today]!==undefined){
+const count=waterData[today];
+waterBtns.forEach(btn=>{
+if(parseInt(btn.dataset.count)===count){
+btn.style.background='linear-gradient(135deg,#3b82f6,#2563eb)';
+btn.style.borderColor='#1d4ed8';
+const svg=btn.querySelector('svg');
+const text=btn.querySelector('span');
+if(svg){
+svg.style.stroke='white';
+if(count===8){svg.style.fill='white';}else{svg.style.fill='none';}
+}
+if(text){text.style.color='white';}
+if(count===8){
+status.textContent=`✓ Perfect! ${count} glasses 💧`;
+}else if(count>=6){
+status.textContent=`✓ Great! ${count} glasses`;
+}else if(count>=4){
+status.textContent=`✓ Good! ${count} glasses`;
+}else{
+status.textContent=`✓ ${count} glass${count>1?'es':''}`;
+}
 }
 });
 }
 })();
 
-// Pain Level Tracker
+// Pain Tracker - Enhanced (0-10 scale)
 (function(){
-const painBtns=document.querySelectorAll('[data-pain]');
-const painLabel=document.getElementById('painLabel');
+const painBtns=document.querySelectorAll('.pain-btn');
 const painLocation=document.getElementById('painLocation');
-const painHistoryList=document.getElementById('painHistoryList');
-const painLabels=['No Pain','Mild','Moderate','Severe'];
-const storageKey='painDataDetailed';
+const status=document.getElementById('painStatus');
+let selectedLevel=null;
 
-function savePainData(){
-const today=getTodayString();
-const painData=JSON.parse(localStorage.getItem(storageKey)||'{}');
-if(!painData[today])painData[today]=[];
-
-const selectedBtn=document.querySelector('[data-pain].selected');
-if(!selectedBtn)return;
-
-const level=parseInt(selectedBtn.dataset.pain);
+function savePain(){
+if(selectedLevel===null)return;
 const location=painLocation.value.trim();
-
-// Only save if there's pain and a location
-if(level>0&&location){
-const entry={level,location,time:new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})};
-// Check if already exists for this location today
-const existing=painData[today].find(e=>e.location.toLowerCase()===location.toLowerCase());
-if(existing){
-existing.level=level;
-existing.time=entry.time;
+const painData=JSON.parse(localStorage.getItem('painData')||'{}');
+const today=getTodayString();
+painData[today]=selectedLevel;
+localStorage.setItem('painData',JSON.stringify(painData));
+saveToFirebase('painData',painData);
+// Save location if provided
+if(location&&selectedLevel>0){
+const detailedData=JSON.parse(localStorage.getItem('painDataDetailed')||'{}');
+if(!detailedData[today])detailedData[today]=[];
+detailedData[today]=[{level:selectedLevel,location,time:new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})}];
+localStorage.setItem('painDataDetailed',JSON.stringify(detailedData));
+saveToFirebase('painDataDetailed',detailedData);
+status.textContent=`✓ Pain ${selectedLevel}/10${location?' - '+location:''}`;
 }else{
-painData[today].push(entry);
+status.textContent=selectedLevel===0?'✓ No pain today':`✓ Pain level ${selectedLevel}/10`;
 }
-localStorage.setItem(storageKey,JSON.stringify(painData));
-saveToFirebase('painDataDetailed',painData);
-painLocation.value='';
-renderPainHistory();
+setTimeout(()=>{status.textContent='';},2500);
 }
-}
-
-function renderPainHistory(){
-const today=getTodayString();
-const painData=JSON.parse(localStorage.getItem(storageKey)||'{}');
-const todayData=painData[today]||[];
-painHistoryList.innerHTML='';
-if(todayData.length===0)return;
-
-todayData.forEach((entry,idx)=>{
-const div=document.createElement('div');
-div.style.cssText='display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(239,68,68,0.1);border-radius:6px;margin-bottom:4px;font-size:0.75rem;';
-div.innerHTML=`<div><span style="font-weight:600;color:#dc2626;">${painLabels[entry.level]}</span> - ${entry.location}</div><button onclick="removePainEntry(${idx})" style="background:none;border:none;color:#ef4444;cursor:pointer;font-weight:bold;padding:0 4px;">×</button>`;
-painHistoryList.appendChild(div);
-});
-}
-
-window.removePainEntry=function(idx){
-const today=getTodayString();
-const painData=JSON.parse(localStorage.getItem(storageKey)||'{}');
-if(painData[today]){
-painData[today].splice(idx,1);
-localStorage.setItem(storageKey,JSON.stringify(painData));
-saveToFirebase('painDataDetailed',painData);
-renderPainHistory();
-}
-};
 
 painBtns.forEach(btn=>{
 btn.addEventListener('click',()=>{
-painBtns.forEach(b=>b.classList.remove('selected'));
-btn.classList.add('selected');
-const level=parseInt(btn.dataset.pain);
-painLabel.textContent=`Level ${level}: ${painLabels[level]}`;
-// Save old format for backward compatibility
-const painData=JSON.parse(localStorage.getItem('painData')||'{}');
-painData[getTodayString()]=level;
-localStorage.setItem('painData',JSON.stringify(painData));
-saveToFirebase('painData',painData);
+painBtns.forEach(b=>{
+b.style.background='#e5e7eb';
+b.style.borderColor='#d1d5db';
+const svg=b.querySelector('svg');
+const text=b.querySelector('span');
+if(svg){svg.style.stroke='#6b7280';}
+if(text){text.style.color='#374151';}
+});
+btn.style.background='linear-gradient(135deg,#ef4444,#dc2626)';
+btn.style.borderColor='#b91c1c';
+const svg=btn.querySelector('svg');
+const text=btn.querySelector('span');
+if(svg){svg.style.stroke='white';}
+if(text){text.style.color='white';}
+selectedLevel=parseInt(btn.dataset.level);
+savePain();
 });
 });
 
+painLocation.addEventListener('blur',savePain);
 painLocation.addEventListener('keypress',(e)=>{
-if(e.key==='Enter'){
-e.preventDefault();
-savePainData();
-}
+if(e.key==='Enter'){e.preventDefault();savePain();}
 });
-
-painLocation.addEventListener('blur',savePainData);
 
 // Load today's data
 const today=getTodayString();
 const painData=JSON.parse(localStorage.getItem('painData')||'{}');
 if(painData[today]!==undefined){
+selectedLevel=painData[today];
 painBtns.forEach(btn=>{
-if(parseInt(btn.dataset.pain)===painData[today]){
-btn.classList.add('selected');
-painLabel.textContent=`Level ${painData[today]}: ${painLabels[painData[today]]}`;
+if(parseInt(btn.dataset.level)===selectedLevel){
+btn.style.background='linear-gradient(135deg,#ef4444,#dc2626)';
+btn.style.borderColor='#b91c1c';
+const svg=btn.querySelector('svg');
+const text=btn.querySelector('span');
+if(svg){svg.style.stroke='white';}
+if(text){text.style.color='white';}
 }
 });
+// Load location if exists
+const detailedData=JSON.parse(localStorage.getItem('painDataDetailed')||'{}');
+if(detailedData[today]&&detailedData[today][0]){
+painLocation.value=detailedData[today][0].location||'';
+status.textContent=`✓ Pain ${selectedLevel}/10${painLocation.value?' - '+painLocation.value:''}`;
+}else{
+status.textContent=selectedLevel===0?'✓ No pain today':`✓ Pain level ${selectedLevel}/10`;
 }
-renderPainHistory();
+}
 })();
 
-// Mental Clarity Tracker
+// Clarity Tracker - Enhanced (1-5 scale)
 (function(){
-const clarityBtns=document.querySelectorAll('[data-clarity]');
-const clarityLabel=document.getElementById('clarityLabel');
-const clarityLabels=['','Foggy','Unclear','Clear','Very Clear','Crystal Clear'];
-clarityBtns.forEach(btn=>{
-btn.addEventListener('click',()=>{
-clarityBtns.forEach(b=>b.classList.remove('selected'));
-btn.classList.add('selected');
-const level=parseInt(btn.dataset.clarity);
-clarityLabel.textContent=`${clarityLabels[level]} (${level}/5)`;
+const clarityBtns=document.querySelectorAll('.clarity-btn');
+const status=document.getElementById('clarityStatus');
+const clarityLabels=['','Foggy','Unclear','Clear','Sharp','Crystal'];
+
+function saveClarity(level){
 const clarityData=JSON.parse(localStorage.getItem('clarityData')||'{}');
 clarityData[getTodayString()]=level;
 localStorage.setItem('clarityData',JSON.stringify(clarityData));
 saveToFirebase('clarityData',clarityData);
+status.textContent=`✓ ${clarityLabels[level]} focus (${level}/5)`;
+setTimeout(()=>{status.textContent='';},2500);
+}
+
+clarityBtns.forEach(btn=>{
+btn.addEventListener('click',()=>{
+clarityBtns.forEach(b=>{
+b.style.background='#e5e7eb';
+b.style.borderColor='#d1d5db';
+const svg=b.querySelector('svg');
+const text=b.querySelector('span');
+if(svg){svg.style.stroke='#6b7280';svg.style.fill='#6b7280';}
+if(text){text.style.color='#374151';}
+});
+btn.style.background='linear-gradient(135deg,#06b6d4,#0284c7)';
+btn.style.borderColor='#0369a1';
+const svg=btn.querySelector('svg');
+const text=btn.querySelector('span');
+if(svg){svg.style.stroke='white';svg.style.fill='white';}
+if(text){text.style.color='white';}
+const level=parseInt(btn.dataset.level);
+saveClarity(level);
 });
 });
+
 // Load today's data
 const today=getTodayString();
 const clarityData=JSON.parse(localStorage.getItem('clarityData')||'{}');
 if(clarityData[today]){
+const level=clarityData[today];
 clarityBtns.forEach(btn=>{
-if(parseInt(btn.dataset.clarity)===clarityData[today]){
-btn.classList.add('selected');
-clarityLabel.textContent=`${clarityLabels[clarityData[today]]} (${clarityData[today]}/5)`;
+if(parseInt(btn.dataset.level)===level){
+btn.style.background='linear-gradient(135deg,#06b6d4,#0284c7)';
+btn.style.borderColor='#0369a1';
+const svg=btn.querySelector('svg');
+const text=btn.querySelector('span');
+if(svg){svg.style.stroke='white';svg.style.fill='white';}
+if(text){text.style.color='white';}
+status.textContent=`✓ ${clarityLabels[level]} focus (${level}/5)`;
 }
 });
 }
-})();
-
-// Water Intake Tracker
-(function(){
-const glasses=document.querySelectorAll('.water-glass');
-const waterLabel=document.getElementById('waterLabel');
-let waterCount=0;
-function updateWaterDisplay(){
-glasses.forEach((glass,idx)=>{
-const svg=glass.querySelector('svg');
-glass.style.transition='all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
-if(idx<waterCount){
-glass.style.background='linear-gradient(135deg,#3b82f6,#60a5fa)';
-glass.style.transform='scale(1.05)';
-glass.style.boxShadow='0 4px 12px rgba(59,130,246,0.3)';
-if(svg){
-svg.style.fill='#ffffff';
-svg.style.stroke='#ffffff';
-svg.style.transition='all 0.3s ease';
-}
-}else{
-glass.style.background='transparent';
-glass.style.transform='scale(1)';
-glass.style.boxShadow='none';
-if(svg){
-svg.style.fill='none';
-svg.style.stroke='currentColor';
-svg.style.transition='all 0.3s ease';
-}
-}
-});
-waterLabel.textContent=`${waterCount}/8 glasses`;
-const waterData=JSON.parse(localStorage.getItem('waterIntakeNew')||'{}');
-waterData[getTodayString()]=waterCount;
-localStorage.setItem('waterIntakeNew',JSON.stringify(waterData));
-saveToFirebase('waterIntakeNew',waterData);
-}
-glasses.forEach((glass,idx)=>{
-glass.addEventListener('mouseover',()=>{
-if(idx>=waterCount){
-glass.style.background='rgba(59,130,246,0.2)';
-glass.style.transform='scale(1.1)';
-}
-});
-glass.addEventListener('mouseout',()=>{
-if(idx>=waterCount){
-glass.style.background='transparent';
-glass.style.transform='scale(1)';
-}
-});
-glass.addEventListener('click',()=>{
-if(idx<waterCount){
-waterCount=idx;
-}else{
-waterCount=idx+1;
-}
-updateWaterDisplay();
-glass.classList.add('animate-pulse');
-setTimeout(()=>glass.classList.remove('animate-pulse'),600);
-});
-});
 })();
 
 // ===== TRAVELS TRACKING FUNCTIONS (localStorage) =====
@@ -6652,7 +6839,6 @@ style.textContent=`
 @keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
 .mood-btn,.theme-btn{transition:all 0.3s cubic-bezier(0.4,0,0.2,1);}
 .mood-btn:active,.theme-btn:active{transform:scale(0.95);}
-.mood-btn.selected{animation:pulse 0.6s ease;}
 `;
 document.head.appendChild(style);
 
@@ -6708,14 +6894,7 @@ const input=e.target;
 if(input.id==='newActivityInput'){
 document.getElementById('addActivityBtn')?.click();
 }
-// Todo input
-else if(input.id==='newTodoInput'){
-document.getElementById('addTodoBtn')?.click();
-}
-// Done input
-else if(input.id==='newDoneInput'){
-document.getElementById('addDoneBtn')?.click();
-}
+// Removed obsolete todo/done input handlers - these elements no longer exist
 // Category item inputs
 else if(input.id==='categoryItemInput'||input.id==='categoryAmountInput'){
 document.getElementById('addCategoryItemBtn')?.click();
