@@ -4622,32 +4622,60 @@ setInterval(showDailyQuote,24*60*60*1000); // Update every 24 hours
 
 updateProgress();
 
-// Tab switching
-function switchTab(tabName){
-const tabs=['today','dailydos','history'];
-tabs.forEach(tab=>{
-const view=document.getElementById(tab+'View');
-const btn=document.querySelector(`button[onclick="switchTab('${tab}')"]`);
-if(tab===tabName){
-view.classList.add('active');
-btn.classList.add('active');
-// Update button styles for active tab
-btn.style.background='linear-gradient(135deg,#ffd6e7,#ffb3c6)';
-btn.style.color='#d63384';
-btn.style.border='none';
-btn.style.boxShadow='0 2px 8px rgba(255,107,198,0.3)';
-if(tab==='history')loadHistory();
-if(tab==='dailydos')loadDailyDosCalendar();
-}else{
+// Tab switching - simplified and more robust
+window.switchTab = function(tabName){
+console.log('Switching to tab:', tabName);
+
+// Hide all views first
+document.querySelectorAll('.view-section').forEach(view => {
 view.classList.remove('active');
-btn.classList.remove('active');
-// Update button styles for inactive tabs
-btn.style.background='white';
-btn.style.color='#9ca3af';
-btn.style.border='2px solid #e5e7eb';
-btn.style.boxShadow='none';
-}
+view.style.display = 'none';
 });
+
+// Remove active from all buttons
+document.querySelectorAll('.tab-btn').forEach(btn => {
+btn.classList.remove('active');
+btn.style.background = 'white';
+btn.style.color = '#9ca3af';
+btn.style.border = '2px solid #e5e7eb';
+btn.style.boxShadow = 'none';
+});
+
+// Show the selected view
+const selectedView = document.getElementById(tabName + 'View');
+if(selectedView){
+selectedView.classList.add('active');
+selectedView.style.display = 'block';
+console.log('Showing view:', tabName + 'View');
+}else{
+console.error('View not found:', tabName + 'View');
+return;
+}
+
+// Activate the selected button
+const selectedBtn = document.querySelector(`button[onclick="switchTab('${tabName}')"]`);
+if(selectedBtn){
+selectedBtn.classList.add('active');
+selectedBtn.style.background = 'linear-gradient(135deg,#ffd6e7,#ffb3c6)';
+selectedBtn.style.color = '#d63384';
+selectedBtn.style.border = 'none';
+selectedBtn.style.boxShadow = '0 2px 8px rgba(255,107,198,0.3)';
+console.log('Activated button for:', tabName);
+}else{
+console.error('Button not found for:', tabName);
+}
+
+// Load specific tab content
+if(tabName === 'history'){
+console.log('Loading history...');
+loadHistory();
+}
+if(tabName === 'dailydos'){
+console.log('Loading daily dos...');
+loadDailyDosCalendar();
+}
+
+console.log('Tab switch complete');
 }
 
 // Utility: Get dates in range
@@ -5456,6 +5484,8 @@ const allDates=Object.keys(moodData).sort();
 displayAllNotes(moodData,allDates);
 const ratings=JSON.parse(localStorage.getItem('dailyRatings')||'{}');
 displayRatingsOverview(ratings,dates7);
+// Display weekly summary
+displayWeeklySummary();
 }
 
 // Toggle weekly/monthly
@@ -6753,12 +6783,7 @@ document.getElementById('weeklySummary').innerHTML=`
 </div>`;
 }
 
-// Update loadHistory to include new insights
-const originalLoadHistory=loadHistory;
-loadHistory=function(){
-originalLoadHistory();
-displayWeeklySummary();
-};
+// Weekly summary already integrated into loadHistory function above
 
 // Header Photo Upload and Management
 function uploadHeaderPhoto(event){
