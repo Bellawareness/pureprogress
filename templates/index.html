@@ -1452,183 +1452,183 @@ flex:1;
 
 <!-- Health Trackers - Enhanced UI with More Options -->
 <div style="margin-bottom:24px;">
-<h2 style="font-size:1.3rem;color:#1f2937;margin-bottom:20px;font-weight:800;display:flex;align-items:center;gap:10px;">
+<h2 style="font-size:1.3rem;color:#d946ef;margin-bottom:20px;font-weight:800;display:flex;align-items:center;gap:10px;">
 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
 Daily Health Check
 </h2>
 
 <!-- 2x2 Grid Layout -->
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:20px;">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:20px;">
 
 <!-- Sleep Tracker - Enhanced -->
-<div class="card" style="background:linear-gradient(135deg,#e9d5ff 0%,#f3e8ff 100%);padding:24px;border:3px solid #c084fc;box-shadow:0 4px 16px rgba(192,132,252,0.2);">
-<div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
-<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2.5"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
-<h3 style="color:#7c3aed;font-size:1.2rem;font-weight:800;margin:0;">Sleep</h3>
+<div class="card" style="background:linear-gradient(135deg,#e9d5ff 0%,#f3e8ff 100%);padding:20px;border:2px solid #c084fc;box-shadow:0 4px 16px rgba(192,132,252,0.2);overflow:hidden;">
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2.5"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+<h3 style="color:#7c3aed;font-size:1.1rem;font-weight:800;margin:0;">Sleep</h3>
 </div>
 
 <!-- Hours Input -->
-<div style="background:white;padding:16px;border-radius:10px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
-<label style="display:block;font-weight:700;color:#4b5563;margin-bottom:10px;font-size:0.95rem;">Hours Slept</label>
-<input type="number" id="sleepHours" min="0" max="24" step="0.5" placeholder="7.5" style="width:100%;padding:12px;font-size:1.1rem;border:2px solid #e5e7eb;border-radius:8px;font-weight:600;"/>
+<div style="background:white;padding:14px;border-radius:10px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+<label style="display:block;font-weight:700;color:#9333ea;margin-bottom:8px;font-size:0.9rem;">Hours Slept</label>
+<input type="number" id="sleepHours" min="0" max="24" step="0.5" placeholder="7.5" style="width:100%;padding:10px;font-size:1rem;border:2px solid #e9d5ff;border-radius:8px;font-weight:600;"/>
 </div>
 
 <!-- Quality Rating -->
-<div style="background:white;padding:16px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
-<label style="display:block;font-weight:700;color:#4b5563;margin-bottom:10px;font-size:0.95rem;text-align:center;">Sleep Quality</label>
-<div style="display:flex;gap:8px;justify-content:space-between;">
-<button class="sleep-quality-btn" data-quality="1" title="Poor" style="flex:1;padding:10px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:4px;">
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="8" y1="8" x2="16" y2="16"/><line x1="16" y1="8" x2="8" y2="16"/></svg>
-<span style="font-size:0.7rem;font-weight:600;">Poor</span>
+<div style="background:white;padding:14px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+<label style="display:block;font-weight:700;color:#9333ea;margin-bottom:10px;font-size:0.9rem;text-align:center;">Sleep Quality</label>
+<div style="display:flex;gap:6px;justify-content:space-between;flex-wrap:wrap;">
+<button class="sleep-quality-btn" data-quality="1" title="Poor" style="flex:1;min-width:50px;padding:8px 2px;background:#faf5ff;border:2px solid #e9d5ff;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="8" y1="8" x2="16" y2="16"/><line x1="16" y1="8" x2="8" y2="16"/></svg>
+<span style="font-size:0.65rem;font-weight:600;color:#9333ea;">Poor</span>
 </button>
-<button class="sleep-quality-btn" data-quality="2" title="Fair" style="flex:1;padding:10px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:4px;">
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="8" y1="15" x2="16" y2="15"/></svg>
-<span style="font-size:0.7rem;font-weight:600;">Fair</span>
+<button class="sleep-quality-btn" data-quality="2" title="Fair" style="flex:1;min-width:50px;padding:8px 2px;background:#faf5ff;border:2px solid #e9d5ff;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="8" y1="15" x2="16" y2="15"/></svg>
+<span style="font-size:0.65rem;font-weight:600;color:#9333ea;">Fair</span>
 </button>
-<button class="sleep-quality-btn" data-quality="3" title="Good" style="flex:1;padding:10px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:4px;">
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg>
-<span style="font-size:0.7rem;font-weight:600;">Good</span>
+<button class="sleep-quality-btn" data-quality="3" title="Good" style="flex:1;min-width:50px;padding:8px 2px;background:#faf5ff;border:2px solid #e9d5ff;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg>
+<span style="font-size:0.65rem;font-weight:600;color:#9333ea;">Good</span>
 </button>
-<button class="sleep-quality-btn" data-quality="4" title="Great" style="flex:1;padding:10px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:4px;">
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 13s1.5 3 4 3 4-3 4-3"/><circle cx="9" cy="9" r="1.5" fill="currentColor"/><circle cx="15" cy="9" r="1.5" fill="currentColor"/></svg>
-<span style="font-size:0.7rem;font-weight:600;">Great</span>
+<button class="sleep-quality-btn" data-quality="4" title="Great" style="flex:1;min-width:50px;padding:8px 2px;background:#faf5ff;border:2px solid #e9d5ff;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 13s1.5 3 4 3 4-3 4-3"/><circle cx="9" cy="9" r="1.5" fill="#a855f7"/><circle cx="15" cy="9" r="1.5" fill="#a855f7"/></svg>
+<span style="font-size:0.65rem;font-weight:600;color:#9333ea;">Great</span>
 </button>
-<button class="sleep-quality-btn" data-quality="5" title="Excellent" style="flex:1;padding:10px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:4px;">
-<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-<span style="font-size:0.7rem;font-weight:600;">Excellent</span>
+<button class="sleep-quality-btn" data-quality="5" title="Excellent" style="flex:1;min-width:50px;padding:8px 2px;background:#faf5ff;border:2px solid #e9d5ff;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="#a855f7"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+<span style="font-size:0.65rem;font-weight:600;color:#9333ea;">Excellent</span>
 </button>
 </div>
 </div>
 
-<div id="sleepStatus" style="text-align:center;color:#7c3aed;font-weight:700;min-height:24px;font-size:0.9rem;margin-top:12px;"></div>
+<div id="sleepStatus" style="text-align:center;color:#7c3aed;font-weight:700;min-height:24px;font-size:0.85rem;margin-top:10px;"></div>
 </div>
 
 <!-- Water Tracker - Enhanced -->
-<div class="card" style="background:linear-gradient(135deg,#bfdbfe 0%,#dbeafe 100%);padding:24px;border:3px solid #60a5fa;box-shadow:0 4px 16px rgba(96,165,250,0.2);">
-<div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
-<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-<h3 style="color:#2563eb;font-size:1.2rem;font-weight:800;margin:0;">Water Intake</h3>
+<div class="card" style="background:linear-gradient(135deg,#bfdbfe 0%,#dbeafe 100%);padding:20px;border:2px solid #60a5fa;box-shadow:0 4px 16px rgba(96,165,250,0.2);overflow:hidden;">
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+<h3 style="color:#2563eb;font-size:1.1rem;font-weight:800;margin:0;">Water Intake</h3>
 </div>
 
-<div style="background:white;padding:16px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
-<label style="display:block;font-weight:700;color:#4b5563;margin-bottom:12px;font-size:0.95rem;text-align:center;">Glasses (8oz each)</label>
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
-<button class="water-btn" data-count="1" style="padding:12px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:4px;">
-<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-<span style="font-size:0.8rem;font-weight:700;">1</span>
+<div style="background:white;padding:14px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+<label style="display:block;font-weight:700;color:#3b82f6;margin-bottom:10px;font-size:0.9rem;text-align:center;">Glasses (8oz each)</label>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(45px,1fr));gap:8px;">
+<button class="water-btn" data-count="1" style="padding:10px 4px;background:#eff6ff;border:2px solid #bfdbfe;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+<span style="font-size:0.75rem;font-weight:700;color:#2563eb;">1</span>
 </button>
-<button class="water-btn" data-count="2" style="padding:12px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:4px;">
-<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-<span style="font-size:0.8rem;font-weight:700;">2</span>
+<button class="water-btn" data-count="2" style="padding:10px 4px;background:#eff6ff;border:2px solid #bfdbfe;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+<span style="font-size:0.75rem;font-weight:700;color:#2563eb;">2</span>
 </button>
-<button class="water-btn" data-count="3" style="padding:12px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:4px;">
-<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-<span style="font-size:0.8rem;font-weight:700;">3</span>
+<button class="water-btn" data-count="3" style="padding:10px 4px;background:#eff6ff;border:2px solid #bfdbfe;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+<span style="font-size:0.75rem;font-weight:700;color:#2563eb;">3</span>
 </button>
-<button class="water-btn" data-count="4" style="padding:12px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:4px;">
-<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-<span style="font-size:0.8rem;font-weight:700;">4</span>
+<button class="water-btn" data-count="4" style="padding:10px 4px;background:#eff6ff;border:2px solid #bfdbfe;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+<span style="font-size:0.75rem;font-weight:700;color:#2563eb;">4</span>
 </button>
-<button class="water-btn" data-count="5" style="padding:12px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:4px;">
-<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-<span style="font-size:0.8rem;font-weight:700;">5</span>
+<button class="water-btn" data-count="5" style="padding:10px 4px;background:#eff6ff;border:2px solid #bfdbfe;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+<span style="font-size:0.75rem;font-weight:700;color:#2563eb;">5</span>
 </button>
-<button class="water-btn" data-count="6" style="padding:12px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:4px;">
-<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-<span style="font-size:0.8rem;font-weight:700;">6</span>
+<button class="water-btn" data-count="6" style="padding:10px 4px;background:#eff6ff;border:2px solid #bfdbfe;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+<span style="font-size:0.75rem;font-weight:700;color:#2563eb;">6</span>
 </button>
-<button class="water-btn" data-count="7" style="padding:12px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:4px;">
-<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-<span style="font-size:0.8rem;font-weight:700;">7</span>
+<button class="water-btn" data-count="7" style="padding:10px 4px;background:#eff6ff;border:2px solid #bfdbfe;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+<span style="font-size:0.75rem;font-weight:700;color:#2563eb;">7</span>
 </button>
-<button class="water-btn" data-count="8" style="padding:12px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:4px;">
-<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-<span style="font-size:0.8rem;font-weight:700;">8</span>
+<button class="water-btn" data-count="8" style="padding:10px 4px;background:#eff6ff;border:2px solid #bfdbfe;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="#3b82f6" stroke="#3b82f6" stroke-width="1"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+<span style="font-size:0.75rem;font-weight:700;color:#2563eb;">8</span>
 </button>
 </div>
 </div>
 
-<div id="waterStatus" style="text-align:center;color:#2563eb;font-weight:700;min-height:24px;font-size:0.9rem;margin-top:12px;"></div>
+<div id="waterStatus" style="text-align:center;color:#2563eb;font-weight:700;min-height:24px;font-size:0.85rem;margin-top:10px;"></div>
 </div>
 
 <!-- Pain Tracker - Enhanced -->
-<div class="card" style="background:linear-gradient(135deg,#fecaca 0%,#fee2e2 100%);padding:24px;border:3px solid #f87171;box-shadow:0 4px 16px rgba(248,113,113,0.2);">
-<div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
-<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-<h3 style="color:#dc2626;font-size:1.2rem;font-weight:800;margin:0;">Pain Level</h3>
+<div class="card" style="background:linear-gradient(135deg,#fecaca 0%,#fee2e2 100%);padding:20px;border:2px solid #f87171;box-shadow:0 4px 16px rgba(248,113,113,0.2);overflow:hidden;">
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+<h3 style="color:#dc2626;font-size:1.1rem;font-weight:800;margin:0;">Pain Level</h3>
 </div>
 
-<div style="background:white;padding:16px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
-<label style="display:block;font-weight:700;color:#4b5563;margin-bottom:12px;font-size:0.95rem;text-align:center;">Pain Intensity (0-10)</label>
-<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:14px;">
-<button class="pain-btn" data-level="0" title="No Pain" style="padding:8px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;">
-<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
-<span style="font-size:0.7rem;font-weight:700;">0</span>
+<div style="background:white;padding:14px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+<label style="display:block;font-weight:700;color:#ef4444;margin-bottom:10px;font-size:0.9rem;text-align:center;">Pain Intensity (0-10)</label>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(45px,1fr));gap:6px;margin-bottom:12px;">
+<button class="pain-btn" data-level="0" title="No Pain" style="padding:8px 2px;background:#fef2f2;border:2px solid #fecaca;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:2px;">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+<span style="font-size:0.65rem;font-weight:700;color:#dc2626;">0</span>
 </button>
-<button class="pain-btn" data-level="2" title="Mild" style="padding:8px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;">
-<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
-<span style="font-size:0.7rem;font-weight:700;">2</span>
+<button class="pain-btn" data-level="2" title="Mild" style="padding:8px 2px;background:#fef2f2;border:2px solid #fecaca;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:2px;">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+<span style="font-size:0.65rem;font-weight:700;color:#dc2626;">2</span>
 </button>
-<button class="pain-btn" data-level="4" title="Moderate" style="padding:8px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;">
-<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1-1-4-1-4 1-4 1"/><line x1="9" y1="10" x2="9.01" y2="10"/><line x1="15" y1="10" x2="15.01" y2="10"/></svg>
-<span style="font-size:0.7rem;font-weight:700;">4</span>
+<button class="pain-btn" data-level="4" title="Moderate" style="padding:8px 2px;background:#fef2f2;border:2px solid #fecaca;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:2px;">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1-1-4-1-4 1-4 1"/><line x1="9" y1="10" x2="9.01" y2="10"/><line x1="15" y1="10" x2="15.01" y2="10"/></svg>
+<span style="font-size:0.65rem;font-weight:700;color:#dc2626;">4</span>
 </button>
-<button class="pain-btn" data-level="6" title="Severe" style="padding:8px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;">
-<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="8" y1="9" x2="10" y2="11"/><line x1="16" y1="9" x2="14" y2="11"/></svg>
-<span style="font-size:0.7rem;font-weight:700;">6</span>
+<button class="pain-btn" data-level="6" title="Severe" style="padding:8px 2px;background:#fef2f2;border:2px solid #fecaca;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:2px;">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="8" y1="9" x2="10" y2="11"/><line x1="16" y1="9" x2="14" y2="11"/></svg>
+<span style="font-size:0.65rem;font-weight:700;color:#dc2626;">6</span>
 </button>
-<button class="pain-btn" data-level="8" title="Very Severe" style="padding:8px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;">
-<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M16 17s-1.5-3-4-3-4 3-4 3"/><line x1="7" y1="7" x2="10" y2="10"/><line x1="17" y1="7" x2="14" y2="10"/></svg>
-<span style="font-size:0.7rem;font-weight:700;">8</span>
+<button class="pain-btn" data-level="8" title="Very Severe" style="padding:8px 2px;background:#fef2f2;border:2px solid #fecaca;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:2px;">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M16 17s-1.5-3-4-3-4 3-4 3"/><line x1="7" y1="7" x2="10" y2="10"/><line x1="17" y1="7" x2="14" y2="10"/></svg>
+<span style="font-size:0.65rem;font-weight:700;color:#dc2626;">8</span>
 </button>
-<button class="pain-btn" data-level="10" title="Worst Possible" style="padding:8px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;">
-<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/><path d="M16 18s-2-4-4-4-4 4-4 4"/><line x1="6" y1="6" x2="10" y2="10"/><line x1="18" y1="6" x2="14" y2="10"/></svg>
-<span style="font-size:0.7rem;font-weight:700;">10</span>
+<button class="pain-btn" data-level="10" title="Worst Possible" style="padding:8px 2px;background:#fef2f2;border:2px solid #fecaca;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:2px;">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="3"><circle cx="12" cy="12" r="10"/><path d="M16 18s-2-4-4-4-4 4-4 4"/><line x1="6" y1="6" x2="10" y2="10"/><line x1="18" y1="6" x2="14" y2="10"/></svg>
+<span style="font-size:0.65rem;font-weight:700;color:#dc2626;">10</span>
 </button>
 </div>
 
 <!-- Body Location -->
-<label style="display:block;font-weight:700;color:#4b5563;margin-bottom:8px;font-size:0.85rem;">Where? (optional)</label>
-<input type="text" id="painLocation" placeholder="e.g., Lower back, headache..." style="width:100%;padding:10px;font-size:0.9rem;border:2px solid #e5e7eb;border-radius:8px;"/>
+<label style="display:block;font-weight:700;color:#ef4444;margin-bottom:6px;font-size:0.8rem;">Where? (optional)</label>
+<input type="text" id="painLocation" placeholder="e.g., Lower back, headache..." style="width:100%;padding:8px;font-size:0.85rem;border:2px solid #fecaca;border-radius:8px;"/>
 </div>
 
-<div id="painStatus" style="text-align:center;color:#dc2626;font-weight:700;min-height:24px;font-size:0.9rem;margin-top:12px;"></div>
+<div id="painStatus" style="text-align:center;color:#dc2626;font-weight:700;min-height:24px;font-size:0.85rem;margin-top:10px;"></div>
 </div>
 
 <!-- Clarity Tracker - Enhanced -->
-<div class="card" style="background:linear-gradient(135deg,#a5f3fc 0%,#e0f2fe 100%);padding:24px;border:3px solid #22d3ee;box-shadow:0 4px 16px rgba(34,211,238,0.2);">
-<div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
-<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.5"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/></svg>
-<h3 style="color:#0284c7;font-size:1.2rem;font-weight:800;margin:0;">Mental Clarity</h3>
+<div class="card" style="background:linear-gradient(135deg,#a5f3fc 0%,#e0f2fe 100%);padding:20px;border:2px solid #22d3ee;box-shadow:0 4px 16px rgba(34,211,238,0.2);overflow:hidden;">
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.5"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/></svg>
+<h3 style="color:#0284c7;font-size:1.1rem;font-weight:800;margin:0;">Mental Clarity</h3>
 </div>
 
-<div style="background:white;padding:16px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
-<label style="display:block;font-weight:700;color:#4b5563;margin-bottom:12px;font-size:0.95rem;text-align:center;">Focus Level (1-5)</label>
-<div style="display:flex;gap:8px;justify-content:space-between;">
-<button class="clarity-btn" data-level="1" title="Very Foggy" style="flex:1;padding:12px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:5px;">
-<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="4" y1="8" x2="20" y2="8"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="4" y1="16" x2="20" y2="16"/></svg>
-<span style="font-size:0.7rem;font-weight:700;">Foggy</span>
+<div style="background:white;padding:14px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+<label style="display:block;font-weight:700;color:#0891b2;margin-bottom:10px;font-size:0.9rem;text-align:center;">Focus Level (1-5)</label>
+<div style="display:flex;gap:6px;justify-content:space-between;flex-wrap:wrap;">
+<button class="clarity-btn" data-level="1" title="Very Foggy" style="flex:1;min-width:50px;padding:10px 2px;background:#ecfeff;border:2px solid #a5f3fc;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2.5"><line x1="4" y1="8" x2="20" y2="8"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="4" y1="16" x2="20" y2="16"/></svg>
+<span style="font-size:0.65rem;font-weight:700;color:#0891b2;">Foggy</span>
 </button>
-<button class="clarity-btn" data-level="2" title="Unclear" style="flex:1;padding:12px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:5px;">
-<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="10" r="3"/><line x1="4" y1="18" x2="20" y2="18" opacity="0.5"/></svg>
-<span style="font-size:0.7rem;font-weight:700;">Unclear</span>
+<button class="clarity-btn" data-level="2" title="Unclear" style="flex:1;min-width:50px;padding:10px 2px;background:#ecfeff;border:2px solid #a5f3fc;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2"><circle cx="12" cy="10" r="3"/><line x1="4" y1="18" x2="20" y2="18" opacity="0.5"/></svg>
+<span style="font-size:0.65rem;font-weight:700;color:#0891b2;">Unclear</span>
 </button>
-<button class="clarity-btn" data-level="3" title="Clear" style="flex:1;padding:12px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:5px;">
-<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/></svg>
-<span style="font-size:0.7rem;font-weight:700;">Clear</span>
+<button class="clarity-btn" data-level="3" title="Clear" style="flex:1;min-width:50px;padding:10px 2px;background:#ecfeff;border:2px solid #a5f3fc;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/></svg>
+<span style="font-size:0.65rem;font-weight:700;color:#0891b2;">Clear</span>
 </button>
-<button class="clarity-btn" data-level="4" title="Very Clear" style="flex:1;padding:12px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:5px;">
-<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="23" y1="12" x2="19" y2="12"/><line x1="5" y1="12" x2="1" y2="12"/><line x1="18.4" y1="5.6" x2="15.5" y2="8.5"/><line x1="8.5" y1="15.5" x2="5.6" y2="18.4"/><line x1="18.4" y1="18.4" x2="15.5" y2="15.5"/><line x1="8.5" y1="8.5" x2="5.6" y2="5.6"/></svg>
-<span style="font-size:0.7rem;font-weight:700;">Sharp</span>
+<button class="clarity-btn" data-level="4" title="Very Clear" style="flex:1;min-width:50px;padding:10px 2px;background:#ecfeff;border:2px solid #a5f3fc;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="23" y1="12" x2="19" y2="12"/><line x1="5" y1="12" x2="1" y2="12"/><line x1="18.4" y1="5.6" x2="15.5" y2="8.5"/><line x1="8.5" y1="15.5" x2="5.6" y2="18.4"/><line x1="18.4" y1="18.4" x2="15.5" y2="15.5"/><line x1="8.5" y1="8.5" x2="5.6" y2="5.6"/></svg>
+<span style="font-size:0.65rem;font-weight:700;color:#0891b2;">Sharp</span>
 </button>
-<button class="clarity-btn" data-level="5" title="Crystal Clear" style="flex:1;padding:12px 4px;background:#e5e7eb;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:5px;">
-<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,2 15,9 22,9 17,14 19,22 12,17 5,22 7,14 2,9 9,9"/></svg>
-<span style="font-size:0.7rem;font-weight:700;">Crystal</span>
+<button class="clarity-btn" data-level="5" title="Crystal Clear" style="flex:1;min-width:50px;padding:10px 2px;background:#ecfeff;border:2px solid #a5f3fc;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px;">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="#06b6d4"><polygon points="12,2 15,9 22,9 17,14 19,22 12,17 5,22 7,14 2,9 9,9"/></svg>
+<span style="font-size:0.65rem;font-weight:700;color:#0891b2;">Crystal</span>
 </button>
 </div>
 </div>
 
-<div id="clarityStatus" style="text-align:center;color:#0284c7;font-weight:700;min-height:24px;font-size:0.9rem;margin-top:12px;"></div>
+<div id="clarityStatus" style="text-align:center;color:#0284c7;font-weight:700;min-height:24px;font-size:0.85rem;margin-top:10px;"></div>
 </div>
 
 </div>
@@ -6143,15 +6143,15 @@ hoursInput.addEventListener('blur',saveSleep);
 qualityBtns.forEach(btn=>{
 btn.addEventListener('click',()=>{
 qualityBtns.forEach(b=>{
-b.style.background='#e5e7eb';
-b.style.borderColor='#d1d5db';
+b.style.background='#faf5ff';
+b.style.borderColor='#e9d5ff';
 const svg=b.querySelector('svg');
 const text=b.querySelector('span');
-if(svg){svg.style.stroke='#6b7280';svg.style.fill='#6b7280';}
-if(text){text.style.color='#374151';}
+if(svg){svg.style.stroke='#a855f7';svg.style.fill='#a855f7';}
+if(text){text.style.color='#9333ea';}
 });
-btn.style.background='linear-gradient(135deg,#a855f7,#7c3aed)';
-btn.style.borderColor='#6d28d9';
+btn.style.background='linear-gradient(135deg,#c084fc,#a855f7)';
+btn.style.borderColor='#7c3aed';
 const svg=btn.querySelector('svg');
 const text=btn.querySelector('span');
 if(svg){svg.style.stroke='white';svg.style.fill='white';}
@@ -6172,8 +6172,8 @@ if(sleepData[today].quality){
 selectedQuality=sleepData[today].quality;
 qualityBtns.forEach(btn=>{
 if(parseInt(btn.dataset.quality)===selectedQuality){
-btn.style.background='linear-gradient(135deg,#a855f7,#7c3aed)';
-btn.style.borderColor='#6d28d9';
+btn.style.background='linear-gradient(135deg,#c084fc,#a855f7)';
+btn.style.borderColor='#7c3aed';
 const svg=btn.querySelector('svg');
 const text=btn.querySelector('span');
 if(svg){svg.style.stroke='white';svg.style.fill='white';}
@@ -6215,15 +6215,15 @@ setTimeout(()=>{status.textContent='';},2500);
 waterBtns.forEach(btn=>{
 btn.addEventListener('click',()=>{
 waterBtns.forEach(b=>{
-b.style.background='#e5e7eb';
-b.style.borderColor='#d1d5db';
+b.style.background='#eff6ff';
+b.style.borderColor='#bfdbfe';
 const svg=b.querySelector('svg');
 const text=b.querySelector('span');
-if(svg){svg.style.stroke='#6b7280';svg.style.fill='none';}
-if(text){text.style.color='#374151';}
+if(svg){svg.style.stroke='#3b82f6';svg.style.fill='none';}
+if(text){text.style.color='#2563eb';}
 });
-btn.style.background='linear-gradient(135deg,#3b82f6,#2563eb)';
-btn.style.borderColor='#1d4ed8';
+btn.style.background='linear-gradient(135deg,#60a5fa,#3b82f6)';
+btn.style.borderColor='#2563eb';
 const svg=btn.querySelector('svg');
 const text=btn.querySelector('span');
 const count=parseInt(btn.dataset.count);
@@ -6243,8 +6243,8 @@ if(waterData[today]!==undefined){
 const count=waterData[today];
 waterBtns.forEach(btn=>{
 if(parseInt(btn.dataset.count)===count){
-btn.style.background='linear-gradient(135deg,#3b82f6,#2563eb)';
-btn.style.borderColor='#1d4ed8';
+btn.style.background='linear-gradient(135deg,#60a5fa,#3b82f6)';
+btn.style.borderColor='#2563eb';
 const svg=btn.querySelector('svg');
 const text=btn.querySelector('span');
 if(svg){
@@ -6298,15 +6298,15 @@ setTimeout(()=>{status.textContent='';},2500);
 painBtns.forEach(btn=>{
 btn.addEventListener('click',()=>{
 painBtns.forEach(b=>{
-b.style.background='#e5e7eb';
-b.style.borderColor='#d1d5db';
+b.style.background='#fef2f2';
+b.style.borderColor='#fecaca';
 const svg=b.querySelector('svg');
 const text=b.querySelector('span');
-if(svg){svg.style.stroke='#6b7280';}
-if(text){text.style.color='#374151';}
+if(svg){svg.style.stroke='#f87171';}
+if(text){text.style.color='#dc2626';}
 });
-btn.style.background='linear-gradient(135deg,#ef4444,#dc2626)';
-btn.style.borderColor='#b91c1c';
+btn.style.background='linear-gradient(135deg,#f87171,#ef4444)';
+btn.style.borderColor='#dc2626';
 const svg=btn.querySelector('svg');
 const text=btn.querySelector('span');
 if(svg){svg.style.stroke='white';}
@@ -6328,8 +6328,8 @@ if(painData[today]!==undefined){
 selectedLevel=painData[today];
 painBtns.forEach(btn=>{
 if(parseInt(btn.dataset.level)===selectedLevel){
-btn.style.background='linear-gradient(135deg,#ef4444,#dc2626)';
-btn.style.borderColor='#b91c1c';
+btn.style.background='linear-gradient(135deg,#f87171,#ef4444)';
+btn.style.borderColor='#dc2626';
 const svg=btn.querySelector('svg');
 const text=btn.querySelector('span');
 if(svg){svg.style.stroke='white';}
@@ -6365,15 +6365,15 @@ setTimeout(()=>{status.textContent='';},2500);
 clarityBtns.forEach(btn=>{
 btn.addEventListener('click',()=>{
 clarityBtns.forEach(b=>{
-b.style.background='#e5e7eb';
-b.style.borderColor='#d1d5db';
+b.style.background='#ecfeff';
+b.style.borderColor='#a5f3fc';
 const svg=b.querySelector('svg');
 const text=b.querySelector('span');
-if(svg){svg.style.stroke='#6b7280';svg.style.fill='#6b7280';}
-if(text){text.style.color='#374151';}
+if(svg){svg.style.stroke='#06b6d4';svg.style.fill='#06b6d4';}
+if(text){text.style.color='#0891b2';}
 });
-btn.style.background='linear-gradient(135deg,#06b6d4,#0284c7)';
-btn.style.borderColor='#0369a1';
+btn.style.background='linear-gradient(135deg,#22d3ee,#06b6d4)';
+btn.style.borderColor='#0284c7';
 const svg=btn.querySelector('svg');
 const text=btn.querySelector('span');
 if(svg){svg.style.stroke='white';svg.style.fill='white';}
@@ -6390,8 +6390,8 @@ if(clarityData[today]){
 const level=clarityData[today];
 clarityBtns.forEach(btn=>{
 if(parseInt(btn.dataset.level)===level){
-btn.style.background='linear-gradient(135deg,#06b6d4,#0284c7)';
-btn.style.borderColor='#0369a1';
+btn.style.background='linear-gradient(135deg,#22d3ee,#06b6d4)';
+btn.style.borderColor='#0284c7';
 const svg=btn.querySelector('svg');
 const text=btn.querySelector('span');
 if(svg){svg.style.stroke='white';svg.style.fill='white';}
