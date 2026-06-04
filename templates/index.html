@@ -1339,7 +1339,7 @@ flex:1;
 </div>
 <!-- Arched Photo Frame -->
 <div style="position:relative;flex-shrink:0;">
-<div class="header-photo-frame" onclick="document.getElementById('headerPhotoInput').click()" id="headerPhotoFrame">
+<div class="header-photo-frame" onclick="triggerHeaderPhotoPicker()" id="headerPhotoFrame">
 <div class="photo-placeholder" id="photoPlaceholder">
 <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
 <span>Add Your<br>Photo</span>
@@ -7148,24 +7148,53 @@ weeklySummaryEl.innerHTML=`
 // Weekly summary already integrated into loadHistory function above
 
 // Header Photo Upload and Management
+function triggerHeaderPhotoPicker(){
+const input=document.getElementById('headerPhotoInput');
+if(!input)return;
+// Reset so selecting the same file again still fires change in all browsers.
+input.value='';
+input.click();
+}
+
 function uploadHeaderPhoto(event){
-const file=event.target.files[0];
+const input=event.target;
+const file=input&&input.files?input.files[0]:null;
 if(!file) return;
+
+const MAX_PHOTO_SIZE=500*1024; // 500KB
+if(!file.type||!file.type.startsWith('image/')){
+alert('Please select an image file.');
+input.value='';
+return;
+}
+if(file.size>MAX_PHOTO_SIZE){
+alert('Image is too large. Please choose one under 500KB.');
+input.value='';
+return;
+}
+
 const reader=new FileReader();
+reader.onerror=function(){
+alert('Could not read that image. Please try a different file.');
+input.value='';
+};
 reader.onload=function(e){
+try{
 const photoData=e.target.result;
-// Get existing photos array
 const photos=JSON.parse(localStorage.getItem('headerPhotos')||'[]');
-// Add new photo
 photos.push({
 url:photoData,
 uploadedAt:new Date().toISOString()
 });
-// Save to localStorage
-localStorage.setItem('headerPhotos',JSON.stringify(photos));
-// Set as current header
+// Keep photo history bounded to avoid localStorage quota issues.
+const MAX_STORED_PHOTOS=8;
+const boundedPhotos=photos.slice(-MAX_STORED_PHOTOS);
+
+localStorage.setItem('headerPhotos',JSON.stringify(boundedPhotos));
 localStorage.setItem('currentHeaderPhoto',photoData);
-// Apply to arched photo frame
+saveToFirebase('headerPhotos',boundedPhotos);
+saveToFirebase('currentHeaderPhoto',photoData);
+
 const photoImg=document.getElementById('headerPhotoImg');
 const placeholder=document.getElementById('photoPlaceholder');
 if(photoImg){
@@ -7173,14 +7202,22 @@ photoImg.src=photoData;
 photoImg.style.display='block';
 if(placeholder)placeholder.style.display='none';
 }
-// Animate change
+
 const frame=document.getElementById('headerPhotoFrame');
 if(frame){
 frame.style.opacity='0';
 setTimeout(()=>{frame.style.opacity='1';},100);
 }
-// Show success message
-// Notification disabled
+}catch(err){
+console.error('Header photo save failed:',err);
+const msg=String(err&&err.name||err);
+if(msg.includes('Quota')){
+alert('Not enough browser storage to save this photo. Try a smaller image.');
+}else{
+alert('Could not save photo. Please try again.');
+}
+}
+input.value='';
 };
 reader.readAsDataURL(file);
 }
