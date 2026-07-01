@@ -2267,28 +2267,13 @@ Weekly Recap
 <div class="card" style="background:linear-gradient(135deg,#f3e8ff 0%,#ede9fe 100%);border:2px solid #c4b5fd;padding:10px;margin-bottom:12px;">
 <h4 style="color:#7c3aed;font-weight:700;margin:0 0 8px 0;font-size:0.85rem;">✨ Key Insights</h4>
 <div id="compactInsights" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:6px;font-size:0.75rem;">
-<div style="background:white;padding:6px 8px;border-radius:4px;border-left:3px solid #ec4899;"><span style="font-weight:600;color:#ec4899;">Mood:</span> <span style="color:#6b7280;" id="moodTrendInsight">-</span></div>
-<div style="background:white;padding:6px 8px;border-radius:4px;border-left:3px solid #eab308;"><span style="font-weight:600;color:#eab308;">Energy:</span> <span style="color:#6b7280;" id="energyTrendInsight">-</span></div>
-<div style="background:white;padding:6px 8px;border-radius:4px;border-left:3px solid #10b981;"><span style="font-weight:600;color:#10b981;">Best:</span> <span style="color:#6b7280;" id="bestHabitInsight">-</span></div>
-<div style="background:white;padding:6px 8px;border-radius:4px;border-left:3px solid #0284c7;"><span style="font-weight:600;color:#0284c7;">Prod:</span> <span style="color:#6b7280;" id="productivityInsight">-</span></div>
+<!-- Auto-populated with actionable insights -->
 </div>
 </div>
 
 <div class="card" style="background:linear-gradient(135deg,var(--pastel-pink) 0%,rgba(255,214,231,0.7) 100%);padding:12px;margin-bottom:12px;">
 <h3 style="color:#ec4899;font-weight:700;font-size:0.9rem;margin:0 0 8px 0;">💭 Mood & Energy Insights</h3>
 <div id="moodEnergyInsights" style="font-size:0.85rem;"></div>
-</div>
-
-<!-- Current Streaks -->
-<div class="card" style="background:linear-gradient(135deg,#ff9a56 0%,rgba(255,173,86,0.7) 100%);padding:12px;margin-bottom:12px;">
-<h3 style="color:#ea580c;font-weight:700;font-size:0.9rem;margin:0 0 8px 0;">🔥 Current Streaks</h3>
-<div id="currentStreaks" style="font-size:0.85rem;"></div>
-</div>
-
-<!-- Activity Choice Insights -->
-<div class="card" style="background:linear-gradient(135deg,#dcfce7 0%,rgba(187,247,208,0.7) 100%);padding:12px;margin-bottom:12px;">
-<h3 style="color:#166534;font-weight:700;font-size:0.9rem;margin:0 0 8px 0;">📈 Activity Choice Insights</h3>
-<div id="bingoChoiceInsights" style="font-size:0.85rem;"></div>
 </div>
 
 <!-- Bingo Activity History -->
@@ -5253,7 +5238,7 @@ function loadComingUp() {
     const checkDate = new Date(today);
     checkDate.setDate(checkDate.getDate() + i);
     const dateStr = checkDate.getFullYear() + '-' + String(checkDate.getMonth() + 1).padStart(2, '0') + '-' + String(checkDate.getDate()).padStart(2, '0');
-    const dateTasks = tasks.filter(t => t.date === dateStr && !t.completed);
+    const dateTasks = tasks.filter(t => t.date === dateStr);
 
     if (dateTasks.length > 0) {
       upcomingTasks.push({
@@ -5275,7 +5260,7 @@ function loadComingUp() {
     <div style="margin-bottom:16px;padding:12px;background:rgba(255,255,255,0.7);border-radius:10px;border-left:3px solid #a78bfa;">
       <div style="font-weight:700;color:#7c3aed;margin-bottom:8px;font-size:0.9rem;">${day.displayDate}</div>
       ${day.tasks.map(task => `
-        <div style="color:#374151;font-size:0.85rem;padding:4px 0;padding-left:12px;">• ${task.text}</div>
+        <div style="color:#374151;font-size:0.85rem;padding:4px 0;padding-left:12px;${task.completed ? 'text-decoration:line-through;opacity:0.5;' : ''}">• ${task.text}</div>
       `).join('')}
     </div>
   `).join('');
@@ -5589,8 +5574,6 @@ function loadWeeklyRecap() {
 function loadHistory(){
 showWeekly();
 const bingoStats=getBingoActivityStats();
-displayCurrentStreaks(bingoStats);
-displayBingoChoiceInsights(bingoStats);
 displayBingoActivityHistory(bingoStats);
 const moodData=JSON.parse(localStorage.getItem('dailyMoodEnergy')||'{}');
 const dates7=getDatesInRange(7);
@@ -5625,12 +5608,9 @@ calculateMonthly();
 // Calculate weekly stats
 function calculateWeekly(){
 const dates=getDatesInRange(7);
-const activities=JSON.parse(localStorage.getItem('activities')||'[]');
+const bingoData=JSON.parse(localStorage.getItem('calendarBingo')||'{}');
 const moodData=JSON.parse(localStorage.getItem('dailyMoodEnergy')||'{}');
 const timeData=JSON.parse(localStorage.getItem('timeTracker')||'{}');
-const ratings=JSON.parse(localStorage.getItem('dailyRatings')||'{}');
-const completionHistory=JSON.parse(localStorage.getItem('activityCompletions')||'{}');
-const spendingData=JSON.parse(localStorage.getItem('daysCried')||'{}');
 const criedData=JSON.parse(localStorage.getItem('daysCried')||'{}');
 const lostData=JSON.parse(localStorage.getItem('itemsLost')||'{}');
 
@@ -5643,9 +5623,9 @@ let criedDays=0;
 let lostItems=0;
 
 dates.forEach(date=>{
-// Count completed activities for this date using completion history
-if(completionHistory[date]){
-totalCompleted+=completionHistory[date].length;
+// Count bingo activities completed for this date
+if(bingoData[date]){
+totalCompleted+=Object.values(bingoData[date]).filter(v=>v).length;
 }
 // Mood/energy
 if(moodData[date]){
@@ -5670,15 +5650,22 @@ spendingSum+=parseFloat(item.amount||0);
 }
 });
 
-// Count cried days and lost items for current month
-const now=new Date();
-const monthKey=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
-if(criedData[monthKey]){
-criedDays=criedData[monthKey].length;
+// Count cried days and lost items for this week
+const dateSet=new Set(dates);
+Object.values(criedData).forEach(monthEntries=>{
+monthEntries.forEach(entry=>{
+if(dateSet.has(entry.date)){
+criedDays++;
 }
-if(lostData[monthKey]){
-lostItems=lostData[monthKey].length;
+});
+});
+Object.values(lostData).forEach(monthEntries=>{
+monthEntries.forEach(entry=>{
+if(dateSet.has(entry.date)){
+lostItems++;
 }
+});
+});
 
 document.getElementById('weekActivitiesCompleted').textContent=totalCompleted;
 document.getElementById('weekAvgMood').textContent=moodCount>0?(moodSum/moodCount).toFixed(1):'-';
@@ -5699,11 +5686,9 @@ updateCompactInsights(dates);
 // Calculate monthly stats
 function calculateMonthly(){
 const dates=getDatesInRange(30);
-const activities=JSON.parse(localStorage.getItem('activities')||'[]');
+const bingoData=JSON.parse(localStorage.getItem('calendarBingo')||'{}');
 const moodData=JSON.parse(localStorage.getItem('dailyMoodEnergy')||'{}');
 const timeData=JSON.parse(localStorage.getItem('timeTracker')||'{}');
-const ratings=JSON.parse(localStorage.getItem('dailyRatings')||'{}');
-const completionHistory=JSON.parse(localStorage.getItem('activityCompletions')||'{}');
 const criedData=JSON.parse(localStorage.getItem('daysCried')||'{}');
 const lostData=JSON.parse(localStorage.getItem('itemsLost')||'{}');
 
@@ -5716,8 +5701,9 @@ let criedDays=0;
 let lostItems=0;
 
 dates.forEach(date=>{
-if(completionHistory[date]){
-totalCompleted+=completionHistory[date].length;
+// Count bingo activities completed for this date
+if(bingoData[date]){
+totalCompleted+=Object.values(bingoData[date]).filter(v=>v).length;
 }
 if(moodData[date]){
 if(moodData[date].mood){moodSum+=parseInt(moodData[date].mood);moodCount++;}
@@ -5740,15 +5726,22 @@ spendingSum+=parseFloat(item.amount||0);
 }
 });
 
-// Count cried days and lost items for current month
-const now=new Date();
-const monthKey=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
-if(criedData[monthKey]){
-criedDays=criedData[monthKey].length;
+// Count cried days and lost items for this month (30-day period)
+const dateSet=new Set(dates);
+Object.values(criedData).forEach(monthEntries=>{
+monthEntries.forEach(entry=>{
+if(dateSet.has(entry.date)){
+criedDays++;
 }
-if(lostData[monthKey]){
-lostItems=lostData[monthKey].length;
+});
+});
+Object.values(lostData).forEach(monthEntries=>{
+monthEntries.forEach(entry=>{
+if(dateSet.has(entry.date)){
+lostItems++;
 }
+});
+});
 
 document.getElementById('monthActivitiesCompleted').textContent=totalCompleted;
 document.getElementById('monthAvgMood').textContent=moodCount>0?(moodSum/moodCount).toFixed(1):'-';
@@ -5757,36 +5750,7 @@ document.getElementById('monthTimeTracked').textContent=timeSum.toFixed(1)+'h';
 document.getElementById('monthSpending').textContent='$'+spendingSum.toFixed(2);
 document.getElementById('monthCried').textContent=criedDays;
 document.getElementById('monthLost').textContent=lostItems;
-for(let w=0;w<4;w++){
-const weekDates=dates.slice(w*7,(w+1)*7);
-const weekDiv=document.createElement('div');
-weekDiv.style.padding='12px';
-weekDiv.style.background='white';
-weekDiv.style.borderRadius='8px';
-weekDiv.style.marginBottom='8px';
-weekDiv.style.border='1px solid #fde68a';
-let weekCompleted=0;
-let weekMoodSum=0,weekMoodCount=0;
-let weekEnergySum=0,weekEnergyCount=0;
-let weekTime=0;
-weekDates.forEach(date=>{
-if(completionHistory[date]){
-weekCompleted+=completionHistory[date].length;
-}
-if(moodData[date]){
-if(moodData[date].mood){weekMoodSum+=parseInt(moodData[date].mood);weekMoodCount++;}
-if(moodData[date].energy){weekEnergySum+=parseInt(moodData[date].energy);weekEnergyCount++;}
-}
-if(timeData[date]){
-timeData[date].forEach(e=>{weekTime+=parseFloat(e.hours||0);});
-}
-});
-const avgMood=weekMoodCount>0?(weekMoodSum/weekMoodCount).toFixed(1):'-';
-const avgEnergy=weekEnergyCount>0?(weekEnergySum/weekEnergyCount).toFixed(1):'-';
-weekDiv.innerHTML=`<div style="font-weight:600;color:#374151;margin-bottom:4px;">Week ${w+1} (${formatDateForDisplay(weekDates[0],{month:'short',day:'numeric'})} - ${formatDateForDisplay(weekDates[weekDates.length-1],{month:'short',day:'numeric'})})</div>
-<div style="font-size:0.875rem;color:#6b7280;">✅ ${weekCompleted} activities | 😊 ${avgMood} | ⚡ ${avgEnergy} | ⏱️ ${weekTime.toFixed(1)}h</div>`;
-breakdown.appendChild(weekDiv);
-}
+
 // Update notes display
 displayAllNotes(moodData,dates);
 displayFullDataReview();
@@ -5799,65 +5763,78 @@ updateCompactInsights(dates);
 function updateCompactInsights(dates){
 const container=document.getElementById('compactInsights');
 const moodData=JSON.parse(localStorage.getItem('dailyMoodEnergy')||'{}');
-const completionHistory=JSON.parse(localStorage.getItem('activityCompletions')||'{}');
-const activities=JSON.parse(localStorage.getItem('activities')||'[]');
+const bingoData=JSON.parse(localStorage.getItem('calendarBingo')||'{}');
+const bingoOptions=getBingoOptions();
 
-// Mood trend
-let moodArr=[];
-dates.forEach(d=>{if(moodData[d]&&moodData[d].mood){moodArr.push(parseInt(moodData[d].mood));}});
-let moodTrend='Steady';
-if(moodArr.length>=2){
-const recent=moodArr.slice(-3).reduce((a,b)=>a+b,0)/Math.min(3,moodArr.length);
-const older=moodArr.slice(0,Math.max(1,moodArr.length-3)).reduce((a,b)=>a+b,0)/Math.max(1,moodArr.length-3);
-if(recent>older+5){moodTrend='📈 Improving';}
-else if(recent<older-5){moodTrend='📉 Declining';}
-else{moodTrend='😌 Stable';}
-}
-document.getElementById('moodTrendInsight').textContent=moodTrend;
-
-// Energy trend
-let energyArr=[];
-dates.forEach(d=>{if(moodData[d]&&moodData[d].energy){energyArr.push(parseInt(moodData[d].energy));}});
-let energyTrend='Steady';
-if(energyArr.length>=2){
-const recent=energyArr.slice(-3).reduce((a,b)=>a+b,0)/Math.min(3,energyArr.length);
-const older=energyArr.slice(0,Math.max(1,energyArr.length-3)).reduce((a,b)=>a+b,0)/Math.max(1,energyArr.length-3);
-if(recent>older+5){energyTrend='⚡ Boosting';}
-else if(recent<older-5){energyTrend='🪫 Draining';}
-else{energyTrend='⚖️ Balanced';}
-}
-document.getElementById('energyTrendInsight').textContent=energyTrend;
-
-// Best habit
+// Best habit - count completions per activity in the date range
 let bestHabitText='None tracked';
+let bestCount=0;
 const completionCounts={};
 dates.forEach(date=>{
-if(completionHistory[date]){
-completionHistory[date].forEach(id=>{
+if(bingoData[date]){
+Object.entries(bingoData[date]).forEach(([id,completed])=>{
+if(completed){
 completionCounts[id]=(completionCounts[id]||0)+1;
+}
 });
 }
 });
 if(Object.keys(completionCounts).length>0){
 const topId=Object.keys(completionCounts).reduce((a,b)=>completionCounts[a]>completionCounts[b]?a:b);
-const topActivity=activities.find(a=>a.id===topId);
+bestCount=completionCounts[topId];
+const topActivity=bingoOptions.find(a=>a.id===topId);
 if(topActivity){
-bestHabitText=topActivity.text.substring(0,20)+(topActivity.text.length>20?'...':'');
+bestHabitText=topActivity.label.substring(0,20)+(topActivity.label.length>20?'...':'');
 }
 }
-document.getElementById('bestHabitInsight').textContent=bestHabitText;
 
-// Productivity
+// Productivity - average activities per day
 let completedCount=0;
-dates.forEach(date=>{if(completionHistory[date]){completedCount+=completionHistory[date].length;}});
+dates.forEach(date=>{
+if(bingoData[date]){
+completedCount+=Object.values(bingoData[date]).filter(v=>v).length;
+}
+});
 const totalDays=dates.length;
 const avgPerDay=totalDays>0?(completedCount/totalDays).toFixed(1):0;
-let productivityText='Low';
+let productivityText='Light';
 if(avgPerDay>=3){productivityText='🚀 Excellent';}
 else if(avgPerDay>=2){productivityText='💪 Strong';}
 else if(avgPerDay>=1){productivityText='👍 Steady';}
 else{productivityText='⚠️ Light';}
-document.getElementById('productivityInsight').textContent=productivityText;
+
+// Emotional range
+let emotionalDay='N/A';
+let maxEmotionDiff=0;
+dates.forEach(date=>{
+if(moodData[date]&&moodData[date].mood&&moodData[date].energy){
+const diff=Math.abs(parseInt(moodData[date].mood)-parseInt(moodData[date].energy));
+if(diff>maxEmotionDiff){
+maxEmotionDiff=diff;
+emotionalDay=formatDateForDisplay(date,{month:'short',day:'numeric'});
+}
+}
+});
+
+// Most active day
+let mostActiveDay='N/A';
+let maxActivities=0;
+dates.forEach(date=>{
+if(bingoData[date]){
+const dayCount=Object.values(bingoData[date]).filter(v=>v).length;
+if(dayCount>maxActivities){
+maxActivities=dayCount;
+mostActiveDay=formatDateForDisplay(date,{month:'short',day:'numeric'});
+}
+}
+});
+
+container.innerHTML=`
+<div style="background:white;padding:6px 8px;border-radius:4px;border-left:3px solid #10b981;"><span style="font-weight:600;color:#10b981;">Best:</span> <span style="color:#6b7280;">${bestHabitText} (${bestCount}×)</span></div>
+<div style="background:white;padding:6px 8px;border-radius:4px;border-left:3px solid #0284c7;"><span style="font-weight:600;color:#0284c7;">Prod:</span> <span style="color:#6b7280;">${productivityText}</span></div>
+<div style="background:white;padding:6px 8px;border-radius:4px;border-left:3px solid #f97316;"><span style="font-weight:600;color:#f97316;">Active:</span> <span style="color:#6b7280;">${mostActiveDay}</span></div>
+<div style="background:white;padding:6px 8px;border-radius:4px;border-left:3px solid #8b5cf6;"><span style="font-weight:600;color:#8b5cf6;">Range:</span> <span style="color:#6b7280;">${emotionalDay}</span></div>
+`;
 }
 
 function getBingoActivityStats(){
