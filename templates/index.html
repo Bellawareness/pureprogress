@@ -151,7 +151,7 @@
         'selectedTheme', 'darkMode', 'activityLog', 'headerPhotos', 'currentHeaderPhoto',
         'foodLog', 'workoutLog', 'dreamLog', 'sleepData', 'painData', 'clarityData',
         'creditCards', 'travels', 'customCards', 'dailyMemories', 'categoryData', 'allNotes',
-        'pendingProjects', 'categorySpending', 'dailyDosTasks', 'dailyDosWorkouts', 'dailyDosGoals', 'dailyDosFood', 'calendarBingo', 'calendarBingoOptions'
+        'pendingProjects', 'categorySpending', 'dailyDosTasks', 'dailyDosWorkouts', 'dailyDosGoals', 'dailyDosFood', 'calendarBingo', 'calendarBingoOptions', 'reflectionsEntries'
       ];
       
       for (const key of STORAGE_KEYS) {
@@ -187,7 +187,7 @@
         'selectedTheme', 'darkMode', 'activityLog', 'headerPhotos', 'currentHeaderPhoto',
         'foodLog', 'workoutLog', 'dreamLog', 'sleepData', 'painData', 'clarityData',
         'creditCards', 'travels', 'customCards', 'dailyMemories', 'categoryData', 'allNotes',
-        'pendingProjects', 'categorySpending', 'dailyDosTasks', 'dailyDosWorkouts', 'dailyDosGoals', 'dailyDosFood', 'calendarBingo', 'calendarBingoOptions'
+        'pendingProjects', 'categorySpending', 'dailyDosTasks', 'dailyDosWorkouts', 'dailyDosGoals', 'dailyDosFood', 'calendarBingo', 'calendarBingoOptions', 'reflectionsEntries'
       ];
       
       let downloaded = 0;
@@ -1361,6 +1361,7 @@ flex:1;
 <button class="tab-btn active" onclick="switchTab('today')" style="padding:12px 24px;border-radius:10px;font-size:0.95rem;font-weight:700;cursor:pointer;transition:all 0.3s;border:2px solid rgba(255,154,162,0.3);">Today</button>
 <button class="tab-btn" onclick="switchTab('dailydos')" style="padding:12px 24px;border-radius:10px;font-size:0.95rem;font-weight:700;cursor:pointer;transition:all 0.3s;border:2px solid rgba(255,154,162,0.3);">Daily Dos</button>
 <button class="tab-btn" onclick="switchTab('history')" style="padding:12px 24px;border-radius:10px;font-size:0.95rem;font-weight:700;cursor:pointer;transition:all 0.3s;border:2px solid rgba(255,154,162,0.3);">History</button>
+<button class="tab-btn" onclick="switchTab('reflections')" style="padding:12px 24px;border-radius:10px;font-size:0.95rem;font-weight:700;cursor:pointer;transition:all 0.3s;border:2px solid rgba(255,154,162,0.3);">Reflections</button>
 </div>
 <!-- Center: Theme Selector -->
 <div style="display:flex;gap:6px;background:rgba(255,255,255,0.5);padding:6px;border-radius:10px;">
@@ -2181,6 +2182,40 @@ Weekly Recap
 
 </div>
 <!-- End Daily Dos View -->
+
+<!-- Reflections View -->
+<div id="reflectionsView" class="view-section">
+<!-- Theme Images Grid -->
+<div style="margin-bottom:24px;padding:0 20px;">
+<h3 style="color:#7c3aed;font-weight:700;margin-bottom:16px;font-size:1.1rem;">Choose a Theme</h3>
+<div id="reflectionThemes" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:20px;padding:12px;"></div>
+</div>
+
+<!-- Selected Theme Section -->
+<div id="selectedThemeSection" style="display:none;background:linear-gradient(135deg,#f3e8ff,#ede9fe);padding:20px;border-radius:10px;border:2px solid #c4b5fd;margin:0 20px 16px 20px;">
+<div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
+<img id="selectedThemeImage" src="" style="width:100px;height:100px;border-radius:10px;object-fit:cover;border:3px solid #7c3aed;box-shadow:0 4px 12px rgba(124,58,237,0.2);flex-shrink:0;">
+<div>
+<h3 id="selectedThemeLabel" style="color:#7c3aed;font-weight:700;margin:0;font-size:1.1rem;"></h3>
+<button onclick="clearSelectedTheme()" style="background:#ef4444;color:white;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:0.85rem;font-weight:600;margin-top:8px;transition:all 0.2s;"
+onmouseover="this.style.transform='scale(1.05)'"
+onmouseout="this.style.transform='scale(1)'">Change Theme</button>
+</div>
+</div>
+
+<!-- Add Note Form -->
+<div style="background:rgba(255,255,255,0.9);padding:14px;border-radius:8px;margin-bottom:14px;border:1px solid #d1d5db;">
+<textarea id="reflectionNote" placeholder="Write your thoughts, feelings, or observations..." style="width:100%;padding:10px 12px;border:1px solid #d1d5db;border-radius:6px;font-size:0.9rem;resize:vertical;min-height:80px;box-sizing:border-box;font-family:inherit;"></textarea>
+<button onclick="addReflectionEntry()" style="width:100%;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:white;border:none;padding:11px;border-radius:6px;cursor:pointer;font-weight:600;transition:all 0.2s;margin-top:10px;"
+onmouseover="this.style.transform='scale(1.02)'"
+onmouseout="this.style.transform='scale(1)'">Save Note</button>
+</div>
+
+<!-- Notes List Grouped by Date -->
+<div id="reflectionEntries" style="max-height:500px;overflow-y:auto;"></div>
+</div>
+</div>
+<!-- End Reflections View -->
 
 <!-- History View -->
 <div id="historyView" class="view-section">
@@ -4699,6 +4734,11 @@ if(tabName === 'dailydos'){
 console.log('Loading daily dos...');
 loadDailyDosCalendar();
 }
+if(tabName === 'reflections'){
+console.log('Loading reflections...');
+initReflectionsData();
+loadReflectionsThemes();
+}
 
 console.log('Tab switch complete');
 }
@@ -4734,6 +4774,13 @@ function initDailyDosData() {
   }
   if (!localStorage.getItem('dailyDosGoals')) {
     localStorage.setItem('dailyDosGoals', JSON.stringify([]));
+  }
+}
+
+// Reflections - Initialize Data
+function initReflectionsData() {
+  if (!localStorage.getItem('reflectionsEntries')) {
+    localStorage.setItem('reflectionsEntries', JSON.stringify([]));
   }
 }
 
@@ -5472,6 +5519,165 @@ function loadFood() {
         onmouseout="this.style.transform='scale(1)'">×</button>
     </div>
   `).join('');
+}
+
+// Reflections Functions
+const reflectionThemes = [
+  { name: 'accomplishment', label: 'Accomplishment', emoji: '🏆', image: 'https://images.unsplash.com/photo-1533104816931-20fa691ff6ca?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fHBhc3RlbHxlbnwwfHwwfHx8MA%3D%3D' },
+  { name: 'doingGood', label: 'Doing Good', emoji: '💚', image: 'https://images.unsplash.com/photo-1529034502960-57f42a966080?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fHBhc3RlbHxlbnwwfHwwfHx8MA%3D%3D' },
+  { name: 'conversation', label: 'Great Conversation', emoji: '💬', image: 'https://images.unsplash.com/photo-1623551729703-27dde0ab431d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjJ8fHBhc3RlbHxlbnwwfHwwfHx8MA%3D%3D' },
+  { name: 'learned', label: 'Things I\'ve Learned', emoji: '📚', image: 'https://images.unsplash.com/photo-1562048048-86d659689440?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDh8fHBhc3RlbHxlbnwwfHwwfHx8MA%3D%3D' },
+  { name: 'desire', label: 'Desire', emoji: '⭐', image: 'https://images.unsplash.com/photo-1551500226-b50b653e33e8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTZ8fHBhc3RlbHxlbnwwfHwwfHx8MA%3D%3D' },
+  { name: 'working', label: 'Everything Working Out', emoji: '✨', image: 'https://images.unsplash.com/photo-1528696892704-5e1122852276?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NzR8fHBhc3RlbHxlbnwwfHwwfHx8MA%3D%3D' },
+  { name: 'sync', label: 'Synchronization', emoji: '🔄', image: 'https://images.unsplash.com/photo-1572953745960-14685e3e9b49?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTQyfHxwYXN0ZWx8ZW58MHx8MHx8fDA%3D' },
+  { name: 'toLearn', label: 'To Learn', emoji: '🎯', image: 'https://images.unsplash.com/photo-1559181567-c3190ca9959b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTYwfHxwYXN0ZWx8ZW58MHx8MHx8fDA%3D' },
+  { name: 'questions', label: 'Questions', emoji: '❓', image: 'https://images.unsplash.com/photo-1689850969062-f7e0a6c45a4b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjEyfHxwYXN0ZWx8ZW58MHx8MHx8fDA%3D' },
+  { name: 'thoughts', label: 'Thoughts', emoji: '💭', image: 'https://images.unsplash.com/photo-1656410783743-d5d454efe4d7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjI0fHxwYXN0ZWx8ZW58MHx8MHx8fDA%3D' },
+  { name: 'love', label: 'Love', emoji: '❤️', image: 'https://images.unsplash.com/photo-1689946242927-0537a5aa6d19?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjI2fHxwYXN0ZWx8ZW58MHx8MHx8fDA%3D' },
+  { name: 'grateful', label: 'Grateful', emoji: '🙏', image: 'https://images.unsplash.com/photo-1498480086004-2400bd8c3663?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mjc5fHxwYXN0ZWx8ZW58MHx8MHx8fDA%3D' }
+];
+
+let selectedReflectionTheme = null;
+let selectedReflectionThemeImage = null;
+
+function loadReflectionsThemes() {
+  const container = document.getElementById('reflectionThemes');
+  container.innerHTML = reflectionThemes.map(theme => `
+    <div onclick="selectReflectionTheme('${theme.name}', '${theme.label}', '${theme.image}')"
+      style="cursor:pointer;border-radius:12px;overflow:hidden;background:rgba(255,255,255,0.6);transition:all 0.2s;box-shadow:0 2px 6px rgba(0,0,0,0.08);display:flex;flex-direction:column;align-items:center;padding:10px;text-align:center;height:100%;border:1px solid rgba(200,180,240,0.4);"
+      onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 6px 16px rgba(124,58,237,0.15)';this.style.border='1px solid rgba(124,58,237,0.3)'"
+      onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 2px 6px rgba(0,0,0,0.08)';this.style.border='1px solid rgba(200,180,240,0.4)'"
+      id="themeBtn_${theme.name}">
+      <div style="width:100%;aspect-ratio:1/1;border-radius:8px;overflow:hidden;margin-bottom:8px;">
+        <img src="${theme.image}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22150%22 height=%22150%22%3E%3Crect fill=%22%23f3e8ff%22 width=%22150%22 height=%22150%22/%3E%3C/svg%3E'">
+      </div>
+      <span style="font-size:0.8rem;font-weight:600;color:#6b7280;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${theme.label}</span>
+    </div>
+  `).join('');
+}
+
+function selectReflectionTheme(themeName, themeLabel, themeImage) {
+  selectedReflectionTheme = themeName;
+  selectedReflectionThemeImage = themeImage;
+
+  document.getElementById('selectedThemeSection').style.display = 'block';
+  document.getElementById('selectedThemeImage').src = themeImage;
+  document.getElementById('selectedThemeImage').onerror = function() {
+    this.src = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22150%22 height=%22150%22%3E%3Crect fill=%22%23f3e8ff%22 width=%22150%22 height=%22150%22/%3E%3C/svg%3E';
+  };
+  document.getElementById('selectedThemeLabel').textContent = themeLabel;
+
+  // Update button styling
+  reflectionThemes.forEach(theme => {
+    const btn = document.getElementById(`themeBtn_${theme.name}`);
+    if (theme.name === themeName) {
+      btn.style.background = 'rgba(243,232,255,0.8)';
+      btn.style.border = '1px solid rgba(124,58,237,0.4)';
+      btn.style.boxShadow = '0 4px 12px rgba(124,58,237,0.12)';
+    } else {
+      btn.style.background = 'rgba(255,255,255,0.6)';
+      btn.style.border = '1px solid rgba(200,180,240,0.4)';
+      btn.style.boxShadow = '0 2px 6px rgba(0,0,0,0.08)';
+    }
+  });
+
+  loadReflectionEntries();
+}
+
+function clearSelectedTheme() {
+  selectedReflectionTheme = null;
+  selectedReflectionThemeImage = null;
+  document.getElementById('selectedThemeSection').style.display = 'none';
+  document.getElementById('reflectionNote').value = '';
+  reflectionThemes.forEach(theme => {
+    const btn = document.getElementById(`themeBtn_${theme.name}`);
+    btn.style.background = 'rgba(255,255,255,0.6)';
+    btn.style.border = '1px solid rgba(200,180,240,0.4)';
+    btn.style.boxShadow = '0 2px 6px rgba(0,0,0,0.08)';
+  });
+}
+
+function addReflectionEntry() {
+  if (!selectedReflectionTheme) {
+    alert('Please select a theme first');
+    return;
+  }
+
+  const note = document.getElementById('reflectionNote').value.trim();
+
+  if (!note) {
+    alert('Please enter a note');
+    return;
+  }
+
+  const entries = JSON.parse(localStorage.getItem('reflectionsEntries') || '[]');
+  const newEntry = {
+    id: Date.now(),
+    theme: selectedReflectionTheme,
+    note: note,
+    date: currentTaskDate
+  };
+
+  entries.push(newEntry);
+  localStorage.setItem('reflectionsEntries', JSON.stringify(entries));
+
+  document.getElementById('reflectionNote').value = '';
+
+  loadReflectionEntries();
+}
+
+function deleteReflectionEntry(entryId) {
+  if (confirm('Delete this entry?')) {
+    let entries = JSON.parse(localStorage.getItem('reflectionsEntries') || '[]');
+    entries = entries.filter(e => e.id !== entryId);
+    localStorage.setItem('reflectionsEntries', JSON.stringify(entries));
+    loadReflectionEntries();
+  }
+}
+
+function loadReflectionEntries() {
+  if (!selectedReflectionTheme) {
+    document.getElementById('reflectionEntries').innerHTML = '';
+    return;
+  }
+
+  const entries = JSON.parse(localStorage.getItem('reflectionsEntries') || '[]');
+  const filteredEntries = entries
+    .filter(e => e.theme === selectedReflectionTheme)
+    .sort((a, b) => b.id - a.id);
+
+  const container = document.getElementById('reflectionEntries');
+
+  if (filteredEntries.length === 0) {
+    container.innerHTML = '<p style="color:#9ca3af;font-style:italic;text-align:center;padding:20px;">No entries yet for this theme.</p>';
+    return;
+  }
+
+  // Group by date
+  const grouped = {};
+  filteredEntries.forEach(entry => {
+    if (!grouped[entry.date]) grouped[entry.date] = [];
+    grouped[entry.date].push(entry);
+  });
+
+  container.innerHTML = Object.entries(grouped).map(([date, dateEntries]) => {
+    const dateObj = new Date(date + 'T12:00:00');
+    const displayDate = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', weekday: 'short' });
+    return `
+      <div style="margin-bottom:16px;">
+        <div style="font-weight:700;color:#7c3aed;margin-bottom:8px;font-size:0.9rem;">${displayDate}</div>
+        ${dateEntries.map(entry => `
+          <div style="background:rgba(255,255,255,0.8);border:1px solid #d1d5db;border-radius:8px;padding:10px;margin-bottom:8px;">
+            <p style="color:#374151;font-size:0.9rem;margin:0 0 8px 0;line-height:1.5;">${entry.note}</p>
+            <button onclick="deleteReflectionEntry(${entry.id})"
+              style="background:#ef4444;color:white;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:0.8rem;font-weight:600;transition:all 0.2s;"
+              onmouseover="this.style.transform='scale(1.05)'"
+              onmouseout="this.style.transform='scale(1)'">Delete</button>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }).join('');
 }
 
 // Weekly Recap Functions
