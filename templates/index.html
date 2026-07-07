@@ -246,6 +246,28 @@
   box-shadow: 0 2px 8px rgba(255, 107, 198, 0.3) !important;
 }
 
+/* Mobile responsive - fix tab text cutoff */
+@media (max-width: 768px) {
+  .tab-btn {
+    font-size: 0.65rem !important;
+    padding: 6px 8px !important;
+    min-width: fit-content;
+  }
+  .nav-bar {
+    padding: 12px 16px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .tab-btn {
+    font-size: 0.6rem !important;
+    padding: 5px 6px !important;
+  }
+  .nav-bar {
+    padding: 10px 12px !important;
+  }
+}
+
 /* Ocean Theme */
 body.theme-ocean{
 --bg-gradient-start:#e0f2fe;
@@ -1353,7 +1375,7 @@ flex:1;
 </div>
 <div class="content-wrapper">
 <!-- Combined Navigation Bar -->
-<div style="background:rgba(255,255,255,0.95);padding:20px 32px;border-radius:16px;margin-bottom:24px;box-shadow:0 4px 20px rgba(0,0,0,0.1);backdrop-filter:blur(10px);">
+<div class="nav-bar" style="background:rgba(255,255,255,0.95);padding:20px 32px;border-radius:16px;margin-bottom:24px;box-shadow:0 4px 20px rgba(0,0,0,0.1);backdrop-filter:blur(10px);">
 <!-- All Navigation in One Row -->
 <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;">
 <!-- Left: Tab Buttons -->
@@ -1385,6 +1407,14 @@ flex:1;
 <!-- Today View -->
 <div id="todayView" class="view-section active">
 
+<!-- Intro Section -->
+<div style="margin-bottom:24px;padding:0 20px;">
+<div style="background:linear-gradient(135deg,rgba(255,237,245,0.8),rgba(255,248,240,0.8));padding:16px;border-radius:12px;border-left:4px solid #ec4899;margin-bottom:20px;">
+<h2 style="color:#ec4899;font-weight:700;margin:0 0 8px 0;font-size:1rem;">Today's Tracker</h2>
+<p style="color:#6b7280;margin:0;font-size:0.9rem;line-height:1.4;">Track your daily mood, energy, activities, and habits. Choose a category below to log what matters to you today.</p>
+</div>
+</div>
+
 <!-- Category Navigation -->
 <div style="margin-bottom:24px;background:linear-gradient(135deg,rgba(255,255,255,0.98),rgba(255,255,255,0.95));padding:16px;border-radius:20px;box-shadow:0 8px 32px rgba(0,0,0,0.12);">
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;">
@@ -1414,6 +1444,7 @@ flex:1;
 <span style="font-size:0.85rem;text-align:center;line-height:1.3;font-weight:800;letter-spacing:0.5px;">My Cards</span>
 </button>
 </div>
+<p style="color:#9ca3af;font-size:0.85rem;margin-top:12px;font-style:italic;">Tap a category to track that area of your life</p>
 </div>
 
 <!-- Health & Wellness Category -->
@@ -1994,6 +2025,14 @@ No memories logged yet today.
 <!-- Daily Dos View -->
 <div id="dailydosView" class="view-section">
 
+<!-- Intro Section -->
+<div style="margin-bottom:20px;padding:0 20px;">
+<div style="background:linear-gradient(135deg,rgba(255,240,245,0.8),rgba(254,243,199,0.8));padding:16px;border-radius:12px;border-left:4px solid #f59e0b;margin-bottom:16px;">
+<h2 style="color:#f59e0b;font-weight:700;margin:0 0 8px 0;font-size:1rem;">Daily Dos</h2>
+<p style="color:#6b7280;margin:0;font-size:0.9rem;line-height:1.4;">Create your daily task list and track your progress. Check off tasks as you complete them to stay motivated.</p>
+</div>
+</div>
+
 <!-- To-Do List (Full Width at Top) -->
 <div class="card" style="background:linear-gradient(135deg,#fff5f7 0%,#ffe8ec 100%);padding:20px;border:2px solid rgba(236,72,153,0.2);box-shadow:0 4px 20px rgba(236,72,153,0.1);margin-bottom:20px;">
 <h2 class="card-title" style="color:#be185d;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;font-size:1.1rem;flex-wrap:wrap;gap:12px;">
@@ -2006,8 +2045,8 @@ To-Do List
 
 <div style="margin-bottom:16px;">
 <div style="display:flex;gap:12px;flex-wrap:wrap;">
-<input type="text" id="newTaskInput" placeholder="Add a new task..." style="flex:1;min-width:250px;padding:12px;border:2px solid #f9a8d4;border-radius:10px;font-size:0.95rem;background:rgba(255,255,255,0.95);transition:all 0.3s;" onkeypress="if(event.key==='Enter')addTask()" onfocus="this.style.borderColor='#ec4899';this.style.boxShadow='0 0 0 3px rgba(236,72,153,0.1)'" onblur="this.style.borderColor='#f9a8d4';this.style.boxShadow='none'"/>
-<button onclick="addTask()" class="btn" style="background:linear-gradient(135deg,#f9a8d4,#ec4899);padding:12px 24px;border:none;box-shadow:0 2px 8px rgba(236,72,153,0.3);font-weight:600;font-size:0.95rem;white-space:nowrap;">Add Task</button>
+<input type="text" id="newTaskInput" placeholder="What do you want to accomplish today?" style="flex:1;min-width:250px;padding:12px;border:2px solid #f9a8d4;border-radius:10px;font-size:0.95rem;background:rgba(255,255,255,0.95);transition:all 0.3s;box-shadow:0 2px 6px rgba(236,72,153,0.1);" onkeypress="if(event.key==='Enter')addTask()" onfocus="this.style.borderColor='#ec4899';this.style.boxShadow='0 0 0 3px rgba(236,72,153,0.15)'" onblur="this.style.borderColor='#f9a8d4';this.style.boxShadow='0 2px 6px rgba(236,72,153,0.1)'"/>
+<button onclick="addTask()" class="btn" style="background:linear-gradient(135deg,#f9a8d4,#ec4899);padding:12px 24px;border:none;box-shadow:0 2px 8px rgba(236,72,153,0.3);font-weight:600;font-size:0.95rem;white-space:nowrap;cursor:pointer;border-radius:10px;color:white;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(236,72,153,0.4)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 2px 8px rgba(236,72,153,0.3)'">Add Task</button>
 </div>
 </div>
 
@@ -2185,10 +2224,17 @@ Weekly Recap
 
 <!-- Reflections View -->
 <div id="reflectionsView" class="view-section">
-<!-- Theme Images Grid -->
+<!-- Onboarding Section -->
 <div style="margin-bottom:24px;padding:0 20px;">
-<h3 style="color:#7c3aed;font-weight:700;margin-bottom:16px;font-size:1.1rem;">Choose a Theme</h3>
+<div style="background:linear-gradient(135deg,rgba(243,232,255,0.8),rgba(237,233,254,0.8));padding:16px;border-radius:12px;border-left:4px solid #7c3aed;margin-bottom:20px;">
+<h2 style="color:#7c3aed;font-weight:700;margin:0 0 8px 0;font-size:1rem;">Reflections</h2>
+<p style="color:#6b7280;margin:0;font-size:0.9rem;line-height:1.4;">Capture your thoughts, feelings, and observations. Choose a theme that resonates with your mood, then write what's on your mind.</p>
+</div>
+
+<!-- Theme Images Grid -->
+<h3 style="color:#7c3aed;font-weight:700;margin-bottom:12px;font-size:1.1rem;">1. Choose a Theme</h3>
 <div id="reflectionThemes" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:16px;padding:8px;"></div>
+<p style="color:#9ca3af;font-size:0.85rem;margin-top:8px;font-style:italic;">Tap any theme to get started</p>
 </div>
 
 <!-- Selected Theme Section -->
@@ -2204,21 +2250,33 @@ onmouseout="this.style.transform='scale(1)'">Change Theme</button>
 </div>
 
 <!-- Add Note Form -->
-<div style="background:rgba(255,255,255,0.9);padding:14px;border-radius:8px;margin-bottom:14px;border:1px solid #d1d5db;">
-<textarea id="reflectionNote" placeholder="Write your thoughts, feelings, or observations..." style="width:100%;padding:10px 12px;border:1px solid #d1d5db;border-radius:6px;font-size:0.9rem;resize:vertical;min-height:80px;box-sizing:border-box;font-family:inherit;"></textarea>
+<div style="background:rgba(255,255,255,0.9);padding:14px;border-radius:8px;margin-bottom:14px;border:2px solid #d1d5db;transition:border-color 0.2s;">
+<p style="color:#7c3aed;font-weight:600;font-size:0.9rem;margin:0 0 8px 0;">2. Write your reflection</p>
+<textarea id="reflectionNote" placeholder="What's on your mind? Share your feelings, observations, or anything you want to remember about this moment..." style="width:100%;padding:10px 12px;border:1px solid #d1d5db;border-radius:6px;font-size:0.9rem;resize:vertical;min-height:100px;box-sizing:border-box;font-family:inherit;"></textarea>
 <button onclick="addReflectionEntry()" style="width:100%;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:white;border:none;padding:11px;border-radius:6px;cursor:pointer;font-weight:600;transition:all 0.2s;margin-top:10px;"
 onmouseover="this.style.transform='scale(1.02)'"
-onmouseout="this.style.transform='scale(1)'">Save Note</button>
+onmouseout="this.style.transform='scale(1)'">Save Reflection</button>
 </div>
 
 <!-- Notes List Grouped by Date -->
+<div style="margin-bottom:16px;">
+<p style="color:#7c3aed;font-weight:600;font-size:0.9rem;margin:16px 0 12px 0;">3. Your Reflections</p>
 <div id="reflectionEntries" style="max-height:500px;overflow-y:auto;"></div>
+</div>
 </div>
 </div>
 <!-- End Reflections View -->
 
 <!-- History View -->
 <div id="historyView" class="view-section">
+
+<!-- Intro Section -->
+<div style="margin-bottom:20px;padding:0 20px;">
+<div style="background:linear-gradient(135deg,rgba(254,243,199,0.8),rgba(240,253,250,0.8));padding:16px;border-radius:12px;border-left:4px solid #d97706;margin-bottom:16px;">
+<h2 style="color:#d97706;font-weight:700;margin:0 0 8px 0;font-size:1rem;">Progress History</h2>
+<p style="color:#6b7280;margin:0;font-size:0.9rem;line-height:1.4;">See your weekly and monthly trends. Track your mood, energy, activities, and time to understand your patterns and progress over time.</p>
+</div>
+</div>
 
 <div class="card" style="background:linear-gradient(135deg,#fef3c7 0%,rgba(254,243,199,0.7) 100%);padding:14px;margin-bottom:12px;">
 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
@@ -2425,7 +2483,8 @@ const STORAGE_KEYS = [
   'selectedTheme', 'darkMode', 'pendingProjects', 'dailyMemories', 'creditCards',
   'activityLog', 'categoryData', 'categorySpending', 'sleepData', 'painData', 'painDataDetailed', 'clarityData',
   'customCards', 'foodLog', 'workoutLog', 'dreamLog', 'travelLocations', 'travels',
-  'headerPhotos', 'currentHeaderPhoto', 'allNotes', 'dailyDosTasks', 'dailyDosWorkouts', 'dailyDosGoals', 'dailyDosFood', 'calendarBingo', 'calendarBingoOptions'
+  'headerPhotos', 'currentHeaderPhoto', 'allNotes', 'dailyDosTasks', 'dailyDosWorkouts', 'dailyDosGoals', 'dailyDosFood', 'calendarBingo', 'calendarBingoOptions',
+  'reflectionsEntries'
 ];
 
 // Save data to Firebase
@@ -5197,11 +5256,12 @@ function addTask() {
 
   tasks.push(newTask);
   localStorage.setItem('dailyDosTasks', JSON.stringify(tasks));
+  saveToFirebase('dailyDosTasks', tasks);
 
   input.value = '';
   loadTasks();
-  loadComingUp(); // Update coming up list
-  loadWeeklyRecap(); // Update weekly recap
+  loadComingUp();
+  loadWeeklyRecap();
 }
 
 function toggleTask(taskId) {
@@ -5210,6 +5270,7 @@ function toggleTask(taskId) {
   if (task) {
     task.completed = !task.completed;
     localStorage.setItem('dailyDosTasks', JSON.stringify(tasks));
+    saveToFirebase('dailyDosTasks', tasks);
     loadTasks();
     loadComingUp();
     loadWeeklyRecap();
@@ -5220,6 +5281,7 @@ function deleteTask(taskId) {
   let tasks = JSON.parse(localStorage.getItem('dailyDosTasks') || '[]');
   tasks = tasks.filter(t => t.id !== taskId);
   localStorage.setItem('dailyDosTasks', JSON.stringify(tasks));
+  saveToFirebase('dailyDosTasks', tasks);
   loadTasks();
   loadComingUp();
   loadWeeklyRecap();
@@ -5235,6 +5297,7 @@ function editTask(taskId) {
 
   task.text = newText.trim();
   localStorage.setItem('dailyDosTasks', JSON.stringify(tasks));
+  saveToFirebase('dailyDosTasks', tasks);
   loadTasks();
   loadComingUp();
   loadWeeklyRecap();
@@ -5252,7 +5315,7 @@ function loadTasks() {
 
   const taskList = document.getElementById('taskList');
   if (dateTasks.length === 0) {
-    taskList.innerHTML = '<p style="color:#9ca3af;font-style:italic;text-align:center;padding:20px;background:rgba(255,255,255,0.6);border-radius:10px;border:1px dashed rgba(236,72,153,0.3);">No tasks for this date. Add one above!</p>';
+    taskList.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:32px 20px;background:linear-gradient(135deg,rgba(255,240,245,0.6),rgba(254,243,199,0.6));border-radius:10px;border:2px dashed rgba(236,72,153,0.3);"><p style="color:#6b7280;margin:0;font-size:0.95rem;font-weight:500;">No tasks yet for today</p><p style="color:#9ca3af;margin:8px 0 0 0;font-size:0.85rem;">Type a task above and click "Add Task" to get started</p></div>';
     return;
   }
 
@@ -5544,14 +5607,17 @@ function loadReflectionsThemes() {
   const container = document.getElementById('reflectionThemes');
   container.innerHTML = reflectionThemes.map(theme => `
     <div onclick="selectReflectionTheme('${theme.name}', '${theme.label.replace(/'/g, "\\'")}', '${theme.image}')"
-      style="cursor:pointer;border-radius:12px;overflow:hidden;background:rgba(255,255,255,0.6);transition:all 0.2s;box-shadow:0 2px 6px rgba(0,0,0,0.08);display:flex;flex-direction:column;align-items:center;padding:10px;text-align:center;height:100%;border:1px solid rgba(200,180,240,0.4);"
-      onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 6px 16px rgba(124,58,237,0.15)';this.style.border='1px solid rgba(124,58,237,0.3)'"
-      onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 2px 6px rgba(0,0,0,0.08)';this.style.border='1px solid rgba(200,180,240,0.4)'"
+      style="cursor:pointer;border-radius:12px;overflow:hidden;background:rgba(255,255,255,0.6);transition:all 0.3s ease;box-shadow:0 2px 6px rgba(0,0,0,0.08);display:flex;flex-direction:column;align-items:center;padding:10px;text-align:center;height:100%;border:2px solid rgba(200,180,240,0.4);position:relative;"
+      onmouseover="this.style.transform='translateY(-6px) scale(1.03)';this.style.boxShadow='0 8px 20px rgba(124,58,237,0.2)';this.style.borderColor='rgba(124,58,237,0.5)'"
+      onmouseout="this.style.transform='translateY(0) scale(1)';this.style.boxShadow='0 2px 6px rgba(0,0,0,0.08)';this.style.borderColor='rgba(200,180,240,0.4)'"
+      ontouchstart="this.style.transform='scale(0.98)';this.style.boxShadow='0 4px 12px rgba(124,58,237,0.15)'"
+      ontouchend="this.style.transform='scale(1)';this.style.boxShadow='0 2px 6px rgba(0,0,0,0.08)'"
       id="themeBtn_${theme.name}">
-      <div style="width:100%;aspect-ratio:1/1;border-radius:8px;overflow:hidden;margin-bottom:8px;">
-        <img src="${theme.image}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22150%22 height=%22150%22%3E%3Crect fill=%22%23f3e8ff%22 width=%22150%22 height=%22150%22/%3E%3C/svg%3E'">
+      <div style="width:100%;aspect-ratio:1/1;border-radius:8px;overflow:hidden;margin-bottom:8px;box-shadow:inset 0 2px 8px rgba(0,0,0,0.1);">
+        <img src="${theme.image}" style="width:100%;height:100%;object-fit:cover;transition:transform 0.3s ease;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22150%22 height=%22150%22%3E%3Crect fill=%22%23f3e8ff%22 width=%22150%22 height=%22150%22/%3E%3C/svg%3E'">
       </div>
-      <span style="font-size:0.8rem;font-weight:600;color:#6b7280;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${theme.label}</span>
+      <span style="font-size:0.8rem;font-weight:600;color:#6b7280;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:4px;">${theme.label}</span>
+      <span style="font-size:0.7rem;color:#a78bfa;font-weight:500;">Tap</span>
     </div>
   `).join('');
 }
@@ -5582,6 +5648,11 @@ function selectReflectionTheme(themeName, themeLabel, themeImage) {
   });
 
   loadReflectionEntries();
+
+  // Scroll to input field on mobile
+  setTimeout(() => {
+    document.getElementById('reflectionNote').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 100);
 }
 
 function clearSelectedTheme() {
@@ -5620,6 +5691,7 @@ function addReflectionEntry() {
 
   entries.push(newEntry);
   localStorage.setItem('reflectionsEntries', JSON.stringify(entries));
+  saveToFirebase('reflectionsEntries', entries);
 
   document.getElementById('reflectionNote').value = '';
 
@@ -5631,6 +5703,7 @@ function deleteReflectionEntry(entryId) {
     let entries = JSON.parse(localStorage.getItem('reflectionsEntries') || '[]');
     entries = entries.filter(e => e.id !== entryId);
     localStorage.setItem('reflectionsEntries', JSON.stringify(entries));
+    saveToFirebase('reflectionsEntries', entries);
     loadReflectionEntries();
   }
 }
