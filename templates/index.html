@@ -131,28 +131,28 @@
   async function checkAndMigrateData(user) {
     if (!window.firebaseDatabase) return;
     
+    const STORAGE_KEYS = [
+      'dailyMoodEnergy', 'activities', 'dailyRatings', 'activityCompletions',
+      'dailyTodo', 'getItDone', 'dailySpending', 'daysCried', 'itemsLost',
+      'waterIntake', 'waterIntakeNew', 'timeTracked', 'timeTracker', 'photos', 'photoAlbum',
+      'selectedTheme', 'darkMode', 'activityLog', 'headerPhotos', 'currentHeaderPhoto',
+      'foodLog', 'workoutLog', 'dreamLog', 'sleepData', 'painData', 'clarityData',
+      'creditCards', 'travels', 'customCards', 'dailyMemories', 'categoryData', 'allNotes',
+      'pendingProjects', 'categorySpending', 'dailyDosTasks', 'dailyDosWorkouts', 'dailyDosGoals', 'dailyDosFood', 'calendarBingo', 'calendarBingoOptions', 'reflectionsEntries'
+    ];
+    
     // Check if cloud has any data
     const userRef = window.firebaseRef(window.firebaseDatabase, `users/${user.uid}`);
     const snapshot = await window.firebaseGet(userRef);
     
     // Check if localStorage has any data
-    const hasLocalData = ['dailyMoodEnergy', 'activities', 'dailyRatings', 'dailySpending', 'daysCried', 'itemsLost']
+    const hasLocalData = STORAGE_KEYS
       .some(key => localStorage.getItem(key) && localStorage.getItem(key) !== '[]' && localStorage.getItem(key) !== '{}');
     
     if (!snapshot.exists() && hasLocalData) {
       // New account with existing local data - automatically upload without dialog
       console.log('🔄 Auto-uploading local data to cloud...');
       let migrated = 0;
-      
-      const STORAGE_KEYS = [
-        'dailyMoodEnergy', 'activities', 'dailyRatings', 'activityCompletions',
-        'dailyTodo', 'getItDone', 'dailySpending', 'daysCried', 'itemsLost',
-        'waterIntake', 'waterIntakeNew', 'timeTracked', 'timeTracker', 'photos', 'photoAlbum',
-        'selectedTheme', 'darkMode', 'activityLog', 'headerPhotos', 'currentHeaderPhoto',
-        'foodLog', 'workoutLog', 'dreamLog', 'sleepData', 'painData', 'clarityData',
-        'creditCards', 'travels', 'customCards', 'dailyMemories', 'categoryData', 'allNotes',
-        'pendingProjects', 'categorySpending', 'dailyDosTasks', 'dailyDosWorkouts', 'dailyDosGoals', 'dailyDosFood', 'calendarBingo', 'calendarBingoOptions', 'reflectionsEntries'
-      ];
       
       for (const key of STORAGE_KEYS) {
         const value = localStorage.getItem(key);
@@ -177,31 +177,27 @@
       // Brand new user - show simple welcome message (no dialog)
       console.log('👋 Welcome new user! Ready to start tracking.');
     } else if (snapshot.exists()) {
-      // Account has cloud data - download it automatically
-      console.log('⬇️ Downloading data from cloud...');
-      
-      const STORAGE_KEYS = [
-        'dailyMoodEnergy', 'activities', 'dailyRatings', 'activityCompletions',
-        'dailyTodo', 'getItDone', 'dailySpending', 'daysCried', 'itemsLost',
-        'waterIntake', 'waterIntakeNew', 'timeTracked', 'timeTracker', 'photos', 'photoAlbum',
-        'selectedTheme', 'darkMode', 'activityLog', 'headerPhotos', 'currentHeaderPhoto',
-        'foodLog', 'workoutLog', 'dreamLog', 'sleepData', 'painData', 'clarityData',
-        'creditCards', 'travels', 'customCards', 'dailyMemories', 'categoryData', 'allNotes',
-        'pendingProjects', 'categorySpending', 'dailyDosTasks', 'dailyDosWorkouts', 'dailyDosGoals', 'dailyDosFood', 'calendarBingo', 'calendarBingoOptions', 'reflectionsEntries'
-      ];
-      
+      // Account has cloud data - hydrate only missing local keys to avoid overwriting newer local entries.
+      console.log('⬇️ Cloud data found - filling missing local keys only...');
       let downloaded = 0;
+      let preserved = 0;
       for (const key of STORAGE_KEYS) {
         const dataRef = window.firebaseRef(window.firebaseDatabase, `users/${user.uid}/${key}`);
         const keySnapshot = await window.firebaseGet(dataRef);
         if (keySnapshot.exists()) {
-          const data = keySnapshot.val();
-          localStorage.setItem(key, typeof data === 'string' ? data : JSON.stringify(data));
-          downloaded++;
+          const localValue = localStorage.getItem(key);
+          const hasMeaningfulLocalValue = localValue && localValue !== '[]' && localValue !== '{}';
+          if (!hasMeaningfulLocalValue) {
+            const data = keySnapshot.val();
+            localStorage.setItem(key, typeof data === 'string' ? data : JSON.stringify(data));
+            downloaded++;
+          } else {
+            preserved++;
+          }
         }
       }
       
-      console.log(`✅ Downloaded ${downloaded} items from cloud`);
+      console.log(`✅ Cloud sync complete: downloaded ${downloaded} missing items, preserved ${preserved} local items`);
       
       // Only refresh if this is a new login and data was downloaded
       const hasShownWelcome = sessionStorage.getItem('welcomeShown');
@@ -5123,7 +5119,8 @@ function renderBingoCalendar() {
     `;
 
     const dayStatus = isBingo ? 'BINGO' : (completeCount > 0 ? `${completeCount}` : '');
-    cell.innerHTML = `<span style="font-size:0.86rem;">${day}</span><span>${dayStatus}</span>`;
+    const streakGlow = dayStatus ? `style="font-size:0.86rem;background:rgba(249,115,22,0.3);padding:2px 6px;border-radius:6px;box-shadow:0 0 12px rgba(249,115,22,0.5),inset 0 0 8px rgba(249,115,22,0.2);font-weight:800;"` : 'style="font-size:0.86rem;"';
+    cell.innerHTML = `<span style="font-size:0.86rem;">${day}</span><span ${streakGlow}>${dayStatus}</span>`;
     cell.addEventListener('click', () => {
       bingoSelectedDate = dateKey;
       renderBingoCalendar();
