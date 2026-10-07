@@ -3035,6 +3035,7 @@ window.addEventListener('load', () => {
 async function autoSyncFromFirebase(user) {
   if (!window.firebaseUserId || !window.firebaseDatabase) return;
   
+  startTaskSync();
   console.log('🔄 Auto-syncing data from Firebase...');
   try {
     let synced = 0;
@@ -3042,6 +3043,7 @@ async function autoSyncFromFirebase(user) {
     window.isSyncingFromFirebase = true; // Flag to prevent re-syncing
     
     for (const key of STORAGE_KEYS) {
+      if (key === 'dailyDosTasks') continue; // handled by startTaskSync (cloud is source of truth)
       try {
         const dataRef = window.firebaseRef(window.firebaseDatabase, `users/${window.firebaseUserId}/${key}`);
         const snapshot = await window.firebaseGet(dataRef);
@@ -3116,6 +3118,32 @@ async function autoSyncFromFirebase(user) {
     window.isSyncingFromFirebase = false;
     console.error('❌ Auto-sync failed:', error);
   }
+}
+
+// Keep tasks in sync across devices: the cloud copy is the source of truth
+let taskSyncStarted = false;
+function startTaskSync() {
+  if (taskSyncStarted || !window.firebaseUserId || !window.firebaseDatabase || !window.firebaseOnValue) return;
+  taskSyncStarted = true;
+  const dataRef = window.firebaseRef(window.firebaseDatabase, `users/${window.firebaseUserId}/dailyDosTasks`);
+  window.firebaseOnValue(dataRef, snapshot => {
+    if (!snapshot.exists()) {
+      // Nothing in the cloud yet: upload whatever this device has
+      const local = JSON.parse(localStorage.getItem('dailyDosTasks') || '[]');
+      if (local.length) saveToFirebase('dailyDosTasks', local);
+      return;
+    }
+    const raw = snapshot.val();
+    const cloudTasks = Array.isArray(raw) ? raw.filter(Boolean) : Object.values(raw || {});
+    const cloudStr = JSON.stringify(cloudTasks);
+    if (cloudStr === localStorage.getItem('dailyDosTasks')) return;
+    Object.getPrototypeOf(localStorage).setItem.call(localStorage, 'dailyDosTasks', cloudStr);
+    if (typeof loadTasks === 'function' && document.getElementById('taskList')) {
+      loadTasks();
+      loadComingUp();
+      loadWeeklyRecap();
+    }
+  }, err => console.error('Task sync error:', err));
 }
 
 // Show temporary sync indicator
@@ -5319,7 +5347,9 @@ function editTask(taskId) {
 
 function loadTasks() {
   const tasks = JSON.parse(localStorage.getItem('dailyDosTasks') || '[]');
-  const dateTasks = tasks.filter(t => t.date === currentTaskDate);
+  // Unfinished tasks from earlier days stay visible on today until checked off
+  const isToday = currentTaskDate === getTodayString();
+  const dateTasks = tasks.filter(t => t.date === currentTaskDate || (isToday && !t.completed && t.date < currentTaskDate));
 
   const completed = dateTasks.filter(t => t.completed).length;
   const pending = dateTasks.filter(t => !t.completed).length;
@@ -7815,6 +7845,7 @@ window.addEventListener('beforeunload', function() {
     
     // Get all tracked data from localStorage and immediately push to Firebase
     STORAGE_KEYS.forEach(key => {
+      if (key === 'dailyDosTasks') return; // already saved on every change; avoid overwriting with stale data
       const data = localStorage.getItem(key);
       if (data) {
         try {
