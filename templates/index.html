@@ -2826,6 +2826,7 @@ function incrementCardStreak(cardId) {
     if (!card.history) card.history = [];
     card.history.push({timestamp: now, action: 'streak_incremented', newStreak: card.streak});
     localStorage.setItem('customCards', JSON.stringify(customCards));
+    saveToFirebase('customCards', customCards);
     initializeCustomCards();
   }
 }
@@ -2841,14 +2842,17 @@ function incrementCardCount(cardId) {
     if (!card.history) card.history = [];
     card.history.push({timestamp: now, action: 'count_incremented', newCount: card.count});
     localStorage.setItem('customCards', JSON.stringify(customCards));
+    saveToFirebase('customCards', customCards);
     initializeCustomCards();
   }
 }
 
 function deleteCustomCard(cardId) {
   if (confirm('Delete this card? This cannot be undone.')) {
-    const customCards = JSON.parse(localStorage.getItem('customCards') || '[]');
-    localStorage.setItem('customCards', JSON.stringify(customCards.filter(c => c.id !== cardId)));
+    let customCards = JSON.parse(localStorage.getItem('customCards') || '[]');
+    customCards = customCards.filter(c => c.id !== cardId);
+    localStorage.setItem('customCards', JSON.stringify(customCards));
+    saveToFirebase('customCards', customCards);
     initializeCustomCards();
   }
 }
@@ -3043,6 +3047,7 @@ function saveCustomCard() {
   }
   
   localStorage.setItem('customCards', JSON.stringify(customCards));
+  saveToFirebase('customCards', customCards);
   closeCustomCardModal();
   initializeCustomCards();
 }
@@ -3068,6 +3073,7 @@ function addCardListItem(cardId) {
   card.updatedAt = new Date().toISOString();
   
   localStorage.setItem('customCards', JSON.stringify(customCards));
+  saveToFirebase('customCards', customCards);
   initializeCustomCards();
 }
 
@@ -3080,6 +3086,7 @@ function toggleListItem(cardId, itemIndex) {
   card.updatedAt = new Date().toISOString();
   
   localStorage.setItem('customCards', JSON.stringify(customCards));
+  saveToFirebase('customCards', customCards);
   initializeCustomCards();
 }
 
@@ -6780,6 +6787,7 @@ document.body.classList.add('theme-'+theme);
 }
 // Save preference
 localStorage.setItem('selectedTheme',theme);
+saveToFirebase('selectedTheme',theme);
 // Update button borders
 document.querySelectorAll('.theme-btn').forEach(btn=>{
 btn.style.borderColor='transparent';
@@ -6801,6 +6809,7 @@ function toggleDarkMode(){
 document.body.classList.toggle('dark-mode');
 const isDark=document.body.classList.contains('dark-mode');
 localStorage.setItem('darkMode',isDark);
+saveToFirebase('darkMode',isDark);
 }
 // Load dark mode preference
 if(localStorage.getItem('darkMode')==='true'){
@@ -7924,6 +7933,21 @@ Track yourself. Know yourself. Grow yourself.
 
 <!-- Force sync to Firebase before page unload -->
 <script>
+function flushToFirebase() {
+  if (!window.firebaseUserId || !window.firebaseDatabase) return;
+  STORAGE_KEYS.forEach(key => {
+    if (key === 'dailyDosTasks') return;
+    const data = localStorage.getItem(key);
+    if (!data) return;
+    let parsed = data;
+    try { parsed = JSON.parse(data); } catch(e) {}
+    const dataRef = window.firebaseRef(window.firebaseDatabase, `users/${window.firebaseUserId}/${key}`);
+    window.firebaseSet(dataRef, parsed).catch(err => console.error(`Failed to sync ${key}:`, err));
+  });
+}
+// Mobile browsers rarely fire beforeunload; flush when the app is backgrounded
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flushToFirebase(); });
+window.addEventListener('pagehide', flushToFirebase);
 window.addEventListener('beforeunload', function() {
   // Ensure all data is synced to Firebase before user leaves page
   if (window.firebaseUserId && window.firebaseDatabase) {
