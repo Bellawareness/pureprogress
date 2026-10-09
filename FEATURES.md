@@ -172,6 +172,7 @@ When you login, you may see a popup asking to enable daily reminders:
 | **Header Photos** | `headerPhotos` | Header photo collection |
 | **Current Header** | `currentHeaderPhoto` | Selected header image |
 | **Credit Cards** | `creditCards` | Card info for financial tracking |
+| **Bookshelf** | `readingBooks` | Book details, page progress, notes, and finish dates |
 | **Travel** | `travels` | Cities, countries, visit dates, notes |
 | **Custom Cards** | `customCards` | User-created tracking cards |
 | **Category Data** | `categoryData` | Category-specific tracking info |

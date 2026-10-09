@@ -80,6 +80,7 @@ Learn Thyself is a comprehensive personal organizer and habit tracker that helps
 ### 📸 Personal Records
 - **Photo Album** - Store visual memories
 - **Daily Memories** - Things to remember
+- **Bookshelf** - Track books, page progress, finish dates, and yearly reading totals
 - **Travel Journal** - Track cities visited 🌍
 - **Custom Cards** - Create your own tracking categories
 
