@@ -2581,6 +2581,42 @@ const STORAGE_KEYS = [
   'reflectionsEntries', 'readingBooks'
 ];
 
+// Habit data is merged (not overwritten) so devices never lose each other's check-ins
+const HABIT_MERGE_KEYS = ['activities', 'activityLog', 'activityCompletions'];
+function mergeHabitData(key, localStr, cloud) {
+  let local;
+  try { local = localStr ? JSON.parse(localStr) : null; } catch (e) { local = null; }
+  if (typeof cloud === 'string') { try { cloud = JSON.parse(cloud); } catch (e) { cloud = null; } }
+  const toArr = v => Array.isArray(v) ? v : (v && typeof v === 'object' ? Object.values(v) : []);
+  if (key === 'activities') {
+    const localById = {};
+    toArr(local).forEach(a => { if (a && a.id) localById[a.id] = a; });
+    // Cloud decides which habits exist (so deletes stick); the more recent state wins per habit
+    return toArr(cloud).filter(a => a && a.id).map(c => {
+      const l = localById[c.id];
+      if (!l) return c;
+      return (l.lastCompletedDate || '') > (c.lastCompletedDate || '') ? l : c;
+    });
+  }
+  const l = local && typeof local === 'object' ? local : {};
+  const c = cloud && typeof cloud === 'object' ? cloud : {};
+  const out = {};
+  new Set([...Object.keys(l), ...Object.keys(c)]).forEach(date => {
+    if (key === 'activityCompletions') {
+      out[date] = [...new Set([...toArr(l[date]), ...toArr(c[date])])];
+    } else {
+      const byId = {};
+      [...toArr(c[date]), ...toArr(l[date])].forEach(e => {
+        if (!e || !e.activityId) return;
+        const prev = byId[e.activityId];
+        byId[e.activityId] = prev && prev.completed && !e.completed ? prev : e;
+      });
+      out[date] = Object.values(byId);
+    }
+  });
+  return out;
+}
+
 // Save data to Firebase
 function saveToFirebase(key, data) {
   if (!window.firebaseUserId || !window.firebaseDatabase) return;
@@ -3129,6 +3165,7 @@ async function autoSyncFromFirebase(user) {
     let synced = 0;
     let kept = 0;
     window.isSyncingFromFirebase = true; // Flag to prevent re-syncing
+    let habitDataChanged = false;
     
     for (const key of STORAGE_KEYS) {
       if (key === 'dailyDosTasks') continue; // handled by startTaskSync (cloud is source of truth)
@@ -3139,6 +3176,18 @@ async function autoSyncFromFirebase(user) {
         if (snapshot.exists()) {
           const cloudData = snapshot.val();
           const localDataStr = localStorage.getItem(key);
+
+          if (HABIT_MERGE_KEYS.includes(key)) {
+            const merged = mergeHabitData(key, localDataStr, cloudData);
+            const mergedStr = JSON.stringify(merged);
+            if (mergedStr !== localDataStr) {
+              Object.getPrototypeOf(localStorage).setItem.call(localStorage, key, mergedStr);
+              habitDataChanged = true;
+              synced++;
+            }
+            if (mergedStr !== JSON.stringify(cloudData)) saveToFirebase(key, merged);
+            continue;
+          }
           
           let shouldSync = true;
           
@@ -3196,6 +3245,11 @@ async function autoSyncFromFirebase(user) {
     }
     
     window.isSyncingFromFirebase = false;
+    if (habitDataChanged && !sessionStorage.getItem('habitMergeReloaded')) {
+      sessionStorage.setItem('habitMergeReloaded', 'true');
+      location.reload();
+      return;
+    }
     console.log(`✅ Auto-sync complete! Synced ${synced} items, kept ${kept} local (newer)`);
     
     // Show sync indicator briefly
@@ -3677,6 +3731,10 @@ d.setHours(12,0,0,0);
 d.setDate(d.getDate()-1);
 return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 }
+function dateStr(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function recomputeStreak(item){const log=JSON.parse(localStorage.getItem('activityLog')||'{}');const done=d=>(log[d]||[]).some(e=>e.activityId===item.id&&e.completed);const d=new Date();d.setHours(12,0,0,0);if(!done(dateStr(d)))d.setDate(d.getDate()-1);let n=0;while(done(dateStr(d))){n++;d.setDate(d.getDate()-1);}item.streak=n;const dates=Object.keys(log).filter(done).sort();if(dates.length)item.lastCompletedDate=dates[dates.length-1];}
+function logPastDay(item,date){const log=JSON.parse(localStorage.getItem('activityLog')||'{}');const comp=JSON.parse(localStorage.getItem('activityCompletions')||'{}');if(!log[date])log[date]=[];if(!comp[date])comp[date]=[];const existing=log[date].find(e=>e.activityId===item.id);if(existing&&existing.completed){existing.completed=false;comp[date]=comp[date].filter(id=>id!==item.id);}else{if(existing){existing.completed=true;existing.completedAt=new Date().toISOString();}else{log[date].push({activityId:item.id,activityName:item.text,completed:true,completedAt:new Date().toISOString(),attempted:true,backfilled:true});}if(!comp[date].includes(item.id))comp[date].push(item.id);}
+localStorage.setItem('activityLog',JSON.stringify(log));localStorage.setItem('activityCompletions',JSON.stringify(comp));saveToFirebase('activityLog',log);saveToFirebase('activityCompletions',comp);recomputeStreak(item);save();render();}
 function checkAndResetDaily(){const today=getTodayString();const yesterday=getYesterday();activities.forEach(item=>{if(!item.lastCompletedDate){item.lastCompletedDate=null;item.streak=0;item.checked=false;}else if(item.lastCompletedDate!==today){if(item.lastCompletedDate===yesterday&&item.checked){item.checked=false;}else if(item.lastCompletedDate!==yesterday){item.streak=0;item.checked=false;}else{item.checked=false;}}});save();}
 checkAndResetDaily();function save(){localStorage.setItem('activities',JSON.stringify(activities));saveToFirebase('activities',activities);updateProgress();}
 function render(){container.innerHTML='';
@@ -3699,7 +3757,7 @@ const currentStreak = item.streak || 0;
 const streakText = currentStreak > 0 ? `🔥 ${currentStreak}` : '🔥 0';
 const streakClass = currentStreak > 0 ? 'active-streak' : 'no-streak';
 
-const div=document.createElement('div');div.className='activity-item';div.innerHTML='<div style="display:flex;align-items:center;gap:16px;flex:1;"><input type="checkbox" '+(item.checked?'checked':'')+' data-id="'+item.id+'"/><span style="font-weight:600;color:#374151;">'+escapeHtml(item.text)+'</span><div style="display:flex;gap:8px;align-items:center;"><span class="status-badge" style="background:var(--pastel-blue);color:#3b82f6;padding:4px 8px;border-radius:12px;font-size:0.75rem;font-weight:600;"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="display:inline-block;vertical-align:middle;margin-right:4px;"><path d="M9 11H7v6h2v-6zm4 0h-2v6h2v-6zm4 0h-2v6h2v-6zm2.5-9H19V1h-2v1H7V1H5v1H4.5C3.12 2 2 3.12 2 4.5v15C2 20.88 3.12 22 4.5 22h15c1.38 0 2.5-1.12 2.5-2.5v-15C22 3.12 20.88 2 19.5 2zM20 19.5c0 .28-.22.5-.5.5h-15c-.28 0-.5-.22-.5-.5v-15c0-.28.22-.5.5-.5h15c.28 0 .5.22.5.5v15z"/></svg>'+daysText+'</span><span class="streak-badge '+streakClass+'" style="background:'+(currentStreak > 0 ? 'linear-gradient(135deg,#ff6b35,#f7931e)' : 'rgba(156,163,175,0.3)')+';color:'+(currentStreak > 0 ? 'white' : '#6b7280')+';padding:4px 8px;border-radius:12px;font-size:0.75rem;font-weight:600;">'+streakText+'</span></div></div><button data-id="'+item.id+'" style="background:rgba(239,68,68,0.1);border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;color:#ef4444;font-size:16px;font-weight:bold;display:flex;align-items:center;justify-content:center;transition:all 0.2s;">×</button>';const checkbox=div.querySelector('input[type="checkbox"]');checkbox.addEventListener('change',()=>{const today=getTodayString();const yesterday=getYesterday();item.checked=checkbox.checked;
+const div=document.createElement('div');div.className='activity-item';div.innerHTML='<div style="display:flex;align-items:center;gap:16px;flex:1;"><input type="checkbox" '+(item.checked?'checked':'')+' data-id="'+item.id+'"/><span style="font-weight:600;color:#374151;">'+escapeHtml(item.text)+'</span><div style="display:flex;gap:8px;align-items:center;"><span class="status-badge" style="background:var(--pastel-blue);color:#3b82f6;padding:4px 8px;border-radius:12px;font-size:0.75rem;font-weight:600;"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="display:inline-block;vertical-align:middle;margin-right:4px;"><path d="M9 11H7v6h2v-6zm4 0h-2v6h2v-6zm4 0h-2v6h2v-6zm2.5-9H19V1h-2v1H7V1H5v1H4.5C3.12 2 2 3.12 2 4.5v15C2 20.88 3.12 22 4.5 22h15c1.38 0 2.5-1.12 2.5-2.5v-15C22 3.12 20.88 2 19.5 2zM20 19.5c0 .28-.22.5-.5.5h-15c-.28 0-.5-.22-.5-.5v-15c0-.28.22-.5.5-.5h15c.28 0 .5.22.5.5v15z"/></svg>'+daysText+'</span><span class="streak-badge '+streakClass+'" style="background:'+(currentStreak > 0 ? 'linear-gradient(135deg,#ff6b35,#f7931e)' : 'rgba(156,163,175,0.3)')+';color:'+(currentStreak > 0 ? 'white' : '#6b7280')+';padding:4px 8px;border-radius:12px;font-size:0.75rem;font-weight:600;">'+streakText+'</span></div></div><button data-id="'+item.id+'" style="background:rgba(239,68,68,0.1);border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;color:#ef4444;font-size:16px;font-weight:bold;display:flex;align-items:center;justify-content:center;transition:all 0.2s;">×</button>';const pastBtn=document.createElement('button');pastBtn.title='Log a past day';pastBtn.textContent='📅';pastBtn.style.cssText='background:rgba(59,130,246,0.1);border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;margin-right:8px;';pastBtn.addEventListener('click',()=>{const dateEl=document.createElement('input');dateEl.type='date';dateEl.max=getYesterday();dateEl.style.cssText='margin-right:8px;';dateEl.addEventListener('change',()=>{if(dateEl.value)logPastDay(item,dateEl.value);});pastBtn.replaceWith(dateEl);try{dateEl.showPicker();}catch(e){}});div.insertBefore(pastBtn,div.querySelector('button'));const checkbox=div.querySelector('input[type="checkbox"]');checkbox.addEventListener('change',()=>{const today=getTodayString();const yesterday=getYesterday();item.checked=checkbox.checked;
 // Always save to completion history - NEVER remove
 let completionHistory=JSON.parse(localStorage.getItem('activityCompletions')||'{}');
 if(!completionHistory[today])completionHistory[today]=[];
