@@ -2021,13 +2021,6 @@ No memories logged yet today.
 </div>
 </div>
 
-<!-- City Filter Tags -->
-<div id="cityFilterContainer" style="display:none;margin-bottom:12px;padding:12px;background:rgba(6,182,212,0.1);border-radius:8px;border:1px solid rgba(6,182,212,0.2);">
-<div style="font-size:0.8rem;color:#164e63;font-weight:600;margin-bottom:8px;">Filter by City:</div>
-<div id="cityFilterTags" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
-<button onclick="clearCityFilter()" style="margin-top:8px;background:rgba(6,182,212,0.2);border:1px solid #06b6d4;color:#0891b2;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:0.75rem;font-weight:600;">Show All</button>
-</div>
-
 <!-- Timeline View -->
 <div class="card" style="background:linear-gradient(135deg,rgba(240,249,255,0.95),rgba(224,242,254,0.95));border:2px solid #bfdbfe;padding:14px;">
 <h3 style="color:#1e40af;font-weight:700;margin:0 0 12px 0;font-size:0.9rem;">
@@ -7393,7 +7386,6 @@ function addLocation() {
         document.getElementById('locationInput').value = '';
         document.getElementById('countryInput').value = '';
         if (document.getElementById('locationNotesInput')) document.getElementById('locationNotesInput').value = '';
-        clearCityFilter();
         loadTravels();
     }, 1200);
   } catch (error) {
@@ -7472,16 +7464,25 @@ function displayCities(cities) {
                   <h4 style="font-size:1rem;font-weight:700;color:#0e7490;margin:0 0 4px 0;word-break:break-word;">${escapeHtml(city.city_name)}</h4>
                   ${city.country && city.country !== 'Unknown' ? `<p style="color:#164e63;font-size:0.85rem;margin:0;font-weight:500;">📍 ${escapeHtml(city.country)}</p>` : ''}
                 </div>
-                <button onclick="filterByCity('${escapeHtml(city.city_name)}')" style="background:rgba(6,182,212,0.2);border:1px solid #06b6d4;color:#0891b2;padding:4px 10px;border-radius:5px;cursor:pointer;font-size:0.7rem;font-weight:600;white-space:nowrap;transition:all 0.2s;flex-shrink:0;"
-                        onmouseenter="this.style.background='rgba(6,182,212,0.3)'"
-                        onmouseleave="this.style.background='rgba(6,182,212,0.2)'">🔍 Filter</button>
               </div>
-              ${city.notes ? `<p style="color:#6b7280;font-size:0.8rem;margin:8px 0 0 0;font-style:italic;word-break:break-word;line-height:1.5;background:rgba(255,255,255,0.6);padding:8px 10px;border-radius:6px;border-left:3px solid #06b6d4;">📝 ${escapeHtml(city.notes)}</p>` : ''}
+              <div id="notes-view-${city.id}" style="color:#6b7280;font-size:0.8rem;margin:8px 0 0 0;font-style:italic;word-break:break-word;line-height:1.5;background:rgba(255,255,255,0.6);padding:8px 10px;border-radius:6px;border-left:3px solid #06b6d4;${!city.notes ? 'display:none;' : ''}">📝 ${escapeHtml(city.notes || '')}</div>
+              <textarea id="notes-edit-${city.id}" style="display:none;width:100%;padding:8px 10px;border:2px solid #06b6d4;border-radius:6px;font-size:0.8rem;font-family:inherit;margin:8px 0 0 0;" rows="3">${escapeHtml(city.notes || '')}</textarea>
               <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px;padding-top:8px;border-top:1px solid rgba(6,182,212,0.2);">
                 <p style="color:#67e8f9;font-size:0.7rem;margin:0;">Added ${formatAddedDate(city.added_date)}</p>
-                <button onclick="deleteCity(${city.id})" style="background:rgba(239,68,68,0.1);border:none;color:#ef4444;padding:4px 8px;border-radius:5px;cursor:pointer;font-size:0.7rem;font-weight:600;transition:all 0.2s;"
-                        onmouseenter="this.style.background='rgba(239,68,68,0.2)';this.style.transform='scale(1.05)'"
-                        onmouseleave="this.style.background='rgba(239,68,68,0.1)';this.style.transform='scale(1)'">Delete</button>
+                <div style="display:flex;gap:6px;">
+                  <button id="edit-btn-${city.id}" onclick="toggleEditNotes(${city.id})" style="background:rgba(59,130,246,0.1);border:none;color:#3b82f6;padding:4px 8px;border-radius:5px;cursor:pointer;font-size:0.7rem;font-weight:600;transition:all 0.2s;"
+                          onmouseenter="this.style.background='rgba(59,130,246,0.2)';this.style.transform='scale(1.05)'"
+                          onmouseleave="this.style.background='rgba(59,130,246,0.1)';this.style.transform='scale(1)'">Edit</button>
+                  <button id="save-btn-${city.id}" onclick="saveNotes(${city.id})" style="display:none;background:rgba(34,197,94,0.1);border:none;color:#22c55e;padding:4px 8px;border-radius:5px;cursor:pointer;font-size:0.7rem;font-weight:600;transition:all 0.2s;"
+                          onmouseenter="this.style.background='rgba(34,197,94,0.2)';this.style.transform='scale(1.05)'"
+                          onmouseleave="this.style.background='rgba(34,197,94,0.1)';this.style.transform='scale(1)'">Save</button>
+                  <button id="cancel-btn-${city.id}" onclick="cancelEditNotes(${city.id})" style="display:none;background:rgba(107,114,128,0.1);border:none;color:#6b7280;padding:4px 8px;border-radius:5px;cursor:pointer;font-size:0.7rem;font-weight:600;transition:all 0.2s;"
+                          onmouseenter="this.style.background='rgba(107,114,128,0.2)'"
+                          onmouseleave="this.style.background='rgba(107,114,128,0.1)'">Cancel</button>
+                  <button onclick="deleteCity(${city.id})" style="background:rgba(239,68,68,0.1);border:none;color:#ef4444;padding:4px 8px;border-radius:5px;cursor:pointer;font-size:0.7rem;font-weight:600;transition:all 0.2s;"
+                          onmouseenter="this.style.background='rgba(239,68,68,0.2)';this.style.transform='scale(1.05)'"
+                          onmouseleave="this.style.background='rgba(239,68,68,0.1)';this.style.transform='scale(1)'">Delete</button>
+                </div>
               </div>
             </div>
           `).join('')}
@@ -7493,35 +7494,65 @@ function displayCities(cities) {
   citiesList.innerHTML = html;
 }
 
-// Filter by city name
-function filterByCity(cityName) {
-  const cities = window.allCities || [];
-  const filtered = cities.filter(c => c.city_name === cityName);
-  displayCities(filtered);
-  updateFilterTags(cityName);
+// Toggle edit mode for notes
+function toggleEditNotes(cityId) {
+  const viewEl = document.getElementById(`notes-view-${cityId}`);
+  const editEl = document.getElementById(`notes-edit-${cityId}`);
+  const editBtn = document.getElementById(`edit-btn-${cityId}`);
+  const saveBtn = document.getElementById(`save-btn-${cityId}`);
+  const cancelBtn = document.getElementById(`cancel-btn-${cityId}`);
+
+  viewEl.style.display = 'none';
+  editEl.style.display = 'block';
+  editBtn.style.display = 'none';
+  saveBtn.style.display = 'block';
+  cancelBtn.style.display = 'block';
+  editEl.focus();
 }
 
-// Update filter tags display
-function updateFilterTags(cityName) {
-  const container = document.getElementById('cityFilterContainer');
-  const tagsDiv = document.getElementById('cityFilterTags');
+// Save edited notes
+function saveNotes(cityId) {
+  try {
+    const editEl = document.getElementById(`notes-edit-${cityId}`);
+    const newNotes = editEl.value;
 
-  if (!container || !tagsDiv) return;
+    const cities = JSON.parse(localStorage.getItem('travels') || '[]');
+    const city = cities.find(c => c.id === cityId);
 
-  container.style.display = 'block';
-  tagsDiv.innerHTML = `
-    <div style="background:#06b6d4;color:white;padding:6px 12px;border-radius:20px;font-weight:600;font-size:0.8rem;display:flex;align-items:center;gap:8px;">
-      ${cityName}
-      <button onclick="clearCityFilter()" style="background:rgba(255,255,255,0.3);border:none;color:white;padding:2px 6px;border-radius:4px;cursor:pointer;font-weight:700;">✕</button>
-    </div>
-  `;
+    if (city) {
+      city.notes = newNotes;
+      localStorage.setItem('travels', JSON.stringify(cities));
+      saveToFirebase('travels', cities);
+    }
+
+    cancelEditNotes(cityId);
+    loadTravels();
+  } catch (error) {
+    console.error('Error saving notes:', error);
+    alert('Error saving notes');
+  }
 }
 
-// Clear city filter
-function clearCityFilter() {
-  const container = document.getElementById('cityFilterContainer');
-  if (container) container.style.display = 'none';
-  loadTravels();
+// Cancel edit and revert changes
+function cancelEditNotes(cityId) {
+  const viewEl = document.getElementById(`notes-view-${cityId}`);
+  const editEl = document.getElementById(`notes-edit-${cityId}`);
+  const editBtn = document.getElementById(`edit-btn-${cityId}`);
+  const saveBtn = document.getElementById(`save-btn-${cityId}`);
+  const cancelBtn = document.getElementById(`cancel-btn-${cityId}`);
+
+  editEl.style.display = 'none';
+  editBtn.style.display = 'block';
+  saveBtn.style.display = 'none';
+  cancelBtn.style.display = 'none';
+
+  const cities = JSON.parse(localStorage.getItem('travels') || '[]');
+  const city = cities.find(c => c.id === cityId);
+  if (city && city.notes) {
+    viewEl.style.display = 'block';
+  } else {
+    viewEl.style.display = 'none';
+  }
 }
 
 // Delete city
@@ -7535,7 +7566,6 @@ function deleteCity(cityId) {
     const updated = cities.filter(c => c.id !== cityId);
     localStorage.setItem('travels', JSON.stringify(updated));
     saveToFirebase('travels', updated);
-    clearCityFilter();
     loadTravels();
   } catch (error) {
     console.error('Error deleting city:', error);
@@ -7588,6 +7618,71 @@ function formatAddedDate(dateStr) {
 }
 
 // Category Switching
+function loadWellnessData(){
+const moodLabel=document.getElementById('moodLabel');
+const energyLabel=document.getElementById('energyLabel');
+const moodNote=document.getElementById('moodNote');
+const energyNote=document.getElementById('energyNote');
+const moodBtns=document.querySelectorAll('#moodButtons .mood-btn');
+const energyBtns=document.querySelectorAll('#energyButtons .mood-btn');
+const moodLabels=['','Very Sad','Sad','Neutral','Happy','Very Happy'];
+
+const today=getTodayString();
+const store=JSON.parse(localStorage.getItem('dailyMoodEnergy')||'{}');
+const todayData=store[today];
+
+moodBtns.forEach(b=>{
+b.classList.remove('selected');
+b.style.background='';
+b.style.color='';
+b.style.border='';
+b.style.transform='';
+});
+energyBtns.forEach(b=>{
+b.classList.remove('selected');
+b.style.background='';
+b.style.color='';
+b.style.border='';
+b.style.transform='';
+});
+
+if(todayData){
+if(todayData.mood){
+const btn=document.querySelector('#moodButtons .mood-btn[data-mood="'+todayData.mood+'"]');
+if(btn){
+btn.classList.add('selected');
+btn.style.background='linear-gradient(135deg,#f472b6,#ec4899)';
+btn.style.color='#ffffff';
+btn.style.border='2px solid #ec4899';
+btn.style.transform='scale(1.1)';
+moodLabel.textContent='Selected: '+moodLabels[todayData.mood];
+}
+}else{
+moodLabel.textContent='No mood selected';
+}
+if(todayData.energy){
+const btn=document.querySelector('#energyButtons .mood-btn[data-energy="'+todayData.energy+'"]');
+if(btn){
+btn.classList.add('selected');
+btn.style.background='linear-gradient(135deg,#fbbf24,#f59e0b)';
+btn.style.color='#ffffff';
+btn.style.border='2px solid #f59e0b';
+btn.style.transform='scale(1.1)';
+energyLabel.textContent='Selected: Level '+todayData.energy;
+}
+}else{
+energyLabel.textContent='No energy selected';
+}
+if(todayData.moodNote)moodNote.value=todayData.moodNote;else moodNote.value='';
+if(todayData.energyNote)energyNote.value=todayData.energyNote;else energyNote.value='';
+}else{
+moodLabel.textContent='No mood selected';
+energyLabel.textContent='No energy selected';
+moodNote.value='';
+energyNote.value='';
+}
+}
+
 function switchCategory(category){
 // Hide all categories
 document.querySelectorAll('.category-content').forEach(div=>{
@@ -7615,6 +7710,7 @@ btn.style.borderColor='#ec4899';
 btn.style.color='#be185d';
 btn.style.boxShadow='0 4px 12px rgba(236,72,153,0.25)';
 btn.style.transform='scale(1.02)';
+loadWellnessData();
 }else if(category==='habits'){
 btn.style.background='linear-gradient(135deg,#e9d5ff,#ddd6fe)';
 btn.style.borderColor='#8b5cf6';
